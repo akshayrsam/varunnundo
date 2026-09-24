@@ -36,11 +36,10 @@
 
 *{
   box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent; /* Cross-platform touch consistency */
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
-  /* Scaled down one notch from original */
   font-size: clamp(14px, 1.1vw + 11px, 16.5px);
 }
 
@@ -209,11 +208,11 @@ textarea.input-field {
   min-width: 0;
 }
 
-/* Responsive Logo Styles */
+/* Responsive Logo Styles - Made 2 notches bigger */
 .app-logo-img {
-  height: clamp(44px, 8vw, 76px);
+  height: clamp(58px, 11vw, 98px);
   width: auto;
-  max-width: 75vw;
+  max-width: 85vw;
   object-fit: contain;
   display: block;
 }
@@ -657,14 +656,19 @@ function updateBottomNav(activeTab){
 }
 
 document.querySelector("#navEvents").addEventListener("click", () => {
-  if(location.hash !== ""){
-    history.replaceState(null, "", location.pathname + location.search);
+  if (location.hash === "#create" || location.hash !== "") {
+    location.hash = "";
+  } else {
     eventsPage();
   }
 });
 
 document.querySelector("#navCreate").addEventListener("click", () => {
-  createPage();
+  if (location.hash !== "#create") {
+    location.hash = "create";
+  } else {
+    createPage();
+  }
 });
 
 function renderHeader(showBack = false){
@@ -688,12 +692,10 @@ function renderHeader(showBack = false){
 
 function wireHeader(){
   document.querySelector("#homeTitle")?.addEventListener("click", () => {
-    history.replaceState(null, "", location.pathname + location.search);
-    eventsPage();
+    location.hash = "";
   });
   document.querySelector("#backButton")?.addEventListener("click", () => {
-    history.replaceState(null, "", location.pathname + location.search);
-    eventsPage();
+    location.hash = "";
   });
   document.querySelector("#accountButton")?.addEventListener("click", async () => {
     if(!auth.currentUser){
@@ -1304,7 +1306,7 @@ function profilePage(){
 
   document.querySelector("#signOutButton").onclick = async () => {
     await signOut(auth);
-    eventsPage();
+    location.hash = "";
   };
 }
 
@@ -1313,14 +1315,17 @@ function profilePage(){
 ===================================================== */
 function route(){
   const hash = location.hash;
-  if(hash.startsWith("#e=")){
+  if(hash === "#create"){
+    createPage();
+  } else if(hash.startsWith("#e=")){
     const id = hash.slice(3);
     if(id) {
       eventPage(id);
       return;
     }
+  } else {
+    eventsPage();
   }
-  eventsPage();
 }
 
 window.addEventListener("hashchange", route);
