@@ -87,6 +87,89 @@ textarea{
   box-shadow:5px 5px #222;
 }
 
+.event-list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.event{
+  cursor:pointer;
+  background:#fff;
+  border:2px solid #222;
+  border-radius:14px;
+  padding:17px 18px;
+  box-shadow:3px 3px #222;
+  transition:
+    transform .12s ease,
+    box-shadow .12s ease;
+}
+
+.event:hover{
+  transform:translate(-1px,-1px);
+  box-shadow:5px 5px #222;
+}
+
+.event:active{
+  transform:translate(2px,2px);
+  box-shadow:1px 1px #222;
+}
+
+.event-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.event-title{
+  font-size:23px;
+  line-height:1.1;
+}
+
+.event-count{
+  flex:none;
+  background:#ffcf4a;
+  border:2px solid #222;
+  border-radius:999px;
+  padding:4px 9px;
+  font-size:13px;
+  line-height:1;
+  white-space:nowrap;
+}
+
+.event-date{
+  margin-top:13px;
+  font-size:17px;
+  font-weight:bold;
+}
+
+.event-note{
+  margin-top:7px;
+  color:#777;
+  white-space:pre-wrap;
+}
+
+.past-events{
+  margin-top:28px;
+}
+
+.past-events summary{
+  padding:4px 0;
+  font-size:17px;
+}
+
+.past-events .event{
+  opacity:.72;
+  box-shadow:2px 2px #222;
+}
+
+.empty-events{
+  padding:22px 4px 8px;
+  text-align:center;
+  color:#777;
+}
+  
 .top{
   display:flex;
   align-items:center;
@@ -682,9 +765,7 @@ ${dateText} · ${timeText}
 }
 
 
-/* =====================================================
-   EVENTS
-===================================================== */
+/* EVENTS */
 
 function eventsPage(){
 
@@ -696,20 +777,13 @@ function eventsPage(){
 
     <div class="box">
 
-      <h2>Events</h2>
-
       <div id="upcomingEvents">
         Loading...
       </div>
 
-      <details style="margin-top:24px;">
+      <details class="past-events">
 
-        <summary
-          style="
-            cursor:pointer;
-            font-weight:bold;
-          "
-        >
+        <summary>
           Past events
         </summary>
 
@@ -726,7 +800,6 @@ function eventsPage(){
 
   wireHeader();
 
-
   const upcomingEvents =
     document.querySelector(
       "#upcomingEvents"
@@ -737,12 +810,9 @@ function eventsPage(){
       "#pastEvents"
     );
 
-
   activeListener = onValue(
-
     ref(db,"events"),
-
-    snapshot=>{
+    snapshot => {
 
       const events =
         snapshot.val() || {};
@@ -752,7 +822,6 @@ function eventsPage(){
 
       const upcoming = [];
       const past = [];
-
 
       Object.entries(events)
         .forEach(([id,event])=>{
@@ -777,13 +846,11 @@ function eventsPage(){
 
         });
 
-
       upcoming.sort(
         (a,b)=>
           new Date(a[1].when).getTime() -
           new Date(b[1].when).getTime()
       );
-
 
       past.sort(
         (a,b)=>
@@ -791,81 +858,11 @@ function eventsPage(){
           new Date(a[1].when).getTime()
       );
 
-
-      function renderEvents(entries){
-
-        if(!entries.length){
-
-          return `
-            <p class="muted">
-              No events.
-            </p>
-          `;
-
-        }
-
-
-        return entries
-          .map(([id,event])=>`
-
-            <div
-              class="event"
-              data-id="${escapeHTML(id)}"
-              style="
-                cursor:pointer;
-                padding:14px 0;
-                border-bottom:1px solid #ddd;
-              "
-            >
-
-              <div style="font-size:19px;">
-                <strong>${escapeHTML(event.title)}</strong>
-                <span
-                  class="muted"
-                  style="
-                    font-size:14px;
-                    font-weight:400;
-                    margin-left:4px;
-                  "
-                >
-                  (${Object.values(event.responses || {})
-                    .filter(response => response.status === "yes")
-                    .length}
-                  coming)
-                </span>
-              </div>
-
-              <div class="muted">
-                ${formatDate(event.when)}
-              </div>
-
-              ${
-                event.note
-                  ? `
-                    <div
-                      class="muted"
-                      style="margin-top:4px;"
-                    >
-                      ${escapeHTML(event.note)}
-                    </div>
-                  `
-                  : ""
-              }
-
-            </div>
-
-          `)
-          .join("");
-
-      }
-
-
       upcomingEvents.innerHTML =
         renderEvents(upcoming);
 
       pastEvents.innerHTML =
         renderEvents(past);
-
 
       document
         .querySelectorAll(
@@ -885,7 +882,6 @@ function eventsPage(){
         });
 
     },
-
     error=>{
 
       console.error(
@@ -894,21 +890,121 @@ function eventsPage(){
       );
 
       upcomingEvents.innerHTML = `
+
         <p class="error">
+
           Couldn't load events.
 
           ${escapeHTML(
             error.message || ""
           )}
+
         </p>
+
       `;
 
     }
-
   );
-
 }
 
+
+function renderEvents(entries){
+
+  if(!entries.length){
+
+    return `
+
+      <div class="empty-events">
+
+        No events.
+
+      </div>
+
+    `;
+
+  }
+
+  return `
+
+    <div class="event-list">
+
+      ${
+        entries
+          .map(([id,event])=>{
+
+            const coming =
+              Object.values(
+                event.responses || {}
+              )
+              .filter(
+                response =>
+                  response.status === "yes"
+              )
+              .length;
+
+            return `
+
+              <div
+                class="event"
+                data-id="${escapeHTML(id)}"
+              >
+
+                <div class="event-top">
+
+                  <div class="event-title">
+
+                    ${escapeHTML(
+                      event.title
+                    )}
+
+                  </div>
+
+                  <div class="event-count">
+
+                    ${coming} coming
+
+                  </div>
+
+                </div>
+
+                <div class="event-date">
+
+                  ${formatDate(
+                    event.when
+                  )}
+
+                </div>
+
+                ${
+                  event.note
+                    ? `
+
+                      <div class="event-note">
+
+                        ${escapeHTML(
+                          event.note
+                        )}
+
+                      </div>
+
+                    `
+                    : ""
+                }
+
+              </div>
+
+            `;
+
+          })
+          .join("")
+
+      }
+
+    </div>
+
+  `;
+}
+  
 
 /* =====================================================
    CREATE
@@ -928,7 +1024,7 @@ function createPage(){
       <div class="box">
 
         <h2>
-          Create an event
+          Create An Event
         </h2>
 
         <p>
@@ -971,12 +1067,12 @@ function createPage(){
     <div class="box">
 
       <h2>
-        Create an event
+        Create An event
       </h2>
 
       <label>
 
-        Event title
+        Event Title
 
         <input
           id="title"
@@ -988,7 +1084,7 @@ function createPage(){
 
       <label>
 
-        Date and time
+        Date & Time
 
         <input
           id="when"
