@@ -396,8 +396,31 @@ function renderHeader(){
         വരുന്നുണ്ടോ???
       </h1>      
 
-      <button id="accountButton">
-        ${user ? "Account" : "Sign in"}
+      <button
+        id="accountButton"
+        style="
+          padding:0;
+          border:0;
+          background:none;
+        "
+      >
+        ${
+          user
+            ? `
+              <img
+                src="${escapeHTML(user.photoURL || "")}"
+                alt="Profile"
+                style="
+                  width:36px;
+                  height:36px;
+                  border-radius:50%;
+                  object-fit:cover;
+                  display:block;
+                "
+              >
+            `
+            : "Sign in"
+        }
       </button>
 
     </div>
