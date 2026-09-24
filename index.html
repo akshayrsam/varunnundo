@@ -427,14 +427,16 @@ function renderHeader(){
 
     <div class="nav">
 
-      <button id="createButton">
-        Create
-      </button>
-
+    <div class="nav">
+    
       <button id="eventsButton">
         Events
       </button>
-
+    
+      <button id="createButton">
+        Create
+      </button>
+    
     </div>
 
   `;
@@ -2230,17 +2232,7 @@ function route(){
 
   }
 
-
-  /*
-    There is intentionally NO #events route.
-
-    Events is opened directly by the Events
-    navigation button.
-
-    Any non-event URL opens Create.
-  */
-
-  createPage();
+  eventsPage();
 
 }
 
