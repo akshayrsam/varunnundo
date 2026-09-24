@@ -1,0 +1,2145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>വരുന്നുണ്ടോ???</title>
+
+<meta property="og:title" content="വരുന്നുണ്ടോ???">
+<meta property="og:description" content="Are you coming?">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --cream:#fffaf0;
+  --paper:#fffdf8;
+  --ink:#102c2a;
+  --muted:#68706e;
+  --line:#d9ddd5;
+  --green:#163c38;
+  --green-soft:#dcebd6;
+  --pink:#f4dce1;
+  --yellow:#ffd45c;
+  --yellow-soft:#fff0c5;
+  --blue-soft:#dce9ee;
+  --lavender:#eadcf1;
+  --shadow:0 10px 30px rgba(35,43,38,.06);
+  --radius:22px;
+}
+
+*{box-sizing:border-box}
+
+html{
+  background:var(--cream);
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(255,255,255,.75),transparent 28rem),
+    var(--cream);
+  color:var(--ink);
+  font:15px "DM Sans",sans-serif;
+  line-height:1.45;
+}
+
+button,input,textarea,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+  -webkit-appearance:none;
+  appearance:none;
+}
+
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+#app{
+  width:min(100%,760px);
+  margin:auto;
+  min-height:100vh;
+}
+
+.page{
+  min-height:100vh;
+  padding:28px 20px 100px;
+}
+
+.page-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:28px;
+}
+
+.brand-button,
+.icon-button{
+  border:0;
+  background:transparent;
+  padding:0;
+}
+
+.brand-button{
+  display:flex;
+  align-items:center;
+  min-width:0;
+}
+
+.brand-image{
+  width:auto;
+  height:52px;
+  max-width:220px;
+  object-fit:contain;
+  display:block;
+}
+
+.brand-fallback{
+  display:none;
+  font:700 22px/1 "Space Grotesk",sans-serif;
+  letter-spacing:-.05em;
+  color:var(--ink);
+}
+
+.avatar-button{
+  width:42px;
+  height:42px;
+  flex:none;
+  border:1px solid var(--line);
+  border-radius:50%;
+  padding:0;
+  overflow:hidden;
+  background:#f1eee5;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+
+.avatar-button img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.avatar-placeholder{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  font:700 14px "Space Grotesk",sans-serif;
+  color:var(--green);
+}
+
+.back{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  border:0;
+  background:transparent;
+  padding:0;
+  color:var(--ink);
+  font-weight:600;
+}
+
+.back svg{
+  width:22px;
+  height:22px;
+}
+
+.subtle-button{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.5);
+  color:var(--ink);
+  min-height:44px;
+  padding:0 18px;
+  border-radius:14px;
+}
+
+.hero{
+  text-align:center;
+  margin:18px 0 28px;
+}
+
+.hero h1{
+  margin:0;
+  font:600 clamp(38px,9vw,62px)/.98 "Space Grotesk",sans-serif;
+  letter-spacing:-.06em;
+}
+
+.hero h1 .mark{
+  display:inline-block;
+  background:var(--yellow);
+  padding:.05em .18em .12em;
+  border-radius:.2em;
+  transform:rotate(-2deg);
+}
+
+.hero-illustration{
+  width:min(100%,300px);
+  height:145px;
+  margin:12px auto 0;
+  position:relative;
+}
+
+.sun{
+  position:absolute;
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  background:var(--yellow);
+  left:50%;
+  top:8px;
+  transform:translateX(-50%);
+}
+
+.hill{
+  position:absolute;
+  left:5%;
+  right:5%;
+  bottom:20px;
+  height:72px;
+}
+
+.hill:before{
+  content:"";
+  position:absolute;
+  left:8%;
+  top:14px;
+  width:60%;
+  height:48px;
+  border-top:3px solid var(--ink);
+  border-radius:50% 50% 0 0;
+  transform:rotate(-4deg);
+}
+
+.hill:after{
+  content:"";
+  position:absolute;
+  left:24%;
+  top:35px;
+  width:65%;
+  height:38px;
+  border-top:2px solid var(--ink);
+  border-radius:50%;
+  transform:rotate(-2deg);
+}
+
+.palm{
+  position:absolute;
+  right:18%;
+  bottom:28px;
+  width:38px;
+  height:70px;
+}
+
+.palm:before{
+  content:"";
+  position:absolute;
+  left:17px;
+  bottom:0;
+  width:3px;
+  height:48px;
+  background:var(--ink);
+  transform:rotate(4deg);
+}
+
+.palm:after{
+  content:"☘";
+  position:absolute;
+  left:-1px;
+  top:0;
+  font-size:36px;
+  line-height:1;
+  transform:rotate(-8deg);
+}
+
+.segmented{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:#f5f3ec;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:2px;
+  margin:0 0 16px;
+}
+
+.segmented button{
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:var(--ink);
+  min-height:38px;
+  font-size:13px;
+  font-weight:600;
+}
+
+.segmented button.active{
+  background:var(--green);
+  color:#fff;
+  box-shadow:0 2px 8px rgba(16,44,42,.16);
+}
+
+.event-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.event-card{
+  position:relative;
+  display:grid;
+  grid-template-columns:52px 1fr auto;
+  align-items:center;
+  gap:13px;
+  padding:15px 15px 15px 13px;
+  background:rgba(255,255,255,.62);
+  border:1px solid var(--line);
+  border-radius:17px;
+  box-shadow:var(--shadow);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+
+.event-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 34px rgba(35,43,38,.09);
+}
+
+.event-card:active{
+  transform:translateY(0);
+}
+
+.date-tile{
+  width:52px;
+  height:52px;
+  border-radius:13px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  color:var(--ink);
+}
+
+.date-tile.green{background:var(--green-soft)}
+.date-tile.pink{background:var(--pink)}
+.date-tile.yellow{background:var(--yellow-soft)}
+.date-tile.blue{background:var(--blue-soft)}
+.date-tile.lavender{background:var(--lavender)}
+
+.date-month{
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+
+.date-day{
+  font:700 19px/1 "Space Grotesk",sans-serif;
+  margin-top:3px;
+}
+
+.event-main{
+  min-width:0;
+}
+
+.event-title{
+  font:600 17px/1.15 "Space Grotesk",sans-serif;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.event-meta{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.event-count{
+  min-width:28px;
+  height:28px;
+  padding:0 8px;
+  border-radius:999px;
+  background:#eeece5;
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:700;
+}
+
+.empty{
+  text-align:center;
+  padding:38px 12px;
+  color:var(--muted);
+}
+
+.create-fab{
+  position:fixed;
+  right:max(22px,calc((100vw - 760px)/2 + 20px));
+  bottom:82px;
+  width:54px;
+  height:54px;
+  border:0;
+  border-radius:50%;
+  background:var(--green);
+  color:#fff;
+  font-size:29px;
+  line-height:1;
+  box-shadow:0 10px 24px rgba(16,44,42,.2);
+  z-index:20;
+}
+
+.bottom-nav{
+  position:fixed;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:min(100%,760px);
+  height:68px;
+  padding:7px 20px 8px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:rgba(255,250,240,.94);
+  backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);
+  z-index:15;
+}
+
+.bottom-nav button{
+  border:0;
+  background:transparent;
+  color:#8a8e8b;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  font-size:11px;
+}
+
+.bottom-nav button.active{
+  color:var(--ink);
+  font-weight:700;
+}
+
+.bottom-nav svg{
+  width:20px;
+  height:20px;
+}
+
+.form-page{
+  padding-bottom:40px;
+}
+
+.form-heading{
+  margin:58px 0 28px;
+}
+
+.form-heading h1{
+  margin:0;
+  font:600 clamp(36px,8vw,54px)/1 "Space Grotesk",sans-serif;
+  letter-spacing:-.055em;
+}
+
+.form-heading p{
+  color:var(--muted);
+  margin:10px 0 0;
+}
+
+.form-icon{
+  width:84px;
+  height:84px;
+  margin-bottom:22px;
+  position:relative;
+}
+
+.form-icon .calendar{
+  position:absolute;
+  left:12px;
+  top:18px;
+  width:55px;
+  height:55px;
+  border:3px solid var(--ink);
+  border-radius:7px;
+  transform:rotate(-3deg);
+}
+
+.form-icon .calendar:before,
+.form-icon .calendar:after{
+  content:"";
+  position:absolute;
+  top:-9px;
+  width:3px;
+  height:18px;
+  background:var(--ink);
+  border-radius:2px;
+}
+
+.form-icon .calendar:before{left:14px}
+.form-icon .calendar:after{right:14px}
+
+.form-icon .slash{
+  position:absolute;
+  width:28px;
+  height:5px;
+  background:var(--yellow);
+  border-radius:99px;
+  left:30px;
+  top:45px;
+  transform:rotate(-45deg);
+}
+
+.form{
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+}
+
+.field{
+  position:relative;
+  display:block;
+  background:rgba(255,255,255,.48);
+  border:1px solid #cbd1cb;
+  border-radius:14px;
+  padding:12px 14px 10px 44px;
+}
+
+.field-icon{
+  position:absolute;
+  left:14px;
+  top:17px;
+  width:18px;
+  height:18px;
+  color:var(--ink);
+}
+
+.field-label{
+  display:block;
+  font-size:11px;
+  font-weight:600;
+  color:#394542;
+  margin-bottom:3px;
+}
+
+.field input,
+.field textarea{
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  padding:0;
+  margin:0;
+  color:var(--ink);
+  font-size:14px;
+}
+
+.field textarea{
+  min-height:86px;
+  resize:vertical;
+}
+
+.char-count{
+  text-align:right;
+  color:#7d8380;
+  font-size:10px;
+  margin-top:2px;
+}
+
+.primary{
+  min-height:50px;
+  border:0;
+  border-radius:13px;
+  background:var(--yellow);
+  color:#111;
+  font-weight:700;
+  padding:0 18px;
+  box-shadow:0 4px 12px rgba(210,165,40,.12);
+}
+
+.outline{
+  min-height:50px;
+  border:1px solid var(--ink);
+  border-radius:13px;
+  background:transparent;
+  color:var(--ink);
+  font-weight:600;
+  padding:0 18px;
+}
+
+.form-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:18px;
+}
+
+.error{
+  color:#a52d3b;
+  white-space:pre-wrap;
+  margin:3px 0 0;
+  font-size:13px;
+}
+
+.success{
+  color:#2d6c43;
+  white-space:pre-wrap;
+  margin:3px 0 0;
+  font-size:13px;
+}
+
+.event-detail{
+  padding-bottom:45px;
+}
+
+.detail-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:34px;
+}
+
+.detail-title{
+  font:600 clamp(38px,9vw,58px)/1 "Space Grotesk",sans-serif;
+  letter-spacing:-.055em;
+  margin:0 0 17px;
+}
+
+.detail-date{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:var(--ink);
+  font-size:14px;
+}
+
+.detail-date svg{
+  width:19px;
+  height:19px;
+}
+
+.coming-pill{
+  display:inline-flex;
+  align-items:center;
+  margin-top:14px;
+  padding:5px 12px;
+  border-radius:999px;
+  background:var(--green-soft);
+  color:#244b39;
+  font-size:12px;
+  font-weight:700;
+}
+
+.note-card{
+  margin-top:18px;
+  padding:15px;
+  border-radius:15px;
+  background:#f1eee5;
+}
+
+.note-card-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.note-card p{
+  margin:6px 0 0;
+  white-space:pre-wrap;
+  font-size:14px;
+}
+
+.creator{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:18px 0 25px;
+  padding-bottom:20px;
+  border-bottom:1px solid var(--line);
+}
+
+.creator img{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  object-fit:cover;
+}
+
+.creator-text{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.creator-name{
+  color:var(--ink);
+  font:500 14px "Space Grotesk",sans-serif;
+  margin-top:2px;
+}
+
+.response-section{
+  margin-top:18px;
+}
+
+.response-section h3{
+  margin:0 0 13px;
+  font:600 14px "Space Grotesk",sans-serif;
+}
+
+.response-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.response-buttons button{
+  min-height:46px;
+  border:0;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.yes{
+  background:#cfe5ca;
+  color:#153e31;
+}
+
+.no{
+  background:#f6cfd2;
+  color:#57282d;
+}
+
+.response-buttons button.selected{
+  outline:2px solid var(--ink);
+  outline-offset:2px;
+}
+
+.response-note-wrap{
+  margin-top:12px;
+  position:relative;
+}
+
+.response-note-wrap textarea{
+  width:100%;
+  min-height:48px;
+  border:0;
+  border-bottom:1px solid var(--line);
+  background:transparent;
+  outline:0;
+  resize:vertical;
+  padding:8px 0 9px 29px;
+  color:var(--ink);
+}
+
+.response-note-wrap svg{
+  position:absolute;
+  top:10px;
+  left:1px;
+  width:18px;
+  height:18px;
+}
+
+.save-response{
+  margin-top:12px;
+  min-height:43px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(255,255,255,.55);
+  color:var(--ink);
+  font-weight:600;
+  padding:0 16px;
+}
+
+.people-section{
+  margin-top:31px;
+}
+
+.people-section h3{
+  font:600 15px "Space Grotesk",sans-serif;
+  margin:0 0 12px;
+}
+
+.person{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid #e7e7df;
+}
+
+.person:last-child{
+  border-bottom:0;
+}
+
+.person img{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  object-fit:cover;
+  flex:none;
+}
+
+.person-name{
+  font-size:13px;
+  font-weight:600;
+}
+
+.person-note{
+  margin-top:2px;
+  color:var(--muted);
+  font-size:12px;
+  white-space:pre-wrap;
+}
+
+.person-status{
+  margin-left:auto;
+  font-size:15px;
+}
+
+.share-section{
+  margin-top:32px;
+  padding-top:22px;
+  border-top:1px solid var(--line);
+}
+
+.share-actions{
+  display:grid;
+  grid-template-columns:1fr 52px;
+  gap:10px;
+}
+
+.share-button{
+  min-height:46px;
+  border:1px solid #cfd4ce;
+  border-radius:13px;
+  background:transparent;
+  color:var(--ink);
+  font-weight:600;
+}
+
+.more-button{
+  min-height:46px;
+  border:1px solid #cfd4ce;
+  border-radius:13px;
+  background:transparent;
+  color:var(--ink);
+  font-size:21px;
+}
+
+.menu{
+  margin-top:9px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(255,255,255,.8);
+}
+
+.menu button{
+  min-height:45px;
+  border:0;
+  border-bottom:1px solid var(--line);
+  background:transparent;
+  text-align:left;
+  padding:0 14px;
+  color:var(--ink);
+}
+
+.menu button:last-child{
+  border-bottom:0;
+}
+
+.menu .danger-text{
+  color:#a52d3b;
+}
+
+.signin-card{
+  text-align:center;
+  padding:38px 20px;
+}
+
+.signin-card h2{
+  font:600 28px "Space Grotesk",sans-serif;
+  margin:0 0 8px;
+}
+
+.signin-card p{
+  color:var(--muted);
+  margin:0 0 20px;
+}
+
+.profile{
+  text-align:center;
+  padding-top:70px;
+}
+
+.profile-avatar{
+  width:110px;
+  height:110px;
+  margin:auto;
+  border-radius:50%;
+  object-fit:cover;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+
+.profile h1{
+  margin:22px 0 5px;
+  font:600 30px "Space Grotesk",sans-serif;
+  letter-spacing:-.04em;
+}
+
+.profile-email{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:28px;
+}
+
+.profile .outline{
+  width:min(100%,255px);
+}
+
+.not-found{
+  padding-top:60px;
+  text-align:center;
+}
+
+.not-found h2{
+  font:600 30px "Space Grotesk",sans-serif;
+}
+
+.muted{color:var(--muted)}
+
+@media(max-width:560px){
+  .page{
+    padding:20px 16px 95px;
+  }
+
+  .page-header{
+    margin-bottom:23px;
+  }
+
+  .brand-image{
+    height:44px;
+    max-width:190px;
+  }
+
+  .hero{
+    margin-top:5px;
+  }
+
+  .hero h1{
+    font-size:38px;
+  }
+
+  .event-card{
+    grid-template-columns:50px minmax(0,1fr) auto;
+  }
+
+  .create-fab{
+    right:18px;
+    bottom:80px;
+  }
+
+  .form-heading{
+    margin-top:38px;
+  }
+
+  .detail-title{
+    font-size:42px;
+  }
+}
+
+@media(min-width:700px){
+  .page{
+    padding-left:30px;
+    padding-right:30px;
+  }
+}
+</style>
+</head>
+
+<body>
+<main id="app"></main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  getDatabase,
+  ref,
+  get,
+  set,
+  onValue
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+/* =====================================================
+   FIREBASE
+===================================================== */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAagNLnoAEmzYzEY9OMeq_m5LR6bmId9zk",
+  authDomain: "varunundo-422fe.firebaseapp.com",
+  databaseURL: "https://varunundo-422fe-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "varunundo-422fe",
+  storageBucket: "varunundo-422fe.firebasestorage.app",
+  messagingSenderId: "733075243873",
+  appId: "1:733075243873:web:9a232cc80e5c9004517b20"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getDatabase(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
+
+const app = document.querySelector("#app");
+
+let activeListener = null;
+let signingIn = false;
+let eventsTab = "upcoming";
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[character]));
+}
+
+function newEventId(){
+  return crypto.randomUUID().replaceAll("-","").slice(0,12);
+}
+
+function eventURL(id){
+  return location.origin + location.pathname + "#e=" + id;
+}
+
+function parseDate(value){
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatDate(value){
+  const date = parseDate(value);
+  if(!date) return "Date unavailable";
+
+  return date.toLocaleString("en-IN",{
+    day:"numeric",
+    month:"long",
+    year:"numeric",
+    hour:"numeric",
+    minute:"2-digit",
+    hour12:true
+  });
+}
+
+function formatTime(value){
+  const date = parseDate(value);
+  if(!date) return "Time unavailable";
+
+  return date.toLocaleTimeString("en-IN",{
+    hour:"numeric",
+    minute:"2-digit",
+    hour12:true
+  });
+}
+
+function dateParts(value){
+  const date = parseDate(value);
+
+  if(!date){
+    return {month:"---",day:"?"};
+  }
+
+  return {
+    month:date.toLocaleDateString("en-US",{month:"short"}).toUpperCase(),
+    day:date.getDate()
+  };
+}
+
+function stopListener(){
+  if(activeListener){
+    activeListener();
+    activeListener = null;
+  }
+}
+
+function icon(name){
+  const icons = {
+    back:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>`,
+    calendar:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M7 3v4M17 3v4M3.5 9.5h17"/></svg>`,
+    note:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h14a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-4 3v-16a2 2 0 0 1 2-2Z"/><path d="M8 9h8M8 13h6"/></svg>`,
+    share:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>`,
+    events:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 9h16"/></svg>`,
+    plus:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`
+  };
+  return icons[name] || "";
+}
+
+/* =====================================================
+   AUTH
+===================================================== */
+
+async function requireAuth(){
+  if(auth.currentUser) return true;
+  if(signingIn) return false;
+
+  signingIn = true;
+
+  try{
+    await signInWithPopup(auth,googleProvider);
+    return true;
+  }catch(error){
+    console.error("Firebase Auth Error:",error);
+
+    if(
+      error.code === "auth/popup-closed-by-user" ||
+      error.code === "auth/cancelled-popup-request" ||
+      error.code === "auth/popup-blocked"
+    ){
+      return false;
+    }
+
+    alert(
+      "Google sign-in failed.\n\n" +
+      error.code +
+      "\n\n" +
+      error.message
+    );
+
+    return false;
+  }finally{
+    signingIn = false;
+  }
+}
+
+/* =====================================================
+   SHARED HEADER
+===================================================== */
+
+function renderHeader({back=false}={}){
+  const user = auth.currentUser;
+
+  return `
+    <header class="page-header">
+      ${
+        back
+          ? `
+            <button class="back" id="backButton" aria-label="Back">
+              ${icon("back")}
+              <span>Events</span>
+            </button>
+          `
+          : `
+            <button class="brand-button" id="homeButton" aria-label="Events home">
+              <img
+                class="brand-image"
+                src="logo.png"
+                alt="വരുന്നുണ്ടോ???"
+                onerror="
+                  this.style.display='none';
+                  this.nextElementSibling.style.display='block';
+                "
+              >
+              <span class="brand-fallback">വരുന്നുണ്ടോ???</span>
+            </button>
+          `
+      }
+
+      <button class="avatar-button" id="accountButton" aria-label="Account">
+        ${
+          user?.photoURL
+            ? `<img src="${escapeHTML(user.photoURL)}" alt="">`
+            : `<span class="avatar-placeholder">${user ? escapeHTML((user.displayName || "U").charAt(0).toUpperCase()) : "G"}</span>`
+        }
+      </button>
+    </header>
+  `;
+}
+
+function wireHeader({back=false}={}){
+  document.querySelector("#homeButton")?.addEventListener("click",()=>{
+    location.hash = "";
+    eventsPage();
+  });
+
+  document.querySelector("#backButton")?.addEventListener("click",()=>{
+    location.hash = "";
+    eventsPage();
+  });
+
+  document.querySelector("#accountButton")?.addEventListener("click",async()=>{
+    if(!auth.currentUser){
+      const signedIn = await requireAuth();
+      if(signedIn) route();
+      return;
+    }
+    profilePage();
+  });
+}
+
+function renderBottomNav(){
+  return `
+    <nav class="bottom-nav">
+      <button id="bottomEvents" class="active">
+        ${icon("events")}
+        <span>Events</span>
+      </button>
+
+      <button id="bottomCreate">
+        ${icon("plus")}
+        <span>Create</span>
+      </button>
+    </nav>
+  `;
+}
+
+function wireBottomNav(){
+  document.querySelector("#bottomEvents")?.addEventListener("click",()=>{
+    location.hash = "";
+    eventsPage();
+  });
+
+  document.querySelector("#bottomCreate")?.addEventListener("click",createPage);
+}
+
+/* =====================================================
+   EVENT LIST
+===================================================== */
+
+function eventsPage(){
+  stopListener();
+
+  app.innerHTML = `
+    <div class="page">
+      ${renderHeader()}
+
+      <section class="hero">
+        <h1>What’s <span class="mark">happening?</span></h1>
+
+        <div class="hero-illustration" aria-hidden="true">
+          <div class="sun"></div>
+          <div class="hill"></div>
+          <div class="palm"></div>
+        </div>
+      </section>
+
+      <div class="segmented">
+        <button id="upcomingTab" class="${eventsTab === "upcoming" ? "active" : ""}">
+          Upcoming
+        </button>
+        <button id="pastTab" class="${eventsTab === "past" ? "active" : ""}">
+          Past
+        </button>
+      </div>
+
+      <div id="eventsList"></div>
+    </div>
+
+    <button class="create-fab" id="createFab" aria-label="Create event">+</button>
+
+    ${renderBottomNav()}
+  `;
+
+  wireHeader();
+  wireBottomNav();
+
+  document.querySelector("#createFab").onclick = createPage;
+
+  document.querySelector("#upcomingTab").onclick = ()=>{
+    eventsTab = "upcoming";
+    eventsPage();
+  };
+
+  document.querySelector("#pastTab").onclick = ()=>{
+    eventsTab = "past";
+    eventsPage();
+  };
+
+  const eventsList = document.querySelector("#eventsList");
+
+  activeListener = onValue(
+    ref(db,"events"),
+    snapshot=>{
+      const events = snapshot.val() || {};
+      const now = Date.now();
+
+      const upcoming = [];
+      const past = [];
+
+      Object.entries(events).forEach(([id,event])=>{
+        const eventTime = parseDate(event.when)?.getTime();
+
+        if(Number.isFinite(eventTime) && eventTime < now){
+          past.push([id,event]);
+        }else{
+          upcoming.push([id,event]);
+        }
+      });
+
+      upcoming.sort((a,b)=>
+        (parseDate(a[1].when)?.getTime() || 0) -
+        (parseDate(b[1].when)?.getTime() || 0)
+      );
+
+      past.sort((a,b)=>
+        (parseDate(b[1].when)?.getTime() || 0) -
+        (parseDate(a[1].when)?.getTime() || 0)
+      );
+
+      const entries = eventsTab === "upcoming" ? upcoming : past;
+      eventsList.innerHTML = renderEvents(entries);
+
+      document.querySelectorAll(".event-card").forEach(card=>{
+        card.addEventListener("click",()=>{
+          location.hash = "e=" + card.dataset.id;
+        });
+      });
+    },
+    error=>{
+      console.error("EVENTS LOAD ERROR:",error);
+      eventsList.innerHTML = `
+        <p class="error">
+          Couldn't load events.<br><br>
+          ${escapeHTML(error.message || "")}
+        </p>
+      `;
+    }
+  );
+}
+
+function renderEvents(entries){
+  if(!entries.length){
+    return `
+      <div class="empty">
+        ${eventsTab === "upcoming" ? "No upcoming events yet." : "No past events."}
+      </div>
+    `;
+  }
+
+  const tileClasses = ["green","pink","yellow","blue","lavender"];
+
+  return `
+    <div class="event-list">
+      ${entries.map(([id,event],index)=>{
+        const parts = dateParts(event.when);
+        const coming = Object.values(event.responses || {})
+          .filter(response => response.status === "yes")
+          .length;
+
+        return `
+          <article
+            class="event-card"
+            data-id="${escapeHTML(id)}"
+            tabindex="0"
+            role="button"
+            aria-label="Open ${escapeHTML(event.title)}"
+          >
+            <div class="date-tile ${tileClasses[index % tileClasses.length]}">
+              <span class="date-month">${parts.month}</span>
+              <span class="date-day">${parts.day}</span>
+            </div>
+
+            <div class="event-main">
+              <div class="event-title">${escapeHTML(event.title)}</div>
+              <div class="event-meta">
+                ${formatDate(event.when).replace(/, \d{4}/,"")} 
+              </div>
+            </div>
+
+            <div class="event-count" title="${coming} coming">
+              ${coming}
+            </div>
+          </article>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+/* =====================================================
+   CREATE
+===================================================== */
+
+function createPage(){
+  stopListener();
+
+  if(!auth.currentUser){
+    app.innerHTML = `
+      <div class="page form-page">
+        ${renderHeader({back:true})}
+
+        <section class="signin-card">
+          <h2>Create an event</h2>
+          <p>Sign in with Google to create an event.</p>
+          <button class="primary" id="googleButton">
+            Continue with Google
+          </button>
+        </section>
+      </div>
+    `;
+
+    wireHeader({back:true});
+
+    document.querySelector("#googleButton").onclick = async()=>{
+      const signedIn = await requireAuth();
+      if(signedIn) createPage();
+    };
+
+    return;
+  }
+
+  app.innerHTML = `
+    <div class="page form-page">
+      ${renderHeader({back:true})}
+
+      <section class="form-heading">
+        <div class="form-icon" aria-hidden="true">
+          <div class="calendar"></div>
+          <div class="slash"></div>
+        </div>
+        <h1>Create a new event</h1>
+      </section>
+
+      <form class="form" id="eventForm">
+        <label class="field">
+          <span class="field-icon">${icon("note")}</span>
+          <span class="field-label">Event title *</span>
+          <input id="title" maxlength="100" placeholder="e.g. Evening walk" autocomplete="off">
+        </label>
+
+        <label class="field">
+          <span class="field-icon">${icon("calendar")}</span>
+          <span class="field-label">Date & time *</span>
+          <input id="when" type="datetime-local">
+        </label>
+
+        <label class="field">
+          <span class="field-icon">${icon("note")}</span>
+          <span class="field-label">Note (optional)</span>
+          <textarea id="eventNote" maxlength="1000" placeholder="Anything people should know?"></textarea>
+          <div class="char-count" id="noteCount">0/1000</div>
+        </label>
+
+        <p id="eventError" class="error"></p>
+
+        <div class="form-actions">
+          <button class="primary" type="submit">Create&nbsp; →</button>
+        </div>
+      </form>
+    </div>
+  `;
+
+  wireHeader({back:true});
+  wireCharacterCount("#eventNote","#noteCount");
+
+  document.querySelector("#eventForm").onsubmit = async(event)=>{
+    event.preventDefault();
+
+    const error = document.querySelector("#eventError");
+    error.textContent = "";
+
+    const title = document.querySelector("#title").value.trim();
+    const when = document.querySelector("#when").value;
+    const note = document.querySelector("#eventNote").value.trim();
+
+    if(!title){
+      error.textContent = "Give the event a title.";
+      return;
+    }
+
+    if(!when){
+      error.textContent = "Choose a date and time.";
+      return;
+    }
+
+    const whenMs = new Date(when).getTime();
+
+    if(!Number.isFinite(whenMs) || whenMs <= Date.now()){
+      error.textContent = "Choose a future date and time.";
+      return;
+    }
+
+    const user = auth.currentUser;
+
+    if(!user){
+      error.textContent = "Please sign in first.";
+      return;
+    }
+
+    const id = newEventId();
+
+    const eventData = {
+      title,
+      when,
+      note,
+      creatorUid:user.uid,
+      creatorName:user.displayName || "Unknown",
+      creatorPhoto:user.photoURL || "",
+      createdAt:Date.now()
+    };
+
+    try{
+      await set(ref(db,"events/" + id),eventData);
+      location.hash = "e=" + id;
+    }catch(errorObject){
+      console.error("CREATE EVENT ERROR:",errorObject);
+      error.textContent =
+        "Couldn't create event.\n\n" +
+        errorObject.code + "\n" +
+        errorObject.message;
+    }
+  };
+}
+
+function wireCharacterCount(textareaSelector,countSelector){
+  const textarea = document.querySelector(textareaSelector);
+  const count = document.querySelector(countSelector);
+  if(!textarea || !count) return;
+
+  const update = ()=>{
+    count.textContent = `${textarea.value.length}/${textarea.maxLength}`;
+  };
+
+  textarea.addEventListener("input",update);
+  update();
+}
+
+/* =====================================================
+   EDIT
+===================================================== */
+
+async function editEvent(id){
+  const user = auth.currentUser;
+
+  if(!user) return;
+
+  const snapshot = await get(ref(db,"events/" + id));
+
+  if(!snapshot.exists()){
+    alert("Event not found.");
+    return;
+  }
+
+  const event = snapshot.val();
+
+  if(event.creatorUid !== user.uid){
+    alert("Only the creator can edit this event.");
+    return;
+  }
+
+  app.innerHTML = `
+    <div class="page form-page">
+      ${renderHeader({back:true})}
+
+      <section class="form-heading">
+        <h1>Edit event</h1>
+      </section>
+
+      <form class="form" id="editForm">
+        <label class="field">
+          <span class="field-icon">${icon("note")}</span>
+          <span class="field-label">Event title *</span>
+          <input
+            id="title"
+            maxlength="100"
+            value="${escapeHTML(event.title)}"
+          >
+        </label>
+
+        <label class="field">
+          <span class="field-icon">${icon("calendar")}</span>
+          <span class="field-label">Date & time *</span>
+          <input
+            id="when"
+            type="datetime-local"
+            value="${escapeHTML(event.when)}"
+          >
+        </label>
+
+        <label class="field">
+          <span class="field-icon">${icon("note")}</span>
+          <span class="field-label">Note (optional)</span>
+          <textarea id="eventNote" maxlength="1000">${escapeHTML(event.note || "")}</textarea>
+          <div class="char-count" id="noteCount">0/1000</div>
+        </label>
+
+        <p id="eventError" class="error"></p>
+
+        <div class="form-actions">
+          <button class="primary" type="submit">Save changes</button>
+          <button class="outline" type="button" id="cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  `;
+
+  wireHeader({back:true});
+  wireCharacterCount("#eventNote","#noteCount");
+
+  document.querySelector("#cancel").onclick = ()=>eventPage(id);
+
+  document.querySelector("#editForm").onsubmit = async(formEvent)=>{
+    formEvent.preventDefault();
+
+    const error = document.querySelector("#eventError");
+    error.textContent = "";
+
+    const title = document.querySelector("#title").value.trim();
+    const when = document.querySelector("#when").value;
+    const note = document.querySelector("#eventNote").value.trim();
+
+    if(!title){
+      error.textContent = "Give the event a title.";
+      return;
+    }
+
+    if(!when){
+      error.textContent = "Choose a date and time.";
+      return;
+    }
+
+    const whenMs = new Date(when).getTime();
+
+    if(!Number.isFinite(whenMs) || whenMs <= Date.now()){
+      error.textContent = "Choose a future date and time.";
+      return;
+    }
+
+    try{
+      await set(ref(db,"events/" + id + "/title"),title);
+      await set(ref(db,"events/" + id + "/when"),when);
+      await set(ref(db,"events/" + id + "/note"),note);
+      eventPage(id);
+    }catch(errorObject){
+      console.error("EDIT EVENT ERROR:",errorObject);
+      error.textContent =
+        "Couldn't save changes.\n\n" +
+        errorObject.code + "\n" +
+        errorObject.message;
+    }
+  };
+}
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+async function deleteEvent(id){
+  const user = auth.currentUser;
+
+  if(!user) return;
+
+  const snapshot = await get(ref(db,"events/" + id));
+
+  if(!snapshot.exists()){
+    alert("Event not found.");
+    return;
+  }
+
+  const event = snapshot.val();
+
+  if(event.creatorUid !== user.uid){
+    alert("Only the creator can delete this event.");
+    return;
+  }
+
+  if(!confirm("Delete this event?\n\nThis cannot be undone.")){
+    return;
+  }
+
+  try{
+    await set(ref(db,"events/" + id),null);
+    location.hash = "";
+    eventsPage();
+  }catch(errorObject){
+    console.error("DELETE EVENT ERROR:",errorObject);
+    alert(
+      "Couldn't delete the event.\n\n" +
+      errorObject.code +
+      "\n" +
+      errorObject.message
+    );
+  }
+}
+
+/* =====================================================
+   EVENT DETAIL
+===================================================== */
+
+function eventPage(id){
+  stopListener();
+
+  app.innerHTML = `
+    <div class="page event-detail">
+      ${renderHeader({back:true})}
+      <div id="eventShell"></div>
+    </div>
+  `;
+
+  wireHeader({back:true});
+
+  activeListener = onValue(
+    ref(db,"events/" + id),
+    snapshot=>{
+      const shell = document.querySelector("#eventShell");
+      if(!shell) return;
+
+      if(!snapshot.exists()){
+        shell.innerHTML = `
+          <section class="not-found">
+            <h2>Event not found.</h2>
+            <p class="muted">This event doesn't exist or has been deleted.</p>
+          </section>
+        `;
+        return;
+      }
+
+      const event = snapshot.val();
+      const user = auth.currentUser;
+      const userUid = user?.uid || null;
+      const isCreator = userUid === event.creatorUid;
+
+      const responses = Object.entries(event.responses || {});
+      const coming = responses.filter(([,response])=>response.status === "yes");
+      const notComing = responses.filter(([,response])=>response.status === "no");
+      const myResponse = userUid ? event.responses?.[userUid] : null;
+
+      shell.innerHTML = `
+        <section>
+          <h1 class="detail-title">${escapeHTML(event.title)}</h1>
+
+          <div class="detail-date">
+            ${icon("calendar")}
+            <span>
+              ${escapeHTML(
+                parseDate(event.when)
+                  ? parseDate(event.when).toLocaleDateString("en-IN",{
+                      day:"numeric",
+                      month:"long",
+                      year:"numeric"
+                    })
+                  : "Date unavailable"
+              )}
+              &nbsp; · &nbsp;
+              ${escapeHTML(formatTime(event.when))}
+            </span>
+          </div>
+
+          <div class="coming-pill">
+            ${coming.length} coming
+          </div>
+
+          ${
+            event.note
+              ? `
+                <div class="note-card">
+                  <div class="note-card-title">
+                    ${icon("note")}
+                    <span>Note</span>
+                  </div>
+                  <p>${escapeHTML(event.note)}</p>
+                </div>
+              `
+              : ""
+          }
+
+          <div class="creator">
+            ${
+              event.creatorPhoto
+                ? `<img src="${escapeHTML(event.creatorPhoto)}" alt="">`
+                : `<div class="avatar-button"><span class="avatar-placeholder">U</span></div>`
+            }
+
+            <div>
+              <div class="creator-text">Created by</div>
+              <div class="creator-name">
+                ${escapeHTML(event.creatorName || "Unknown")}
+              </div>
+            </div>
+          </div>
+
+          <section class="response-section">
+            <h3>Are you coming?</h3>
+
+            ${
+              !userUid
+                ? `
+                  <button class="primary" id="respondButton">
+                    Continue with Google
+                  </button>
+                `
+                : `
+                  <div class="response-buttons">
+                    <button
+                      id="yesButton"
+                      class="yes ${myResponse?.status === "yes" ? "selected" : ""}"
+                    >
+                      ${myResponse?.status === "yes" ? "✓ " : ""}COMING
+                    </button>
+
+                    <button
+                      id="noButton"
+                      class="no ${myResponse?.status === "no" ? "selected" : ""}"
+                    >
+                      ${myResponse?.status === "no" ? "✓ " : ""}NOT COMING
+                    </button>
+                  </div>
+
+                  <div class="response-note-wrap">
+                    ${icon("note")}
+                    <textarea
+                      id="responseNote"
+                      maxlength="500"
+                      placeholder="Add a note (optional)"
+                    >${escapeHTML(myResponse?.note || "")}</textarea>
+                  </div>
+
+                  <button class="save-response" id="saveResponse">
+                    Save response
+                  </button>
+
+                  <p id="responseMessage" class="success"></p>
+                `
+            }
+          </section>
+
+          <section class="people-section">
+            <h3>Coming · ${coming.length}</h3>
+
+            ${
+              coming.length
+                ? coming.map(([,response])=>renderPerson(response,true)).join("")
+                : `<p class="muted small">Nobody yet.</p>`
+            }
+          </section>
+
+          <section class="people-section">
+            <h3>Not coming · ${notComing.length}</h3>
+
+            ${
+              notComing.length
+                ? notComing.map(([,response])=>renderPerson(response,false)).join("")
+                : `<p class="muted small">Nobody yet.</p>`
+            }
+          </section>
+
+          <section class="share-section">
+            <div class="share-actions">
+              <button class="share-button" id="shareButton">
+                ${icon("share")} &nbsp; Share
+              </button>
+
+              <button class="more-button" id="moreButton" aria-label="More options">
+                …
+              </button>
+            </div>
+
+            <div class="menu" id="moreMenu" hidden>
+              ${
+                isCreator
+                  ? `
+                    <button id="editButton">Edit event</button>
+                    <button id="deleteButton" class="danger-text">Delete event</button>
+                  `
+                  : ""
+              }
+              <button id="copyButton">Copy event link</button>
+            </div>
+          </section>
+        </section>
+      `;
+
+      document.querySelector("#moreButton").onclick = ()=>{
+        const menu = document.querySelector("#moreMenu");
+        menu.hidden = !menu.hidden;
+      };
+
+      document.querySelector("#editButton")?.addEventListener("click",()=>editEvent(id));
+      document.querySelector("#deleteButton")?.addEventListener("click",()=>deleteEvent(id));
+
+      document.querySelector("#copyButton")?.addEventListener("click",async()=>{
+        const button = document.querySelector("#copyButton");
+
+        try{
+          await navigator.clipboard.writeText(eventURL(id));
+          button.textContent = "Copied!";
+          setTimeout(()=>{
+            if(button.isConnected) button.textContent = "Copy event link";
+          },1200);
+        }catch{
+          prompt("Copy this event link:",eventURL(id));
+        }
+      });
+
+      document.querySelector("#respondButton")?.addEventListener("click",async()=>{
+        const signedIn = await requireAuth();
+        if(signedIn) eventPage(id);
+      });
+
+      document.querySelector("#shareButton")?.addEventListener("click",event=>{
+        shareEvent(id,event.currentTarget);
+      });
+
+      if(!userUid) return;
+
+      let choice = myResponse?.status || "";
+
+      const yesButton = document.querySelector("#yesButton");
+      const noButton = document.querySelector("#noButton");
+      const responseNote = document.querySelector("#responseNote");
+      const message = document.querySelector("#responseMessage");
+
+      function updateChoice(){
+        yesButton?.classList.toggle("selected",choice === "yes");
+        noButton?.classList.toggle("selected",choice === "no");
+
+        if(yesButton){
+          yesButton.textContent = choice === "yes" ? "✓ COMING" : "COMING";
+        }
+
+        if(noButton){
+          noButton.textContent = choice === "no" ? "✓ NOT COMING" : "NOT COMING";
+        }
+      }
+
+      yesButton?.addEventListener("click",()=>{
+        choice = "yes";
+        updateChoice();
+      });
+
+      noButton?.addEventListener("click",()=>{
+        choice = "no";
+        updateChoice();
+      });
+
+      document.querySelector("#saveResponse")?.addEventListener("click",async()=>{
+        if(choice !== "yes" && choice !== "no"){
+          message.textContent = "Choose COMING or NOT COMING.";
+          return;
+        }
+
+        const currentUser = auth.currentUser;
+        if(!currentUser) return;
+
+        const note = responseNote.value.trim();
+
+        try{
+          await set(
+            ref(db,"events/" + id + "/responses/" + currentUser.uid),
+            {
+              name:currentUser.displayName || "Unknown",
+              photo:currentUser.photoURL || "",
+              status:choice,
+              note,
+              updatedAt:Date.now()
+            }
+          );
+
+          message.textContent =
+            choice === "yes"
+              ? "You're coming."
+              : "You're not coming.";
+        }catch(errorObject){
+          console.error("RESPONSE ERROR:",errorObject);
+          message.textContent =
+            "Couldn't save your response.\n\n" +
+            errorObject.code +
+            "\n" +
+            errorObject.message;
+        }
+      });
+    },
+    error=>{
+      console.error("EVENT ERROR:",error);
+
+      const shell = document.querySelector("#eventShell");
+
+      if(shell){
+        shell.innerHTML = `
+          <p class="error">
+            Couldn't load event.<br><br>
+            ${escapeHTML(error.message || "")}
+          </p>
+        `;
+      }
+    }
+  );
+}
+
+function renderPerson(response,isComing){
+  return `
+    <div class="person">
+      ${
+        response.photo
+          ? `<img src="${escapeHTML(response.photo)}" alt="">`
+          : `<div class="avatar-button"><span class="avatar-placeholder">U</span></div>`
+      }
+
+      <div>
+        <div class="person-name">${escapeHTML(response.name || "Unknown")}</div>
+        ${
+          response.note
+            ? `<div class="person-note">${escapeHTML(response.note)}</div>`
+            : ""
+        }
+      </div>
+
+      <div class="person-status">${isComing ? "✓" : "×"}</div>
+    </div>
+  `;
+}
+
+/* =====================================================
+   SHARE
+===================================================== */
+
+async function shareEvent(id,button){
+  const url = eventURL(id);
+
+  const snapshot = await get(ref(db,"events/" + id));
+  const event = snapshot.val();
+
+  if(!event) return;
+
+  const date = parseDate(event.when);
+
+  const dateText = date
+    ? date.toLocaleDateString("en-IN",{
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+      })
+    : "Date unavailable";
+
+  const timeText = date
+    ? date.toLocaleTimeString("en-IN",{
+        hour:"numeric",
+        minute:"2-digit",
+        hour12:true
+      })
+    : "Time unavailable";
+
+  const message = `${event.title}
+${dateText} · ${timeText}
+
+# വരുന്നുണ്ടോ???`;
+
+  if(navigator.share){
+    try{
+      await navigator.share({
+        title:"വരുന്നുണ്ടോ???",
+        text:message,
+        url
+      });
+      return;
+    }catch(error){
+      if(error?.name === "AbortError") return;
+    }
+  }
+
+  try{
+    await navigator.clipboard.writeText(message + "\n\n" + url);
+
+    if(button){
+      const original = button.innerHTML;
+      button.textContent = "Copied!";
+      setTimeout(()=>{
+        if(button.isConnected) button.innerHTML = original;
+      },1200);
+    }
+  }catch{
+    prompt("Copy this event message:",message + "\n\n" + url);
+  }
+}
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+function profilePage(){
+  const user = auth.currentUser;
+  if(!user) return;
+
+  app.innerHTML = `
+    <div class="page">
+      ${renderHeader({back:true})}
+
+      <section class="profile">
+        ${
+          user.photoURL
+            ? `<img class="profile-avatar" src="${escapeHTML(user.photoURL)}" alt="">`
+            : `<div class="profile-avatar avatar-placeholder">${escapeHTML((user.displayName || "U").charAt(0).toUpperCase())}</div>`
+        }
+
+        <h1>${escapeHTML(user.displayName || "Google account")}</h1>
+        <div class="profile-email">${escapeHTML(user.email || "")}</div>
+
+        <button class="outline" id="signOutButton">
+          Sign out
+        </button>
+      </section>
+    </div>
+  `;
+
+  wireHeader({back:true});
+
+  document.querySelector("#signOutButton").onclick = async()=>{
+    await signOut(auth);
+    location.hash = "";
+    eventsPage();
+  };
+}
+
+/* =====================================================
+   ROUTER
+===================================================== */
+
+function route(){
+  stopListener();
+
+  const match = location.hash.match(/^#e=(.+)$/);
+
+  if(match){
+    eventPage(decodeURIComponent(match[1]));
+    return;
+  }
+
+  eventsPage();
+}
+
+/* =====================================================
+   START
+===================================================== */
+
+onAuthStateChanged(auth,()=>{
+  route();
+});
+
+window.addEventListener("hashchange",route);
+</script>
+</body>
+</html>
