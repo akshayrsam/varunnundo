@@ -9,6 +9,11 @@
 <meta property="og:description" content="Are you coming?">
 <meta property="og:type" content="website">
 
+<link
+  href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap"
+  rel="stylesheet"
+>
+
 <style>
 *{box-sizing:border-box}
 
@@ -16,7 +21,7 @@ body{
   margin:0;
   background:#fff9ef;
   color:#222;
-  font:17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font:17px "Lilita One",sans-serif;
   line-height:1.45;
 }
 
@@ -31,10 +36,14 @@ h1{
   line-height:1;
   margin:0;
 }
-  
-h2,h3{line-height:1.15}
 
-button,input,textarea{font:inherit}
+h2,h3{
+  line-height:1.15
+}
+
+button,input,textarea,select,summary{
+  font:inherit;
+}
 
 button{
   min-height:48px;
@@ -82,7 +91,9 @@ textarea{
   margin-bottom:18px;
 }
 
-.top h1{flex:1}
+.top h1{
+  flex:1
+}
 
 .nav{
   display:flex;
@@ -94,10 +105,18 @@ textarea{
   flex:1;
   background:#fff;
 }
-  
-.muted{color:#777}
-.small{font-size:14px}
-.center{text-align:center}
+
+.muted{
+  color:#777
+}
+
+.small{
+  font-size:14px
+}
+
+.center{
+  text-align:center
+}
 
 .error{
   color:#b00020;
@@ -128,22 +147,34 @@ textarea{
   margin:18px 0;
 }
 
-.choice button{flex:1}
+.choice button{
+  flex:1
+}
 
 .choice .selected{
   outline:4px solid #222;
 }
 
-.yes{background:#8ee6a8}
-.no{background:#ff9b9b}
-.danger{background:#ff9b9b}
+.yes{
+  background:#8ee6a8
+}
+
+.no{
+  background:#ff9b9b
+}
+
+.danger{
+  background:#ff9b9b
+}
 
 .person{
   padding:11px 0;
   border-bottom:1px solid #ddd;
 }
 
-.person:last-child{border-bottom:0}
+.person:last-child{
+  border-bottom:0
+}
 
 .person-head{
   display:flex;
@@ -190,11 +221,27 @@ textarea{
 }
 
 @media(max-width:420px){
-  .top{align-items:flex-start}
-  .top h1{font-size:34px}
-  .nav{flex-wrap:wrap}
-  .nav button{min-width:30%}
-  .choice{flex-direction:column}
+
+  .top{
+    align-items:flex-start
+  }
+
+  .top h1{
+    font-size:34px
+  }
+
+  .nav{
+    flex-wrap:wrap
+  }
+
+  .nav button{
+    min-width:30%
+  }
+
+  .choice{
+    flex-direction:column
+  }
+
 }
 </style>
 </head>
@@ -461,7 +508,8 @@ function renderHeader(){
 
   `;
 
-}  
+}
+
 
 function wireHeader(){
 
@@ -527,7 +575,7 @@ function wireHeader(){
       }
     );
 }
-  
+
 
 /* =====================================================
    SHARE
