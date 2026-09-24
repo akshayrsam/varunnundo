@@ -389,7 +389,12 @@ function renderHeader(){
 
     <div class="top">
 
-      <h1>വരുന്നുണ്ടോ???</h1>
+      <h1
+        id="homeTitle"
+        style="cursor:pointer;"
+      >
+        വരുന്നുണ്ടോ???
+      </h1>      
 
       <button id="accountButton">
         ${user ? "Account" : "Sign in"}
@@ -441,6 +446,23 @@ function wireHeader(){
     );
 
   document
+    .querySelector("#homeTitle")
+    ?.addEventListener(
+      "click",
+      () => {
+
+        history.replaceState(
+          null,
+          "",
+          location.pathname + location.search
+        );
+
+        eventsPage();
+
+      }
+    );
+
+  document
     .querySelector("#accountButton")
     ?.addEventListener(
       "click",
@@ -461,7 +483,6 @@ function wireHeader(){
       }
     );
 }
-
   
 
 /* =====================================================
