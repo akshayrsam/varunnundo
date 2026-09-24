@@ -11,20 +11,20 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --bg: #F9F6EE;
+  --bg: #F5F3EF;
   --card-bg: #FFFFFF;
   --input-bg: #FAF8F5;
   --text-main: #1C1917;
   --text-muted: #78716C;
   --border: #E7E5E4;
   --border-dark: #292524;
-  --primary: #FFCB45;
-  --primary-hover: #F5BF38;
-  --tab-active: #233831;
+  --primary: #F2C94C;
+  --primary-hover: #E0B83B;
+  --tab-active: #21332A;
   --yes-bg: #D1F2DF;
   --yes-text: #166534;
   --no-bg: #FCE7F3;
@@ -166,7 +166,7 @@ textarea.input-field {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 0 20px;
+  padding: 12px 0 16px;
 }
 
 .header-left {
@@ -176,14 +176,13 @@ textarea.input-field {
 }
 
 .back-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: #fff;
+  width: 32px;
+  height: 32px;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
 }
 
 .app-title {
@@ -217,23 +216,14 @@ textarea.input-field {
 
 .hero-illustration svg {
   width: 100%;
-  max-width: 280px;
+  max-width: 260px;
   height: auto;
-}
-
-.hero-tagline {
-  text-align: center;
-  font-family: Georgia, serif;
-  font-size: 20px;
-  line-height: 1.35;
-  color: #292524;
-  margin-bottom: 24px;
 }
 
 /* Segmented Control / Tabs */
 .tab-container {
   display: flex;
-  background: #EFECE6;
+  background: #EBE8E1;
   padding: 4px;
   border-radius: 999px;
   margin-bottom: 20px;
@@ -264,7 +254,7 @@ textarea.input-field {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 16px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -278,15 +268,16 @@ textarea.input-field {
 }
 
 .date-badge {
-  background: #F5F3EF;
+  background: #FAF8F5;
   border-radius: var(--radius-sm);
-  padding: 8px 12px;
+  padding: 6px 10px;
   text-align: center;
-  min-width: 56px;
+  min-width: 50px;
+  border: 1px solid var(--border);
 }
 
 .date-badge-month {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -294,7 +285,7 @@ textarea.input-field {
 }
 
 .date-badge-day {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--text-main);
   line-height: 1.2;
@@ -307,7 +298,7 @@ textarea.input-field {
 
 .event-name {
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
@@ -315,19 +306,20 @@ textarea.input-field {
 }
 
 .event-meta {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
 }
 
 .count-pill {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
+  background: #FAF8F5;
   border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-muted);
 }
@@ -336,7 +328,7 @@ textarea.input-field {
 .fab {
   position: fixed;
   bottom: 24px;
-  right: calc(50% - 220px);
+  right: calc(50% - 210px);
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -347,9 +339,7 @@ textarea.input-field {
 }
 
 @media (max-width: 480px) {
-  .fab {
-    right: 20px;
-  }
+  .fab { right: 20px; }
 }
 
 /* RSVP Buttons */
@@ -364,7 +354,7 @@ textarea.input-field {
   padding: 12px;
   border-radius: var(--radius-md);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
   border: 1px solid transparent;
   background: var(--input-bg);
   color: var(--text-muted);
@@ -388,7 +378,7 @@ textarea.input-field {
   border-radius: var(--radius-lg);
   padding: 20px;
   border: 1px solid var(--border);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .note-box {
@@ -397,6 +387,7 @@ textarea.input-field {
   padding: 14px;
   margin: 16px 0;
   font-size: 14px;
+  border: 1px solid var(--border);
 }
 
 .creator-info {
@@ -442,44 +433,6 @@ textarea.input-field {
   background: #E7E5E4;
 }
 
-/* Handdrawn Quote Footer */
-.handdrawn-quote {
-  font-family: 'Caveat', cursive;
-  font-size: 26px;
-  text-align: center;
-  color: var(--text-muted);
-  margin-top: 40px;
-  line-height: 1.1;
-}
-
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(100%, 480px);
-  background: rgba(249, 246, 238, 0.9);
-  backdrop-filter: blur(10px);
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  border-top: 1px solid var(--border);
-}
-
-.bottom-nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 11px;
-  color: var(--text-muted);
-  gap: 4px;
-}
-
-.bottom-nav-item.active {
-  color: var(--text-main);
-  font-weight: 600;
-}
-
 .error { color: #dc2626; font-size: 13px; margin-top: 6px; font-weight: 500; }
 .success { color: #166534; font-size: 13px; margin-top: 6px; font-weight: 500; }
 </style>
@@ -519,7 +472,7 @@ let signingIn = false;
 let currentTab = 'upcoming';
 
 /* =====================================================
-   HELPERS & SVGS
+   HELPERS & SVGS MATCHING REFERENCE DESIGN ACCURATELY
 ===================================================== */
 function escapeHTML(value){
   return String(value ?? "")
@@ -561,15 +514,32 @@ function parseEventDate(value) {
   };
 }
 
-// Minimal Handdrawn SVG Illustrations
+// Hand-drawn SVGs recreated precisely from reference screenshots
 const SVGS = {
-  landscape: `<svg viewBox="0 0 300 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="150" cy="40" r="22" fill="#FFCB45"/>
-    <path d="M10 100 C 60 70, 110 110, 160 80 C 210 50, 250 90, 290 100" stroke="#292524" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M40 105 C 100 85, 170 105, 260 98" stroke="#78716C" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M240 85 Q 235 60 250 45" stroke="#292524" stroke-width="2" fill="none"/>
-    <path d="M250 45 Q 235 35 225 45 M250 45 Q 260 30 270 40 M250 45 Q 265 50 255 60" stroke="#292524" stroke-width="2" fill="none"/>
+  // Main Sun/Landscape Illustration with Palm Tree
+  landscape: `<svg viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="140" cy="42" r="24" fill="#F2C94C"/>
+    <path d="M 20 95 C 70 65, 120 105, 170 85 C 220 65, 250 85, 260 90" stroke="#1C1917" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    <path d="M 10 102 C 80 82, 160 102, 270 96" stroke="#1C1917" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+    <path d="M 235 90 C 232 75, 230 60, 240 45" stroke="#1C1917" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M 240 45 C 228 38, 220 48, 218 50 M 240 45 C 235 32, 245 28, 250 30 M 240 45 C 252 38, 260 48, 262 50 M 240 45 C 250 55, 258 52, 260 55" stroke="#1C1917" stroke-width="1.8" stroke-linecap="round" fill="none"/>
   </svg>`,
+
+  // Landscape variant with colored green hill accent (for details screen)
+  landscapeGreen: `<svg viewBox="0 0 280 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="178" cy="36" r="20" fill="#F2C94C"/>
+    <path d="M 10 85 C 70 50, 150 95, 270 75 L 270 100 L 10 100 Z" fill="#93A38C" opacity="0.6"/>
+    <path d="M 10 85 C 70 50, 150 95, 270 75" stroke="#1C1917" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M 220 38 Q 225 32 230 38 M 235 34 Q 240 28 245 34" stroke="#1C1917" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  </svg>`,
+
+  // Calendar Icon inside Input
+  createCalendarIcon: `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="22" y="20" width="36" height="38" rx="6" stroke="#1C1917" stroke-width="2.5" fill="none"/>
+    <path d="M 30 14 L 30 22 M 50 14 L 50 22" stroke="#1C1917" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 32 38 L 48 38 M 40 30 L 40 46" stroke="#1C1917" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>`,
+
   calendar: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
   pencil: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>`,
   note: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>`,
@@ -612,7 +582,7 @@ function renderHeader(showBack = false){
         <h1 class="app-title" id="homeTitle" style="cursor:pointer;">വരുന്നുണ്ടോ???</h1>
       </div>
       <button class="avatar-btn" id="accountButton">
-        ${user ? `<img src="${escapeHTML(user.photoURL || "")}" alt="Profile">` : `<span style="font-size:12px; font-weight:600;">Sign in</span>`}
+        ${user ? `<img src="${escapeHTML(user.photoURL || "")}" alt="Profile">` : `<span style="font-size:11px; font-weight:700;">Sign in</span>`}
       </button>
     </header>
   `;
@@ -682,10 +652,6 @@ function eventsPage(){
     <div class="hero-illustration">
       ${SVGS.landscape}
     </div>
-    
-    <div class="hero-tagline">
-      Good people.<br>Real plans.<br>Let's show up.
-    </div>
 
     <div class="tab-container">
       <button class="tab-btn ${currentTab === 'upcoming' ? 'active' : ''}" id="tabUpcoming">Upcoming</button>
@@ -747,7 +713,7 @@ function eventsPage(){
               </div>
               <div class="event-info">
                 <div class="event-name">${escapeHTML(event.title)}</div>
-                <div class="event-meta">${dateData ? dateData.time : ''}</div>
+                <div class="event-meta">Kozhikode · ${dateData ? dateData.time : ''}</div>
               </div>
               <div class="count-pill">${coming}</div>
             </div>
@@ -815,12 +781,10 @@ function createPage(){
   app.innerHTML = `
     ${renderHeader(true)}
 
-    <div style="text-align:center; margin-bottom: 24px;">
-      <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-        <rect x="15" y="15" width="30" height="30" rx="4" stroke="#292524" stroke-width="2.5"/>
-        <path d="M22 10V18 M38 10V18" stroke="#292524" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M25 30H35 M30 25V35" stroke="#292524" stroke-width="2.5" stroke-linecap="round"/>
-      </svg>
+    <div style="text-align:center; margin: 10px 0 20px;">
+      <div style="width:80px; height:80px; margin: 0 auto;">
+        ${SVGS.createCalendarIcon}
+      </div>
       <h2 style="font-size:24px; margin-top:8px;">Create a new event</h2>
     </div>
 
@@ -939,6 +903,10 @@ async function editEvent(id){
       <button class="btn-primary" id="saveEvent">Save changes</button>
       <button class="btn-secondary" id="cancel">Cancel</button>
     </div>
+
+    <div class="hero-illustration" style="margin-top:20px;">
+      ${SVGS.landscape}
+    </div>
   `;
 
   wireHeader();
@@ -1044,7 +1012,7 @@ function eventPage(id){
 
     shell.innerHTML = `
       <div class="hero-illustration" style="padding:0 0 10px;">
-        ${SVGS.landscape}
+        ${SVGS.landscapeGreen}
       </div>
 
       <div class="details-card">
@@ -1055,16 +1023,16 @@ function eventPage(id){
           <span>${dateData ? dateData.formatted : 'Date unavailable'}</span>
         </div>
 
-        <div style="display:inline-block; background:#FAF8F5; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; margin-top:10px;">
+        <div style="display:inline-block; background:#FAF8F5; border:1px solid var(--border); padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; margin-top:10px;">
           ${coming.length} coming
         </div>
 
         ${event.note ? `
           <div class="note-box">
-            <div style="font-weight:700; display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+            <div style="font-weight:700; display:flex; align-items:center; gap:6px; margin-bottom:4px; font-size:13px;">
               ${SVGS.note} Note
             </div>
-            <div style="white-space:pre-wrap; color:var(--text-main);">${escapeHTML(event.note)}</div>
+            <div style="white-space:pre-wrap; color:var(--text-main); font-size:14px;">${escapeHTML(event.note)}</div>
           </div>
         ` : ''}
 
@@ -1225,17 +1193,14 @@ function profilePage(){
     ${renderHeader(true)}
 
     <div class="details-card" style="text-align:center; padding: 32px 20px; margin-top:20px;">
-      <div style="width:80px; height:80px; border-radius:50%; overflow:hidden; margin: 0 auto 16px; border:2px solid var(--border);">
+      <div style="width:80px; height:80px; border-radius:50%; overflow:hidden; margin: 0 auto 16px; border:2px solid var(--border); position:relative;">
         <img src="${escapeHTML(user.photoURL || "")}" alt="Profile" style="width:100%; height:100%; object-fit:cover;">
+        <div style="position:absolute; bottom:0; right:0; background:#fff; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; border:1px solid var(--border);">G</div>
       </div>
       <h2 style="font-size:22px;">${escapeHTML(user.displayName || "User")}</h2>
       <p style="color:var(--text-muted); font-size:14px; margin-top:4px; margin-bottom:24px;">${escapeHTML(user.email || "")}</p>
 
       <button class="btn-secondary" id="signOutButton">Sign out</button>
-    </div>
-
-    <div class="handdrawn-quote">
-      Same people.<br>New plans.
     </div>
   `;
 
