@@ -247,6 +247,7 @@ textarea{
 </main>
 
 
+
 <script type="module">
 
 import {
@@ -268,6 +269,7 @@ import {
   set,
   onValue
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
 
 
 /* =====================================================
@@ -298,6 +300,7 @@ let activeListener = null;
 let signingIn = false;
 
 
+
 /* =====================================================
    HELPERS
 ===================================================== */
@@ -315,12 +318,14 @@ function escapeHTML(value){
 }
 
 
+
 function newEventId(){
 
   return crypto.randomUUID()
     .replaceAll("-", "")
     .slice(0,12);
 }
+
 
 
 function eventURL(id){
@@ -332,6 +337,7 @@ function eventURL(id){
     id
   );
 }
+
 
 
 function formatDate(value){
@@ -354,6 +360,7 @@ function formatDate(value){
 }
 
 
+
 function stopListener(){
 
   if(activeListener){
@@ -363,6 +370,7 @@ function stopListener(){
     activeListener = null;
   }
 }
+
 
 
 /* =====================================================
@@ -419,6 +427,7 @@ async function requireAuth(){
 }
 
 
+
 /* =====================================================
    HEADER
 ===================================================== */
@@ -446,16 +455,22 @@ function renderHeader(){
     </div>
 
 
+
     <div class="nav">
 
       <button id="createButton">
         Create
       </button>
 
+      <button id="eventsButton">
+        Events
+      </button>
+
     </div>
 
   `;
 }
+
 
 
 function wireHeader(){
@@ -466,6 +481,18 @@ function wireHeader(){
       "click",
       createPage
     );
+
+
+
+  document
+    .querySelector("#eventsButton")
+    ?.addEventListener(
+      "click",
+      ()=>{
+        location.hash = "events";
+      }
+    );
+
 
 
   document
@@ -489,6 +516,7 @@ function wireHeader(){
       }
     );
 }
+
 
 
 /* =====================================================
@@ -517,6 +545,7 @@ async function shareEvent(id,button){
         return;
     }
   }
+
 
 
   try{
@@ -548,6 +577,247 @@ async function shareEvent(id,button){
 }
 
 
+
+/* =====================================================
+   EVENTS
+===================================================== */
+
+function eventsPage(){
+
+  stopListener();
+
+  app.innerHTML = `
+
+    ${renderHeader()}
+
+    <div class="box">
+
+      <h2>
+        Events
+      </h2>
+
+      <div id="upcomingEvents">
+        Loading...
+      </div>
+
+      <details style="margin-top:24px;">
+
+        <summary
+          style="
+            cursor:pointer;
+            font-weight:bold;
+          "
+        >
+          Past events
+        </summary>
+
+        <div
+          id="pastEvents"
+          style="margin-top:16px;"
+        >
+        </div>
+
+      </details>
+
+    </div>
+
+  `;
+
+  wireHeader();
+
+
+
+  const upcomingEvents =
+    document.querySelector(
+      "#upcomingEvents"
+    );
+
+  const pastEvents =
+    document.querySelector(
+      "#pastEvents"
+    );
+
+
+
+  activeListener =
+    onValue(
+      ref(db,"events"),
+      snapshot => {
+
+        const events =
+          snapshot.val() || {};
+
+
+
+        const now =
+          Date.now();
+
+
+
+        const upcoming = [];
+
+        const past = [];
+
+
+
+        Object.entries(events)
+          .forEach(
+            ([id,event]) => {
+
+              const eventTime =
+                new Date(
+                  event.when
+                ).getTime();
+
+
+
+              if(
+                Number.isFinite(eventTime) &&
+                eventTime < now
+              ){
+
+                past.push(
+                  [id,event]
+                );
+
+              }else{
+
+                upcoming.push(
+                  [id,event]
+                );
+
+              }
+
+            }
+          );
+
+
+
+        upcoming.sort(
+          (a,b)=>
+            new Date(a[1].when).getTime() -
+            new Date(b[1].when).getTime()
+        );
+
+
+
+        past.sort(
+          (a,b)=>
+            new Date(b[1].when).getTime() -
+            new Date(a[1].when).getTime()
+        );
+
+
+
+        function renderEvents(entries){
+
+          if(!entries.length){
+
+            return `
+              <p class="muted">
+                No events.
+              </p>
+            `;
+
+          }
+
+
+
+          return entries
+            .map(
+              ([id,event]) => `
+
+                <div
+                  class="event"
+                  data-id="${escapeHTML(id)}"
+                  style="
+                    cursor:pointer;
+                    padding:14px 0;
+                    border-bottom:1px solid #ddd;
+                  "
+                >
+
+                  <div
+                    style="
+                      font-weight:800;
+                      font-size:19px;
+                    "
+                  >
+                    ${escapeHTML(
+                      event.title
+                    )}
+                  </div>
+
+
+
+                  <div class="muted">
+                    ${formatDate(
+                      event.when
+                    )}
+                  </div>
+
+
+
+                  ${
+                    event.note
+                      ? `
+                        <div
+                          class="muted"
+                          style="margin-top:4px;"
+                        >
+                          ${escapeHTML(
+                            event.note
+                          )}
+                        </div>
+                      `
+                      : ""
+                  }
+
+                </div>
+
+              `
+            )
+            .join("");
+
+        }
+
+
+
+        upcomingEvents.innerHTML =
+          renderEvents(upcoming);
+
+
+
+        pastEvents.innerHTML =
+          renderEvents(past);
+
+
+
+        document
+          .querySelectorAll(
+            "#upcomingEvents .event, " +
+            "#pastEvents .event"
+          )
+          .forEach(
+            card => {
+
+              card.onclick = () => {
+
+                location.hash =
+                  "e=" +
+                  card.dataset.id;
+
+              };
+
+            }
+          );
+
+      }
+    );
+}
+
+
+
 /* =====================================================
    CREATE
 ===================================================== */
@@ -555,6 +825,7 @@ async function shareEvent(id,button){
 function createPage(){
 
   stopListener();
+
 
 
   if(!auth.currentUser){
@@ -585,6 +856,7 @@ function createPage(){
     wireHeader();
 
 
+
     document
       .querySelector("#googleButton")
       .onclick = async()=>{
@@ -600,6 +872,7 @@ function createPage(){
   }
 
 
+
   app.innerHTML = `
 
     ${renderHeader()}
@@ -609,6 +882,7 @@ function createPage(){
       <h2>
         Create an event
       </h2>
+
 
 
       <label>
@@ -624,6 +898,7 @@ function createPage(){
       </label>
 
 
+
       <label>
 
         Date and time
@@ -634,6 +909,7 @@ function createPage(){
         >
 
       </label>
+
 
 
       <label>
@@ -649,10 +925,12 @@ function createPage(){
       </label>
 
 
+
       <p
         id="eventError"
         class="error"
       ></p>
+
 
 
       <button id="saveEvent">
@@ -666,6 +944,7 @@ function createPage(){
   wireHeader();
 
 
+
   document
     .querySelector("#saveEvent")
     .onclick = async()=>{
@@ -676,10 +955,12 @@ function createPage(){
         );
 
 
+
       const title =
         document.querySelector(
           "#title"
         ).value.trim();
+
 
 
       const when =
@@ -688,10 +969,12 @@ function createPage(){
         ).value;
 
 
+
       const note =
         document.querySelector(
           "#eventNote"
         ).value.trim();
+
 
 
       if(!title){
@@ -703,6 +986,7 @@ function createPage(){
       }
 
 
+
       if(!when){
 
         error.textContent =
@@ -712,8 +996,10 @@ function createPage(){
       }
 
 
+
       const whenMs =
         new Date(when).getTime();
+
 
 
       if(
@@ -728,8 +1014,10 @@ function createPage(){
       }
 
 
+
       const user =
         auth.currentUser;
+
 
 
       if(!user){
@@ -741,8 +1029,10 @@ function createPage(){
       }
 
 
+
       const id =
         newEventId();
+
 
 
       /*
@@ -750,6 +1040,8 @@ function createPage(){
         There is intentionally NO
         responses:{} here.
       */
+
+
 
       const event = {
 
@@ -776,6 +1068,7 @@ function createPage(){
       };
 
 
+
       try{
 
         await set(
@@ -785,6 +1078,7 @@ function createPage(){
           ),
           event
         );
+
 
 
         location.hash =
@@ -807,6 +1101,7 @@ function createPage(){
 }
 
 
+
 /* =====================================================
    EDIT
 ===================================================== */
@@ -817,8 +1112,10 @@ async function editEvent(id){
     auth.currentUser;
 
 
+
   if(!user)
     return;
+
 
 
   const snapshot =
@@ -828,6 +1125,7 @@ async function editEvent(id){
         "events/" + id
       )
     );
+
 
 
   if(!snapshot.exists()){
@@ -840,8 +1138,10 @@ async function editEvent(id){
   }
 
 
+
   const event =
     snapshot.val();
+
 
 
   if(
@@ -856,6 +1156,7 @@ async function editEvent(id){
   }
 
 
+
   app.innerHTML = `
 
     ${renderHeader()}
@@ -865,6 +1166,7 @@ async function editEvent(id){
       <h2>
         Edit event
       </h2>
+
 
 
       <label>
@@ -882,6 +1184,7 @@ async function editEvent(id){
       </label>
 
 
+
       <label>
 
         Date and time
@@ -895,6 +1198,7 @@ async function editEvent(id){
         >
 
       </label>
+
 
 
       <label>
@@ -911,10 +1215,12 @@ async function editEvent(id){
       </label>
 
 
+
       <p
         id="eventError"
         class="error"
       ></p>
+
 
 
       <div class="actions">
@@ -936,10 +1242,12 @@ async function editEvent(id){
   wireHeader();
 
 
+
   document
     .querySelector("#cancel")
     .onclick = () =>
       eventPage(id);
+
 
 
   document
@@ -952,10 +1260,12 @@ async function editEvent(id){
         );
 
 
+
       const title =
         document.querySelector(
           "#title"
         ).value.trim();
+
 
 
       const when =
@@ -964,10 +1274,12 @@ async function editEvent(id){
         ).value;
 
 
+
       const note =
         document.querySelector(
           "#eventNote"
         ).value.trim();
+
 
 
       if(!title){
@@ -979,6 +1291,7 @@ async function editEvent(id){
       }
 
 
+
       if(!when){
 
         error.textContent =
@@ -988,8 +1301,10 @@ async function editEvent(id){
       }
 
 
+
       const whenMs =
         new Date(when).getTime();
+
 
 
       if(
@@ -1002,6 +1317,7 @@ async function editEvent(id){
 
         return;
       }
+
 
 
       try{
@@ -1017,6 +1333,8 @@ async function editEvent(id){
           responses
         */
 
+
+
         await set(
           ref(
             db,
@@ -1026,6 +1344,7 @@ async function editEvent(id){
           ),
           title
         );
+
 
 
         await set(
@@ -1039,6 +1358,7 @@ async function editEvent(id){
         );
 
 
+
         await set(
           ref(
             db,
@@ -1048,6 +1368,7 @@ async function editEvent(id){
           ),
           note
         );
+
 
 
         eventPage(id);
@@ -1069,6 +1390,7 @@ async function editEvent(id){
 }
 
 
+
 /* =====================================================
    DELETE
 ===================================================== */
@@ -1079,8 +1401,10 @@ async function deleteEvent(id){
     auth.currentUser;
 
 
+
   if(!user)
     return;
+
 
 
   const snapshot =
@@ -1090,6 +1414,7 @@ async function deleteEvent(id){
         "events/" + id
       )
     );
+
 
 
   if(!snapshot.exists()){
@@ -1102,8 +1427,10 @@ async function deleteEvent(id){
   }
 
 
+
   const event =
     snapshot.val();
+
 
 
   if(
@@ -1118,6 +1445,7 @@ async function deleteEvent(id){
   }
 
 
+
   if(
     !confirm(
       "Delete this event?\n\n" +
@@ -1125,6 +1453,7 @@ async function deleteEvent(id){
     )
   )
     return;
+
 
 
   try{
@@ -1136,6 +1465,7 @@ async function deleteEvent(id){
       ),
       null
     );
+
 
 
     location.hash = "";
@@ -1159,6 +1489,7 @@ async function deleteEvent(id){
 }
 
 
+
 /* =====================================================
    EVENT PAGE
 ===================================================== */
@@ -1166,6 +1497,7 @@ async function deleteEvent(id){
 function eventPage(id){
 
   stopListener();
+
 
 
   app.innerHTML = `
@@ -1177,6 +1509,7 @@ function eventPage(id){
   `;
 
   wireHeader();
+
 
 
   activeListener =
@@ -1193,8 +1526,10 @@ function eventPage(id){
           );
 
 
+
         if(!shell)
           return;
+
 
 
         if(!snapshot.exists()){
@@ -1220,26 +1555,32 @@ function eventPage(id){
         }
 
 
+
         const event =
           snapshot.val();
+
 
 
         const user =
           auth.currentUser;
 
 
+
         const userUid =
           user?.uid || null;
+
 
 
         const isCreator =
           userUid === event.creatorUid;
 
 
+
         const responses =
           Object.entries(
             event.responses || {}
           );
+
 
 
         const coming =
@@ -1249,6 +1590,7 @@ function eventPage(id){
           );
 
 
+
         const notComing =
           responses.filter(
             ([,response]) =>
@@ -1256,10 +1598,12 @@ function eventPage(id){
           );
 
 
+
         const myResponse =
           userUid
             ? event.responses?.[userUid]
             : null;
+
 
 
         shell.innerHTML = `
@@ -1273,11 +1617,13 @@ function eventPage(id){
             </h2>
 
 
+
             <p>
               ${formatDate(
                 event.when
               )}
             </p>
+
 
 
             ${
@@ -1310,6 +1656,7 @@ function eventPage(id){
             }
 
 
+
             <div class="person-info">
 
               ${
@@ -1339,6 +1686,7 @@ function eventPage(id){
             </div>
 
 
+
             ${
               isCreator
                 ? `
@@ -1364,6 +1712,7 @@ function eventPage(id){
             }
 
           </div>
+
 
 
           ${
@@ -1397,6 +1746,7 @@ function eventPage(id){
                   </h3>
 
 
+
                   <div class="choice">
 
                     <button
@@ -1417,6 +1767,7 @@ function eventPage(id){
                       COMING
 
                     </button>
+
 
 
                     <button
@@ -1441,6 +1792,7 @@ function eventPage(id){
                   </div>
 
 
+
                   <label>
 
                     Your note
@@ -1456,9 +1808,11 @@ function eventPage(id){
                   </label>
 
 
+
                   <button id="saveResponse">
                     Save response
                   </button>
+
 
 
                   <p
@@ -1472,11 +1826,13 @@ function eventPage(id){
           }
 
 
+
           <div class="box">
 
             <h3>
               Coming · ${coming.length}
             </h3>
+
 
 
             ${
@@ -1519,6 +1875,7 @@ function eventPage(id){
                           </div>
 
 
+
                           ${
                             response.note
                               ? `
@@ -1546,11 +1903,13 @@ function eventPage(id){
           </div>
 
 
+
           <div class="box">
 
             <h3>
               Not coming · ${notComing.length}
             </h3>
+
 
 
             ${
@@ -1593,6 +1952,7 @@ function eventPage(id){
                           </div>
 
 
+
                           ${
                             response.note
                               ? `
@@ -1620,6 +1980,7 @@ function eventPage(id){
           </div>
 
 
+
           <div class="box">
 
             <strong>
@@ -1627,11 +1988,13 @@ function eventPage(id){
             </strong>
 
 
+
             <div class="link">
               ${escapeHTML(
                 eventURL(id)
               )}
             </div>
+
 
 
             <div class="actions">
@@ -1651,6 +2014,7 @@ function eventPage(id){
         `;
 
 
+
         /* EDIT */
 
         document
@@ -1661,6 +2025,7 @@ function eventPage(id){
           );
 
 
+
         /* DELETE */
 
         document
@@ -1669,6 +2034,7 @@ function eventPage(id){
             "click",
             ()=>deleteEvent(id)
           );
+
 
 
         /* SIGN IN TO RESPOND */
@@ -1688,6 +2054,7 @@ function eventPage(id){
           );
 
 
+
         /* SHARE */
 
         document
@@ -1700,6 +2067,7 @@ function eventPage(id){
                 event.currentTarget
               )
           );
+
 
 
         /* COPY */
@@ -1716,6 +2084,7 @@ function eventPage(id){
                 );
 
 
+
               try{
 
                 await navigator.clipboard
@@ -1724,8 +2093,10 @@ function eventPage(id){
                   );
 
 
+
                 button.textContent =
                   "Copied!";
+
 
 
                 setTimeout(()=>{
@@ -1747,14 +2118,17 @@ function eventPage(id){
           );
 
 
+
         /* RESPONSE */
 
         if(!userUid)
           return;
 
 
+
         let choice =
           myResponse?.status || "";
+
 
 
         const yesButton =
@@ -1763,10 +2137,12 @@ function eventPage(id){
           );
 
 
+
         const noButton =
           document.querySelector(
             "#noButton"
           );
+
 
 
         const responseNote =
@@ -1775,10 +2151,12 @@ function eventPage(id){
           );
 
 
+
         const message =
           document.querySelector(
             "#responseMessage"
           );
+
 
 
         function updateChoice(){
@@ -1789,10 +2167,12 @@ function eventPage(id){
           );
 
 
+
           noButton?.classList.toggle(
             "selected",
             choice === "no"
           );
+
 
 
           if(yesButton){
@@ -1802,6 +2182,7 @@ function eventPage(id){
                 ? "✓ COMING"
                 : "COMING";
           }
+
 
 
           if(noButton){
@@ -1814,6 +2195,7 @@ function eventPage(id){
         }
 
 
+
         yesButton?.addEventListener(
           "click",
           ()=>{
@@ -1823,6 +2205,7 @@ function eventPage(id){
         );
 
 
+
         noButton?.addEventListener(
           "click",
           ()=>{
@@ -1830,6 +2213,7 @@ function eventPage(id){
             updateChoice();
           }
         );
+
 
 
         document
@@ -1850,16 +2234,20 @@ function eventPage(id){
               }
 
 
+
               const currentUser =
                 auth.currentUser;
+
 
 
               if(!currentUser)
                 return;
 
 
+
               const note =
                 responseNote.value.trim();
+
 
 
               try{
@@ -1895,6 +2283,7 @@ function eventPage(id){
                 );
 
 
+
                 message.textContent =
                   choice === "yes"
                     ? "You're coming."
@@ -1920,6 +2309,7 @@ function eventPage(id){
 }
 
 
+
 /* =====================================================
    ACCOUNT
 ===================================================== */
@@ -1930,8 +2320,10 @@ function profilePage(){
     auth.currentUser;
 
 
+
   if(!user)
     return;
+
 
 
   app.innerHTML = `
@@ -1955,6 +2347,7 @@ function profilePage(){
       }
 
 
+
       <h2>
         ${escapeHTML(
           user.displayName ||
@@ -1963,11 +2356,13 @@ function profilePage(){
       </h2>
 
 
+
       <p class="muted">
         ${escapeHTML(
           user.email || ""
         )}
       </p>
+
 
 
       <button id="signOutButton">
@@ -1979,7 +2374,9 @@ function profilePage(){
   `;
 
 
+
   wireHeader();
+
 
 
   document
@@ -1995,6 +2392,7 @@ function profilePage(){
 }
 
 
+
 /* =====================================================
    ROUTER
 ===================================================== */
@@ -2004,10 +2402,12 @@ function route(){
   stopListener();
 
 
+
   const match =
     location.hash.match(
       /^#e=(.+)$/
     );
+
 
 
   if(match){
@@ -2022,8 +2422,19 @@ function route(){
   }
 
 
+
+  if(location.hash === "#events"){
+
+    eventsPage();
+
+    return;
+  }
+
+
+
   createPage();
 }
+
 
 
 /* =====================================================
@@ -2036,6 +2447,7 @@ onAuthStateChanged(
     route();
   }
 );
+
 
 
 window.addEventListener(
