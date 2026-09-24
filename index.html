@@ -662,13 +662,21 @@ function eventsPage(){
               "
             >
 
-              <div
-                style="
-                  font-weight:800;
-                  font-size:19px;
-                "
-              >
-                ${escapeHTML(event.title)}
+              <div style="font-size:19px;">
+                <strong>${escapeHTML(event.title)}</strong>
+                <span
+                  class="muted"
+                  style="
+                    font-size:14px;
+                    font-weight:400;
+                    margin-left:4px;
+                  "
+                >
+                  (${Object.values(event.responses || {})
+                    .filter(response => response.status === "yes")
+                    .length}
+                  coming)
+                </span>
               </div>
 
               <div class="muted">
