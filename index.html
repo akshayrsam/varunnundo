@@ -1,0 +1,1848 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>വരുന്നുണ്ടോ???</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#fff9ef;
+  color:#222;
+  font:17px system-ui,sans-serif;
+  line-height:1.45;
+}
+
+main{
+  width:min(calc(100% - 24px),620px);
+  margin:auto;
+  padding:28px 0 70px;
+}
+
+h1{
+  text-align:center;
+  font-size:clamp(34px,8vw,42px);
+  line-height:1;
+  margin:0 0 28px;
+}
+
+h2,h3{
+  line-height:1.15;
+  margin-top:0;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  min-height:48px;
+  border:2px solid #222;
+  border-radius:12px;
+  padding:10px 16px;
+  background:#ffcf4a;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+input{
+  width:100%;
+  min-height:50px;
+  padding:11px;
+  border:2px solid #222;
+  border-radius:11px;
+  margin:7px 0 12px;
+}
+
+.box{
+  background:#fff;
+  border:3px solid #222;
+  border-radius:18px;
+  padding:20px;
+  margin:16px 0;
+  box-shadow:5px 5px #222;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.top h1{
+  margin:0;
+  text-align:left;
+}
+
+.nav{
+  display:flex;
+  gap:8px;
+  margin:12px 0 20px;
+}
+
+.nav button{
+  flex:1;
+  background:#fff;
+}
+
+.nav button.active{
+  background:#ffcf4a;
+}
+
+.event{
+  cursor:pointer;
+}
+
+.event:hover{
+  transform:translateY(-1px);
+}
+
+.event-title{
+  font-size:21px;
+  font-weight:800;
+  margin-bottom:5px;
+}
+
+.muted{
+  color:#777;
+}
+
+.small{
+  font-size:14px;
+}
+
+.center{
+  text-align:center;
+}
+
+.error{
+  color:#b00020;
+  font-weight:700;
+}
+
+.success{
+  font-weight:700;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 9px;
+  border:2px solid #222;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:800;
+  margin-top:8px;
+}
+
+.yes{
+  background:#8ee6a8;
+}
+
+.no{
+  background:#ff9b9b;
+}
+
+.choice{
+  display:flex;
+  gap:10px;
+  margin:18px 0;
+}
+
+.choice button{
+  flex:1;
+}
+
+.choice .selected{
+  outline:4px solid #222;
+}
+
+.scope{
+  display:grid;
+  gap:9px;
+  margin:12px 0 18px;
+}
+
+.scope label{
+  display:block;
+  border:2px solid #222;
+  border-radius:12px;
+  padding:12px;
+  cursor:pointer;
+  background:#fff;
+}
+
+.scope input{
+  width:auto;
+  min-height:auto;
+  margin:0 8px 0 0;
+}
+
+.invite-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid #ddd;
+}
+
+.invite-row:last-child{
+  border:0;
+}
+
+.person{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:11px 0;
+  border-bottom:1px solid #ddd;
+}
+
+.person:last-child{
+  border:0;
+}
+
+.link{
+  overflow-wrap:anywhere;
+  background:#f1eee7;
+  padding:11px;
+  border-radius:9px;
+  margin:12px 0;
+}
+
+.profile-photo{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  border:3px solid #222;
+  object-fit:cover;
+}
+
+@media(max-width:360px){
+  .choice{
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+<main>
+  <div id="app"></div>
+</main>
+
+<script type="module">
+
+import{
+  initializeApp
+}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import{
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut
+}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import{
+  getDatabase,
+  ref,
+  get,
+  set,
+  update,
+  onValue,
+  runTransaction
+}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+
+/* ==================================================
+   FIREBASE
+================================================== */
+
+const firebaseConfig={
+  apiKey:"AIzaSyC-SDx67qExccNG9dejrtT62XJ8JFaMEfo",
+  authDomain:"are-you-coming-7d624.firebaseapp.com",
+  databaseURL:"https://are-you-coming-7d624-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"are-you-coming-7d624",
+  storageBucket:"are-you-coming-7d624.firebasestorage.app",
+  messagingSenderId:"871889087284",
+  appId:"1:871889087284:web:96de6b10f2e197ffc55361"
+};
+
+const firebaseApp=initializeApp(firebaseConfig);
+const auth=getAuth(firebaseApp);
+const db=getDatabase(firebaseApp);
+const googleProvider=new GoogleAuthProvider();
+
+const app=document.querySelector("#app");
+
+
+/* ==================================================
+   HELPERS
+================================================== */
+
+const esc=value=>
+  String(value??"").replace(/[&<>"']/g,char=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[char]));
+
+const uid=()=>auth.currentUser?.uid||null;
+
+const newId=()=>
+  crypto.randomUUID().replaceAll("-","").slice(0,12);
+
+const eventUrl=id=>
+  location.origin+
+  location.pathname+
+  "#e="+id;
+
+const formatDate=value=>{
+  if(!value)return"Date unavailable";
+
+  return new Date(value).toLocaleString([],{
+    day:"2-digit",
+    month:"long",
+    year:"numeric",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+};
+
+const validUsername=value=>
+  /^[a-zA-Z0-9_]{3,20}$/.test(value);
+
+
+/* ==================================================
+   AUTH
+================================================== */
+
+async function requireAuth(){
+
+  if(auth.currentUser)
+    return true;
+
+  try{
+    await signInWithPopup(
+      auth,
+      googleProvider
+    );
+
+    return true;
+
+  }catch(error){
+
+    if(
+      error.code==="auth/popup-blocked" ||
+      error.code==="auth/popup-closed-by-user"
+    ){
+      return false;
+    }
+
+    console.error(error);
+    alert("Google sign-in failed.");
+    return false;
+  }
+}
+
+
+/* ==================================================
+   PROFILE
+================================================== */
+
+async function getProfile(){
+
+  const user=auth.currentUser;
+
+  if(!user)
+    return null;
+
+  const snapshot=
+    await get(ref(db,"users/"+user.uid));
+
+  return snapshot.exists()
+    ?snapshot.val()
+    :null;
+}
+
+
+async function ensureProfile(){
+
+  const user=auth.currentUser;
+
+  if(!user)
+    return null;
+
+  const existing=await getProfile();
+
+  if(existing?.username)
+    return existing;
+
+  return new Promise(resolve=>{
+
+    app.innerHTML=`
+
+      <div class="box">
+
+        <h2>Welcome.</h2>
+
+        <p>
+          Choose your username.
+        </p>
+
+        <input
+          id="username"
+          maxlength="20"
+          placeholder="akshay"
+          autocomplete="off"
+        >
+
+        <p class="muted small">
+          3–20 characters.
+          Letters, numbers and underscore.
+        </p>
+
+        <p id="usernameError" class="error"></p>
+
+        <button id="continue">
+          Continue →
+        </button>
+
+      </div>
+    `;
+
+    document.querySelector("#continue").onclick=async()=>{
+
+      const input=
+        document.querySelector("#username");
+
+      const error=
+        document.querySelector("#usernameError");
+
+      const username=
+        input.value.trim();
+
+      const usernameLower=
+        username.toLowerCase();
+
+      if(!validUsername(username)){
+        error.textContent=
+          "Use 3–20 letters, numbers or underscores.";
+        return;
+      }
+
+      error.textContent="Checking…";
+
+      try{
+
+        const usernameRef=
+          ref(db,"usernames/"+usernameLower);
+
+        const result=
+          await runTransaction(
+            usernameRef,
+            current=>{
+              if(current===null)
+                return user.uid;
+
+              return;
+            }
+          );
+
+        if(!result.committed){
+
+          error.textContent=
+            "That username is already taken.";
+
+          return;
+        }
+
+        const profile={
+          username,
+          usernameLower,
+          displayName:
+            user.displayName||username,
+          photoURL:
+            user.photoURL||"",
+          createdAt:Date.now()
+        };
+
+        await set(
+          ref(db,"users/"+user.uid),
+          profile
+        );
+
+        resolve(profile);
+
+      }catch(errorObject){
+
+        console.error(errorObject);
+
+        error.textContent=
+          "Couldn't create your profile.";
+      }
+    };
+  });
+}
+
+
+/* ==================================================
+   NAVIGATION
+================================================== */
+
+function header(){
+
+  const user=auth.currentUser;
+
+  return`
+
+    <div class="top">
+
+      <h1>വരുന്നുണ്ടോ???</h1>
+
+      ${
+        user
+        ?`
+          <button id="account">
+            @${esc(
+              user.displayName||"Account"
+            )}
+          </button>
+        `
+        :`
+          <button id="account">
+            Sign in
+          </button>
+        `
+      }
+
+    </div>
+
+    <div class="nav">
+
+      <button id="feed">
+        Feed
+      </button>
+
+      <button id="events">
+        Events
+      </button>
+
+      <button id="create">
+        Create
+      </button>
+
+    </div>
+  `;
+}
+
+
+function wireHeader(){
+
+  document.querySelector("#feed").onclick=
+    feedPage;
+
+  document.querySelector("#events").onclick=
+    eventsPage;
+
+  document.querySelector("#create").onclick=
+    createPage;
+
+  document.querySelector("#account").onclick=
+    async()=>{
+
+      if(!auth.currentUser){
+
+        const signedIn=await requireAuth();
+
+        if(signedIn){
+          await ensureProfile();
+          route();
+        }
+
+        return;
+      }
+
+      profilePage();
+    };
+}
+
+
+/* ==================================================
+   FEED
+================================================== */
+
+function feedPage(){
+
+  app.innerHTML=`
+
+    ${header()}
+
+    <div class="box">
+
+      <h2>Feed</h2>
+
+      <p class="muted">
+        Public events.
+      </p>
+
+    </div>
+
+    <div id="feedList">
+      <p class="muted">
+        Loading…
+      </p>
+    </div>
+  `;
+
+  wireHeader();
+
+  onValue(
+    ref(db,"publicEvents"),
+    snapshot=>{
+
+      const data=
+        snapshot.val()||{};
+
+      const events=
+        Object.entries(data)
+        .sort((a,b)=>
+          (a[1].when||"")
+          .localeCompare(b[1].when||"")
+        );
+
+      const list=
+        document.querySelector("#feedList");
+
+      if(!events.length){
+
+        list.innerHTML=`
+          <div class="box">
+            <p class="muted">
+              No public events yet.
+            </p>
+          </div>
+        `;
+
+        return;
+      }
+
+      list.innerHTML=
+        events.map(([id,event])=>`
+
+          <div
+            class="box event"
+            data-id="${esc(id)}"
+          >
+
+            <div class="event-title">
+              ${esc(event.title)}
+            </div>
+
+            <div>
+              ${formatDate(event.when)}
+            </div>
+
+            <p class="muted small">
+              by @${esc(event.creatorUsername)}
+            </p>
+
+            <span class="badge">
+              Public
+            </span>
+
+          </div>
+
+        `).join("");
+
+      list
+        .querySelectorAll(".event")
+        .forEach(element=>{
+
+          element.onclick=()=>{
+            location.hash=
+              "e="+element.dataset.id;
+          };
+
+        });
+    }
+  );
+}
+
+
+/* ==================================================
+   EVENTS PAGE
+================================================== */
+
+function eventsPage(){
+
+  const user=auth.currentUser;
+
+  if(!user){
+
+    app.innerHTML=`
+
+      ${header()}
+
+      <div class="box">
+
+        <h2>Events</h2>
+
+        <p>
+          Sign in to see the events
+          you've been invited to.
+        </p>
+
+        <button id="google">
+          Continue with Google
+        </button>
+
+      </div>
+
+    `;
+
+    wireHeader();
+
+    document.querySelector("#google").onclick=
+      async()=>{
+
+        const signedIn=
+          await requireAuth();
+
+        if(signedIn){
+          await ensureProfile();
+          eventsPage();
+        }
+      };
+
+    return;
+  }
+
+  app.innerHTML=`
+
+    ${header()}
+
+    <div class="box">
+
+      <h2>Your events</h2>
+
+      <p class="muted">
+        Events you've created or been invited to.
+      </p>
+
+    </div>
+
+    <div id="eventList">
+      <p class="muted">
+        Loading…
+      </p>
+    </div>
+
+  `;
+
+  wireHeader();
+
+  onValue(
+    ref(db,"userEvents/"+user.uid),
+    async snapshot=>{
+
+      const index=
+        snapshot.val()||{};
+
+      const ids=
+        Object.keys(index);
+
+      const events=[];
+
+      for(const id of ids){
+
+        const eventSnapshot=
+          await get(ref(db,"events/"+id));
+
+        if(eventSnapshot.exists()){
+
+          events.push({
+            id,
+            event:eventSnapshot.val(),
+            relationship:index[id]
+          });
+
+        }
+      }
+
+      events.sort((a,b)=>
+        (a.event.when||"")
+        .localeCompare(b.event.when||"")
+      );
+
+      const list=
+        document.querySelector("#eventList");
+
+      if(!events.length){
+
+        list.innerHTML=`
+
+          <div class="box">
+
+            <p class="muted">
+              No events yet.
+            </p>
+
+            <button id="makeOne">
+              Create an event →
+            </button>
+
+          </div>
+
+        `;
+
+        document.querySelector("#makeOne").onclick=
+          createPage;
+
+        return;
+      }
+
+      list.innerHTML=
+        events.map(({id,event,relationship})=>`
+
+          <div
+            class="box event"
+            data-id="${esc(id)}"
+          >
+
+            <div class="event-title">
+              ${esc(event.title)}
+            </div>
+
+            <div>
+              ${formatDate(event.when)}
+            </div>
+
+            <p class="muted small">
+              by @${esc(event.creatorUsername)}
+            </p>
+
+            <span class="badge">
+              ${
+                relationship==="creator"
+                ?"Created by you"
+                :"Invited"
+              }
+            </span>
+
+          </div>
+
+        `).join("");
+
+      list
+        .querySelectorAll(".event")
+        .forEach(element=>{
+
+          element.onclick=()=>{
+            location.hash=
+              "e="+element.dataset.id;
+          };
+
+        });
+    }
+  );
+}
+
+
+/* ==================================================
+   CREATE EVENT
+================================================== */
+
+async function createPage(){
+
+  if(!auth.currentUser){
+
+    const signedIn=
+      await requireAuth();
+
+    if(!signedIn)
+      return;
+
+    await ensureProfile();
+  }
+
+  app.innerHTML=`
+
+    ${header()}
+
+    <div class="box">
+
+      <h2>Make a thing.</h2>
+
+      <input
+        id="title"
+        maxlength="100"
+        placeholder="Evening walk"
+      >
+
+      <input
+        id="when"
+        type="datetime-local"
+      >
+
+      <h3>
+        Who can respond?
+      </h3>
+
+      <div class="scope">
+
+        <label>
+
+          <input
+            type="radio"
+            name="scope"
+            value="link"
+            checked
+          >
+
+          <strong>
+            Send link
+          </strong>
+
+          <br>
+
+          <span class="muted small">
+            Anyone with the link can respond.
+          </span>
+
+        </label>
+
+
+        <label>
+
+          <input
+            type="radio"
+            name="scope"
+            value="invited"
+          >
+
+          <strong>
+            Invited people
+          </strong>
+
+          <br>
+
+          <span class="muted small">
+            Only invited people can respond.
+          </span>
+
+        </label>
+
+
+        <label>
+
+          <input
+            type="radio"
+            name="scope"
+            value="public"
+          >
+
+          <strong>
+            Public
+          </strong>
+
+          <br>
+
+          <span class="muted small">
+            Anyone can discover it in Feed.
+          </span>
+
+        </label>
+
+      </div>
+
+      <div id="inviteBox"></div>
+
+      <p id="createError" class="error"></p>
+
+      <button id="createEvent">
+        Create →
+      </button>
+
+    </div>
+  `;
+
+  wireHeader();
+
+  let invited=[];
+
+  const renderInvites=()=>{
+
+    const box=
+      document.querySelector("#inviteBox");
+
+    if(
+      document.querySelector(
+        'input[name="scope"]:checked'
+      )?.value!=="invited"
+    ){
+      box.innerHTML="";
+      return;
+    }
+
+    box.innerHTML=`
+
+      <h3>
+        Invite people
+      </h3>
+
+      <input
+        id="inviteUsername"
+        placeholder="@username"
+        maxlength="20"
+      >
+
+      <button
+        id="addInvite"
+        type="button"
+      >
+        Add person
+      </button>
+
+      <div id="inviteList">
+        ${
+          invited.map((username,index)=>`
+
+            <div class="invite-row">
+
+              <span>
+                @${esc(username)}
+              </span>
+
+              <button
+                type="button"
+                data-index="${index}"
+              >
+                Remove
+              </button>
+
+            </div>
+
+          `).join("")
+        }
+      </div>
+
+    `;
+
+    document.querySelector("#addInvite").onclick=
+      async()=>{
+
+        const input=
+          document.querySelector(
+            "#inviteUsername"
+          );
+
+        const username=
+          input.value.trim();
+
+        const lower=
+          username.toLowerCase();
+
+        if(!validUsername(username)){
+          alert("Enter a valid username.");
+          return;
+        }
+
+        if(invited.includes(lower)){
+          input.value="";
+          return;
+        }
+
+        const snapshot=
+          await get(
+            ref(db,"usernames/"+lower)
+          );
+
+        if(!snapshot.exists()){
+          alert("That username doesn't exist.");
+          return;
+        }
+
+        if(snapshot.val()===uid()){
+          alert("You are already the creator.");
+          return;
+        }
+
+        invited.push(lower);
+
+        input.value="";
+
+        renderInvites();
+      };
+
+    document
+      .querySelectorAll(
+        "#inviteList button"
+      )
+      .forEach(button=>{
+
+        button.onclick=()=>{
+
+          invited.splice(
+            Number(button.dataset.index),
+            1
+          );
+
+          renderInvites();
+        };
+
+      });
+  };
+
+  document
+    .querySelectorAll(
+      'input[name="scope"]'
+    )
+    .forEach(input=>{
+      input.onchange=renderInvites;
+    });
+
+  renderInvites();
+
+  document.querySelector("#createEvent").onclick=
+    async()=>{
+
+      const error=
+        document.querySelector("#createError");
+
+      const title=
+        document.querySelector("#title")
+        .value.trim();
+
+      const when=
+        document.querySelector("#when")
+        .value;
+
+      const scope=
+        document.querySelector(
+          'input[name="scope"]:checked'
+        )?.value;
+
+      if(!title){
+        error.textContent=
+          "Give the event a title.";
+        return;
+      }
+
+      if(!when){
+        error.textContent=
+          "Choose a date and time.";
+        return;
+      }
+
+      if(
+        scope==="invited" &&
+        !invited.length
+      ){
+        error.textContent=
+          "Add at least one person.";
+        return;
+      }
+
+      const profile=
+        await getProfile();
+
+      const id=
+        newId();
+
+      const createdAt=
+        Date.now();
+
+      const invitedUsers={};
+
+      for(const username of invited){
+
+        const snapshot=
+          await get(
+            ref(db,"usernames/"+username)
+          );
+
+        if(snapshot.exists()){
+
+          invitedUsers[
+            snapshot.val()
+          ]=true;
+
+        }
+      }
+
+      const event={
+        title,
+        when,
+        scope,
+        creatorUid:uid(),
+        creatorUsername:profile.username,
+        createdAt,
+        invitedUsers,
+        responses:{}
+      };
+
+      try{
+
+        await set(
+          ref(db,"events/"+id),
+          event
+        );
+
+        const updates={};
+
+        updates[
+          "userEvents/"
+          +uid()
+          +"/"
+          +id
+        ]="creator";
+
+        Object.keys(invitedUsers)
+          .forEach(invitedUid=>{
+
+            updates[
+              "userEvents/"
+              +invitedUid
+              +"/"
+              +id
+            ]="invited";
+
+          });
+
+        await update(
+          ref(db),
+          updates
+        );
+
+        if(scope==="public"){
+
+          await set(
+            ref(db,"publicEvents/"+id),
+            {
+              title,
+              when,
+              creatorUid:uid(),
+              creatorUsername:
+                profile.username,
+              createdAt
+            }
+          );
+        }
+
+        location.hash="e="+id;
+
+      }catch(errorObject){
+
+        console.error(errorObject);
+
+        error.textContent=
+          "Couldn't create the event.";
+      }
+    };
+}
+
+
+/* ==================================================
+   EVENT PAGE
+================================================== */
+
+function eventPage(id){
+
+  app.innerHTML=`
+
+    ${header()}
+
+    <div class="box">
+      <p class="muted">
+        Loading…
+      </p>
+    </div>
+
+  `;
+
+  wireHeader();
+
+  onValue(
+    ref(db,"events/"+id),
+    async snapshot=>{
+
+      if(!snapshot.exists()){
+
+        app.innerHTML=`
+
+          ${header()}
+
+          <div class="box">
+
+            <h2>
+              Event not found.
+            </h2>
+
+            <p class="muted">
+              This event doesn't exist.
+            </p>
+
+          </div>
+
+        `;
+
+        wireHeader();
+
+        return;
+      }
+
+      const event=
+        snapshot.val();
+
+      const user=
+        auth.currentUser;
+
+      const userUid=
+        user?.uid||null;
+
+      const isCreator=
+        userUid===event.creatorUid;
+
+      const isInvited=
+        !!event.invitedUsers?.[userUid];
+
+      const isPublic=
+        event.scope==="public";
+
+      /*
+        Viewing is always allowed.
+        Responding is checked separately.
+      */
+
+      const canRespond=
+        !!userUid &&
+        (
+          event.scope==="link" ||
+          isPublic ||
+          isCreator ||
+          isInvited
+        );
+
+      const responses=
+        Object.entries(
+          event.responses||{}
+        );
+
+      const coming=
+        responses.filter(
+          ([,response])=>
+            response.status==="yes"
+        );
+
+      const notComing=
+        responses.filter(
+          ([,response])=>
+            response.status==="no"
+        );
+
+      const myResponse=
+        userUid
+        ?event.responses?.[userUid]?.status||""
+        :"";
+
+      app.innerHTML=`
+
+        ${header()}
+
+        <div class="box">
+
+          <p class="muted">
+
+            ${
+              event.scope==="public"
+              ?"Public event"
+              :event.scope==="invited"
+              ?"Invited event"
+              :"Shared event"
+            }
+
+          </p>
+
+          <h2>
+            ${esc(event.title)}
+          </h2>
+
+          <p>
+            ${formatDate(event.when)}
+          </p>
+
+          <p class="muted small">
+            by @${esc(event.creatorUsername)}
+          </p>
+
+          ${
+            !userUid
+            ?`
+              <div class="box">
+
+                <p>
+                  You can view this event
+                  without signing in.
+                </p>
+
+                <button id="respond">
+                  Sign in to respond
+                </button>
+
+              </div>
+            `
+            :""
+          }
+
+          ${
+            userUid &&
+            !canRespond
+            ?`
+              <div class="box">
+
+                <p>
+                  You're signed in as
+                  <strong>
+                    @${esc(
+                      user.displayName||"user"
+                    )}
+                  </strong>.
+                </p>
+
+                <p class="muted">
+                  You're not invited to respond
+                  to this event.
+                </p>
+
+              </div>
+            `
+            :""
+          }
+
+          ${
+            canRespond
+            ?`
+
+              <div class="choice">
+
+                <button
+                  id="yes"
+                  class="yes
+                    ${myResponse==="yes"
+                      ?"selected"
+                      :""}"
+                >
+                  COMING
+                </button>
+
+                <button
+                  id="no"
+                  class="no
+                    ${myResponse==="no"
+                      ?"selected"
+                      :""}"
+                >
+                  NOT COMING
+                </button>
+
+              </div>
+
+              <button
+                id="save"
+                ${myResponse?"":"disabled"}
+              >
+                ${
+                  myResponse
+                  ?"Save answer"
+                  :"Choose one"
+                }
+              </button>
+
+              <p
+                id="message"
+                class="success"
+              ></p>
+
+            `
+            :""
+          }
+
+        </div>
+
+
+        <div class="box">
+
+          <h3>
+            Coming · ${coming.length}
+          </h3>
+
+          ${
+            coming.length
+            ?coming.map(
+              ([responseUid,response])=>`
+
+                <div class="person">
+
+                  <strong>
+                    @${esc(
+                      response.username
+                    )}
+                  </strong>
+
+                  <b>✓</b>
+
+                </div>
+
+              `
+            ).join("")
+            :`
+              <p class="muted">
+                Nobody yet.
+              </p>
+            `
+          }
+
+        </div>
+
+
+        <div class="box">
+
+          <h3>
+            Not coming · ${notComing.length}
+          </h3>
+
+          ${
+            notComing.length
+            ?notComing.map(
+              ([responseUid,response])=>`
+
+                <div class="person">
+
+                  <strong>
+                    @${esc(
+                      response.username
+                    )}
+                  </strong>
+
+                  <b>×</b>
+
+                </div>
+
+              `
+            ).join("")
+            :`
+              <p class="muted">
+                Nobody yet.
+              </p>
+            `
+          }
+
+        </div>
+
+
+        <div class="box">
+
+          <strong>
+            Share this event
+          </strong>
+
+          <div class="link">
+            ${esc(eventUrl(id))}
+          </div>
+
+          <button id="copy">
+            Copy link
+          </button>
+
+        </div>
+
+      `;
+
+      wireHeader();
+
+      const respondButton=
+        document.querySelector("#respond");
+
+      if(respondButton){
+
+        respondButton.onclick=
+          async()=>{
+
+            const signedIn=
+              await requireAuth();
+
+            if(signedIn){
+
+              await ensureProfile();
+
+              eventPage(id);
+            }
+          };
+      }
+
+      const copyButton=
+        document.querySelector("#copy");
+
+      copyButton.onclick=
+        async()=>{
+
+          try{
+
+            await navigator.clipboard.writeText(
+              eventUrl(id)
+            );
+
+            copyButton.textContent=
+              "Copied!";
+
+            setTimeout(()=>{
+              copyButton.textContent=
+                "Copy link";
+            },1200);
+
+          }catch{
+            alert(
+              "Copy failed. Copy the link manually."
+            );
+          }
+        };
+
+
+      if(!canRespond)
+        return;
+
+
+      let choice=
+        myResponse;
+
+      const yes=
+        document.querySelector("#yes");
+
+      const no=
+        document.querySelector("#no");
+
+      const save=
+        document.querySelector("#save");
+
+      const updateChoice=()=>{
+
+        yes.classList.toggle(
+          "selected",
+          choice==="yes"
+        );
+
+        no.classList.toggle(
+          "selected",
+          choice==="no"
+        );
+
+        save.disabled=!choice;
+
+        save.textContent=
+          choice
+          ?"Save answer"
+          :"Choose one";
+      };
+
+      yes.onclick=()=>{
+        choice="yes";
+        updateChoice();
+      };
+
+      no.onclick=()=>{
+        choice="no";
+        updateChoice();
+      };
+
+      save.onclick=async()=>{
+
+        if(!choice)
+          return;
+
+        const profile=
+          await getProfile();
+
+        if(!profile)
+          return;
+
+        try{
+
+          /*
+            UID is the response key.
+            One Google account = one response.
+          */
+
+          await set(
+            ref(
+              db,
+              "events/"
+              +id
+              +"/responses/"
+              +userUid
+            ),
+            {
+              username:profile.username,
+              status:choice,
+              updatedAt:Date.now()
+            }
+          );
+
+          await set(
+            ref(
+              db,
+              "userEvents/"
+              +userUid
+              +"/"
+              +id
+            ),
+            isCreator
+              ?"creator"
+              :"invited"
+          );
+
+          document.querySelector(
+            "#message"
+          ).textContent="Saved.";
+
+        }catch(errorObject){
+
+          console.error(errorObject);
+
+          document.querySelector(
+            "#message"
+          ).textContent=
+            "Couldn't save your response.";
+        }
+      };
+    }
+  );
+}
+
+
+/* ==================================================
+   PROFILE
+================================================== */
+
+async function profilePage(){
+
+  if(!auth.currentUser){
+    signInPage();
+    return;
+  }
+
+  const profile=
+    await getProfile();
+
+  app.innerHTML=`
+
+    ${header()}
+
+    <div class="box center">
+
+      ${
+        profile?.photoURL
+        ?`
+          <img
+            class="profile-photo"
+            src="${esc(profile.photoURL)}"
+            alt=""
+          >
+        `
+        :""
+      }
+
+      <h2>
+        @${esc(
+          profile?.username||"unknown"
+        )}
+      </h2>
+
+      <p class="muted">
+        ${esc(
+          profile?.displayName||
+          auth.currentUser.displayName||
+          ""
+        )}
+      </p>
+
+      <button id="signout">
+        Sign out
+      </button>
+
+    </div>
+
+  `;
+
+  wireHeader();
+
+  document.querySelector("#signout").onclick=
+    async()=>{
+
+      await signOut(auth);
+
+      location.hash="";
+      route();
+    };
+}
+
+
+/* ==================================================
+   ROUTER
+================================================== */
+
+function route(){
+
+  const match=
+    location.hash.match(/^#e=([^]+)$/);
+
+  if(match){
+
+    eventPage(match[1]);
+    return;
+  }
+
+  feedPage();
+}
+
+
+/* ==================================================
+   START
+================================================== */
+
+auth.onAuthStateChanged(async user=>{
+
+  if(user){
+
+    const profile=
+      await getProfile();
+
+    if(!profile){
+      await ensureProfile();
+    }
+  }
+
+  route();
+});
+
+addEventListener(
+  "hashchange",
+  route
+);
+
+</script>
+</body>
+</html>
