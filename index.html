@@ -82,15 +82,12 @@ textarea{
 
 .nav{
   display:flex;
-  align-items:center;
-  justify-content:space-between;
   gap:8px;
   margin-bottom:20px;
 }
 
 .nav button{
-  flex:0 0 auto;
-  width:auto;
+  flex:1;
   background:#fff;
 }
   
@@ -191,8 +188,8 @@ textarea{
 @media(max-width:420px){
   .top{align-items:flex-start}
   .top h1{font-size:34px}
-  .nav{flex-wrap:nowrap}
-  .nav button{min-width:0}
+  .nav{flex-wrap:wrap}
+  .nav button{min-width:30%}
   .choice{flex-direction:column}
 }
 </style>
