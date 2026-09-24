@@ -6,9 +6,7 @@
 <title>വരുന്നുണ്ടോ???</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -30,15 +28,9 @@ h1{
   margin:0;
 }
 
-h2,h3{
-  line-height:1.15;
-}
+h2,h3{line-height:1.15}
 
-button,
-input,
-textarea{
-  font:inherit;
-}
+button,input,textarea{font:inherit}
 
 button{
   min-height:48px;
@@ -55,8 +47,7 @@ button:disabled{
   cursor:not-allowed;
 }
 
-input,
-textarea{
+input,textarea{
   width:100%;
   padding:11px;
   border:2px solid #222;
@@ -87,9 +78,7 @@ textarea{
   margin-bottom:18px;
 }
 
-.top h1{
-  flex:1;
-}
+.top h1{flex:1}
 
 .nav{
   display:flex;
@@ -102,17 +91,9 @@ textarea{
   background:#fff;
 }
 
-.muted{
-  color:#777;
-}
-
-.small{
-  font-size:14px;
-}
-
-.center{
-  text-align:center;
-}
+.muted{color:#777}
+.small{font-size:14px}
+.center{text-align:center}
 
 .error{
   color:#b00020;
@@ -123,6 +104,7 @@ textarea{
 .success{
   color:#08752b;
   font-weight:700;
+  white-space:pre-wrap;
 }
 
 .actions{
@@ -142,34 +124,22 @@ textarea{
   margin:18px 0;
 }
 
-.choice button{
-  flex:1;
-}
+.choice button{flex:1}
 
 .choice .selected{
   outline:4px solid #222;
 }
 
-.yes{
-  background:#8ee6a8;
-}
-
-.no{
-  background:#ff9b9b;
-}
-
-.danger{
-  background:#ff9b9b;
-}
+.yes{background:#8ee6a8}
+.no{background:#ff9b9b}
+.danger{background:#ff9b9b}
 
 .person{
   padding:11px 0;
   border-bottom:1px solid #ddd;
 }
 
-.person:last-child{
-  border-bottom:0;
-}
+.person:last-child{border-bottom:0}
 
 .person-head{
   display:flex;
@@ -216,26 +186,11 @@ textarea{
 }
 
 @media(max-width:420px){
-
-  .top{
-    align-items:flex-start;
-  }
-
-  .top h1{
-    font-size:34px;
-  }
-
-  .nav{
-    flex-wrap:wrap;
-  }
-
-  .nav button{
-    min-width:30%;
-  }
-
-  .choice{
-    flex-direction:column;
-  }
+  .top{align-items:flex-start}
+  .top h1{font-size:34px}
+  .nav{flex-wrap:wrap}
+  .nav button{min-width:30%}
+  .choice{flex-direction:column}
 }
 </style>
 </head>
@@ -245,8 +200,6 @@ textarea{
 <main>
   <div id="app"></div>
 </main>
-
-
 
 <script type="module">
 
@@ -271,7 +224,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
-
 /* =====================================================
    FIREBASE
 ===================================================== */
@@ -287,18 +239,14 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-
 const auth = getAuth(firebaseApp);
-
 const db = getDatabase(firebaseApp);
-
 const googleProvider = new GoogleAuthProvider();
 
 const app = document.querySelector("#app");
 
 let activeListener = null;
 let signingIn = false;
-
 
 
 /* =====================================================
@@ -315,17 +263,17 @@ function escapeHTML(value){
       '"':"&quot;",
       "'":"&#39;"
     }[character]));
-}
 
+}
 
 
 function newEventId(){
 
   return crypto.randomUUID()
-    .replaceAll("-", "")
+    .replaceAll("-","")
     .slice(0,12);
-}
 
+}
 
 
 function eventURL(id){
@@ -336,8 +284,8 @@ function eventURL(id){
     "#e=" +
     id
   );
-}
 
+}
 
 
 function formatDate(value){
@@ -357,8 +305,8 @@ function formatDate(value){
     hour:"numeric",
     minute:"2-digit"
   });
-}
 
+}
 
 
 function stopListener(){
@@ -366,11 +314,11 @@ function stopListener(){
   if(activeListener){
 
     activeListener();
-
     activeListener = null;
-  }
-}
 
+  }
+
+}
 
 
 /* =====================================================
@@ -423,9 +371,10 @@ async function requireAuth(){
   }finally{
 
     signingIn = false;
-  }
-}
 
+  }
+
+}
 
 
 /* =====================================================
@@ -443,18 +392,10 @@ function renderHeader(){
       <h1>വരുന്നുണ്ടോ???</h1>
 
       <button id="accountButton">
-
-        ${
-          user
-            ? "Account"
-            : "Sign in"
-        }
-
+        ${user ? "Account" : "Sign in"}
       </button>
 
     </div>
-
-
 
     <div class="nav">
 
@@ -469,8 +410,8 @@ function renderHeader(){
     </div>
 
   `;
-}
 
+}
 
 
 function wireHeader(){
@@ -483,16 +424,19 @@ function wireHeader(){
     );
 
 
+  /*
+    IMPORTANT:
+
+    Events is NOT a route.
+    Do NOT change location.hash here.
+  */
 
   document
     .querySelector("#eventsButton")
     ?.addEventListener(
       "click",
-      ()=>{
-        location.hash = "events";
-      }
+      eventsPage
     );
-
 
 
   document
@@ -510,13 +454,15 @@ function wireHeader(){
             route();
 
           return;
+
         }
 
         profilePage();
+
       }
     );
-}
 
+}
 
 
 /* =====================================================
@@ -543,9 +489,10 @@ async function shareEvent(id,button){
 
       if(error?.name === "AbortError")
         return;
-    }
-  }
 
+    }
+
+  }
 
 
   try{
@@ -565,6 +512,7 @@ async function shareEvent(id,button){
           button.textContent = original;
 
       },1200);
+
     }
 
   }catch{
@@ -573,9 +521,10 @@ async function shareEvent(id,button){
       "Copy this event link:",
       url
     );
-  }
-}
 
+  }
+
+}
 
 
 /* =====================================================
@@ -592,9 +541,7 @@ function eventsPage(){
 
     <div class="box">
 
-      <h2>
-        Events
-      </h2>
+      <h2>Events</h2>
 
       <div id="upcomingEvents">
         Loading...
@@ -614,8 +561,7 @@ function eventsPage(){
         <div
           id="pastEvents"
           style="margin-top:16px;"
-        >
-        </div>
+        ></div>
 
       </details>
 
@@ -624,7 +570,6 @@ function eventsPage(){
   `;
 
   wireHeader();
-
 
 
   const upcomingEvents =
@@ -638,184 +583,168 @@ function eventsPage(){
     );
 
 
+  activeListener = onValue(
 
-  activeListener =
-    onValue(
-      ref(db,"events"),
-      snapshot => {
+    ref(db,"events"),
 
-        const events =
-          snapshot.val() || {};
+    snapshot=>{
 
+      const events =
+        snapshot.val() || {};
 
+      const now =
+        Date.now();
 
-        const now =
-          Date.now();
-
-
-
-        const upcoming = [];
-
-        const past = [];
+      const upcoming = [];
+      const past = [];
 
 
+      Object.entries(events)
+        .forEach(([id,event])=>{
 
-        Object.entries(events)
-          .forEach(
-            ([id,event]) => {
+          const eventTime =
+            new Date(
+              event.when
+            ).getTime();
 
-              const eventTime =
-                new Date(
-                  event.when
-                ).getTime();
+          if(
+            Number.isFinite(eventTime) &&
+            eventTime < now
+          ){
 
+            past.push([id,event]);
 
+          }else{
 
-              if(
-                Number.isFinite(eventTime) &&
-                eventTime < now
-              ){
-
-                past.push(
-                  [id,event]
-                );
-
-              }else{
-
-                upcoming.push(
-                  [id,event]
-                );
-
-              }
-
-            }
-          );
-
-
-
-        upcoming.sort(
-          (a,b)=>
-            new Date(a[1].when).getTime() -
-            new Date(b[1].when).getTime()
-        );
-
-
-
-        past.sort(
-          (a,b)=>
-            new Date(b[1].when).getTime() -
-            new Date(a[1].when).getTime()
-        );
-
-
-
-        function renderEvents(entries){
-
-          if(!entries.length){
-
-            return `
-              <p class="muted">
-                No events.
-              </p>
-            `;
+            upcoming.push([id,event]);
 
           }
 
+        });
 
 
-          return entries
-            .map(
-              ([id,event]) => `
-
-                <div
-                  class="event"
-                  data-id="${escapeHTML(id)}"
-                  style="
-                    cursor:pointer;
-                    padding:14px 0;
-                    border-bottom:1px solid #ddd;
-                  "
-                >
-
-                  <div
-                    style="
-                      font-weight:800;
-                      font-size:19px;
-                    "
-                  >
-                    ${escapeHTML(
-                      event.title
-                    )}
-                  </div>
+      upcoming.sort(
+        (a,b)=>
+          new Date(a[1].when).getTime() -
+          new Date(b[1].when).getTime()
+      );
 
 
-
-                  <div class="muted">
-                    ${formatDate(
-                      event.when
-                    )}
-                  </div>
-
+      past.sort(
+        (a,b)=>
+          new Date(b[1].when).getTime() -
+          new Date(a[1].when).getTime()
+      );
 
 
-                  ${
-                    event.note
-                      ? `
-                        <div
-                          class="muted"
-                          style="margin-top:4px;"
-                        >
-                          ${escapeHTML(
-                            event.note
-                          )}
-                        </div>
-                      `
-                      : ""
-                  }
+      function renderEvents(entries){
 
-                </div>
+        if(!entries.length){
 
-              `
-            )
-            .join("");
+          return `
+            <p class="muted">
+              No events.
+            </p>
+          `;
 
         }
 
 
+        return entries
+          .map(([id,event])=>`
 
-        upcomingEvents.innerHTML =
-          renderEvents(upcoming);
+            <div
+              class="event"
+              data-id="${escapeHTML(id)}"
+              style="
+                cursor:pointer;
+                padding:14px 0;
+                border-bottom:1px solid #ddd;
+              "
+            >
 
+              <div
+                style="
+                  font-weight:800;
+                  font-size:19px;
+                "
+              >
+                ${escapeHTML(event.title)}
+              </div>
 
+              <div class="muted">
+                ${formatDate(event.when)}
+              </div>
 
-        pastEvents.innerHTML =
-          renderEvents(past);
+              ${
+                event.note
+                  ? `
+                    <div
+                      class="muted"
+                      style="margin-top:4px;"
+                    >
+                      ${escapeHTML(event.note)}
+                    </div>
+                  `
+                  : ""
+              }
 
+            </div>
 
-
-        document
-          .querySelectorAll(
-            "#upcomingEvents .event, " +
-            "#pastEvents .event"
-          )
-          .forEach(
-            card => {
-
-              card.onclick = () => {
-
-                location.hash =
-                  "e=" +
-                  card.dataset.id;
-
-              };
-
-            }
-          );
+          `)
+          .join("");
 
       }
-    );
-}
 
+
+      upcomingEvents.innerHTML =
+        renderEvents(upcoming);
+
+      pastEvents.innerHTML =
+        renderEvents(past);
+
+
+      document
+        .querySelectorAll(
+          "#upcomingEvents .event, " +
+          "#pastEvents .event"
+        )
+        .forEach(card=>{
+
+          card.onclick = ()=>{
+
+            location.hash =
+              "e=" +
+              card.dataset.id;
+
+          };
+
+        });
+
+    },
+
+    error=>{
+
+      console.error(
+        "EVENTS LOAD ERROR:",
+        error
+      );
+
+      upcomingEvents.innerHTML = `
+        <p class="error">
+          Couldn't load events.
+
+          ${escapeHTML(
+            error.message || ""
+          )}
+        </p>
+      `;
+
+    }
+
+  );
+
+}
 
 
 /* =====================================================
@@ -825,7 +754,6 @@ function eventsPage(){
 function createPage(){
 
   stopListener();
-
 
 
   if(!auth.currentUser){
@@ -856,7 +784,6 @@ function createPage(){
     wireHeader();
 
 
-
     document
       .querySelector("#googleButton")
       .onclick = async()=>{
@@ -866,11 +793,12 @@ function createPage(){
 
         if(signedIn)
           createPage();
+
       };
 
     return;
-  }
 
+  }
 
 
   app.innerHTML = `
@@ -882,8 +810,6 @@ function createPage(){
       <h2>
         Create an event
       </h2>
-
-
 
       <label>
 
@@ -897,8 +823,6 @@ function createPage(){
 
       </label>
 
-
-
       <label>
 
         Date and time
@@ -909,8 +833,6 @@ function createPage(){
         >
 
       </label>
-
-
 
       <label>
 
@@ -924,14 +846,10 @@ function createPage(){
 
       </label>
 
-
-
       <p
         id="eventError"
         class="error"
       ></p>
-
-
 
       <button id="saveEvent">
         Create →
@@ -944,7 +862,6 @@ function createPage(){
   wireHeader();
 
 
-
   document
     .querySelector("#saveEvent")
     .onclick = async()=>{
@@ -954,27 +871,22 @@ function createPage(){
           "#eventError"
         );
 
-
-
       const title =
-        document.querySelector(
-          "#title"
-        ).value.trim();
-
-
+        document
+          .querySelector("#title")
+          .value
+          .trim();
 
       const when =
-        document.querySelector(
-          "#when"
-        ).value;
-
-
+        document
+          .querySelector("#when")
+          .value;
 
       const note =
-        document.querySelector(
-          "#eventNote"
-        ).value.trim();
-
+        document
+          .querySelector("#eventNote")
+          .value
+          .trim();
 
 
       if(!title){
@@ -983,8 +895,8 @@ function createPage(){
           "Give the event a title.";
 
         return;
-      }
 
+      }
 
 
       if(!when){
@@ -993,14 +905,12 @@ function createPage(){
           "Choose a date and time.";
 
         return;
-      }
 
+      }
 
 
       const whenMs =
         new Date(when).getTime();
-
-
 
       if(
         !Number.isFinite(whenMs) ||
@@ -1011,14 +921,12 @@ function createPage(){
           "Choose a future date and time.";
 
         return;
-      }
 
+      }
 
 
       const user =
         auth.currentUser;
-
-
 
       if(!user){
 
@@ -1026,21 +934,12 @@ function createPage(){
           "Please sign in first.";
 
         return;
-      }
 
+      }
 
 
       const id =
         newEventId();
-
-
-
-      /*
-        IMPORTANT:
-        There is intentionally NO
-        responses:{} here.
-      */
-
 
 
       const event = {
@@ -1068,7 +967,6 @@ function createPage(){
       };
 
 
-
       try{
 
         await set(
@@ -1078,8 +976,6 @@ function createPage(){
           ),
           event
         );
-
-
 
         location.hash =
           "e=" + id;
@@ -1096,10 +992,12 @@ function createPage(){
           errorObject.code +
           "\n" +
           errorObject.message;
-      }
-    };
-}
 
+      }
+
+    };
+
+}
 
 
 /* =====================================================
@@ -1111,11 +1009,8 @@ async function editEvent(id){
   const user =
     auth.currentUser;
 
-
-
   if(!user)
     return;
-
 
 
   const snapshot =
@@ -1127,34 +1022,27 @@ async function editEvent(id){
     );
 
 
-
   if(!snapshot.exists()){
 
-    alert(
-      "Event not found."
-    );
-
+    alert("Event not found.");
     return;
-  }
 
+  }
 
 
   const event =
     snapshot.val();
 
 
-
-  if(
-    event.creatorUid !== user.uid
-  ){
+  if(event.creatorUid !== user.uid){
 
     alert(
       "Only the creator can edit this event."
     );
 
     return;
-  }
 
+  }
 
 
   app.innerHTML = `
@@ -1167,8 +1055,6 @@ async function editEvent(id){
         Edit event
       </h2>
 
-
-
       <label>
 
         Event title
@@ -1176,14 +1062,10 @@ async function editEvent(id){
         <input
           id="title"
           maxlength="100"
-          value="${escapeHTML(
-            event.title
-          )}"
+          value="${escapeHTML(event.title)}"
         >
 
       </label>
-
-
 
       <label>
 
@@ -1192,14 +1074,10 @@ async function editEvent(id){
         <input
           id="when"
           type="datetime-local"
-          value="${escapeHTML(
-            event.when
-          )}"
+          value="${escapeHTML(event.when)}"
         >
 
       </label>
-
-
 
       <label>
 
@@ -1208,20 +1086,14 @@ async function editEvent(id){
         <textarea
           id="eventNote"
           maxlength="1000"
-        >${escapeHTML(
-          event.note || ""
-        )}</textarea>
+        >${escapeHTML(event.note || "")}</textarea>
 
       </label>
-
-
 
       <p
         id="eventError"
         class="error"
       ></p>
-
-
 
       <div class="actions">
 
@@ -1242,12 +1114,10 @@ async function editEvent(id){
   wireHeader();
 
 
-
   document
     .querySelector("#cancel")
     .onclick = () =>
       eventPage(id);
-
 
 
   document
@@ -1259,27 +1129,22 @@ async function editEvent(id){
           "#eventError"
         );
 
-
-
       const title =
-        document.querySelector(
-          "#title"
-        ).value.trim();
-
-
+        document
+          .querySelector("#title")
+          .value
+          .trim();
 
       const when =
-        document.querySelector(
-          "#when"
-        ).value;
-
-
+        document
+          .querySelector("#when")
+          .value;
 
       const note =
-        document.querySelector(
-          "#eventNote"
-        ).value.trim();
-
+        document
+          .querySelector("#eventNote")
+          .value
+          .trim();
 
 
       if(!title){
@@ -1288,8 +1153,8 @@ async function editEvent(id){
           "Give the event a title.";
 
         return;
-      }
 
+      }
 
 
       if(!when){
@@ -1298,14 +1163,12 @@ async function editEvent(id){
           "Choose a date and time.";
 
         return;
-      }
 
+      }
 
 
       const whenMs =
         new Date(when).getTime();
-
-
 
       if(
         !Number.isFinite(whenMs) ||
@@ -1316,24 +1179,11 @@ async function editEvent(id){
           "Choose a future date and time.";
 
         return;
+
       }
 
 
-
       try{
-
-        /*
-          Update ONLY these fields.
-
-          This preserves:
-          creatorUid
-          creatorName
-          creatorPhoto
-          createdAt
-          responses
-        */
-
-
 
         await set(
           ref(
@@ -1345,8 +1195,6 @@ async function editEvent(id){
           title
         );
 
-
-
         await set(
           ref(
             db,
@@ -1357,8 +1205,6 @@ async function editEvent(id){
           when
         );
 
-
-
         await set(
           ref(
             db,
@@ -1368,8 +1214,6 @@ async function editEvent(id){
           ),
           note
         );
-
-
 
         eventPage(id);
 
@@ -1385,10 +1229,12 @@ async function editEvent(id){
           errorObject.code +
           "\n" +
           errorObject.message;
-      }
-    };
-}
 
+      }
+
+    };
+
+}
 
 
 /* =====================================================
@@ -1400,11 +1246,8 @@ async function deleteEvent(id){
   const user =
     auth.currentUser;
 
-
-
   if(!user)
     return;
-
 
 
   const snapshot =
@@ -1416,34 +1259,27 @@ async function deleteEvent(id){
     );
 
 
-
   if(!snapshot.exists()){
 
-    alert(
-      "Event not found."
-    );
-
+    alert("Event not found.");
     return;
-  }
 
+  }
 
 
   const event =
     snapshot.val();
 
 
-
-  if(
-    event.creatorUid !== user.uid
-  ){
+  if(event.creatorUid !== user.uid){
 
     alert(
       "Only the creator can delete this event."
     );
 
     return;
-  }
 
+  }
 
 
   if(
@@ -1453,7 +1289,6 @@ async function deleteEvent(id){
     )
   )
     return;
-
 
 
   try{
@@ -1466,10 +1301,7 @@ async function deleteEvent(id){
       null
     );
 
-
-
     location.hash = "";
-
     route();
 
   }catch(errorObject){
@@ -1485,9 +1317,10 @@ async function deleteEvent(id){
       "\n" +
       errorObject.message
     );
-  }
-}
 
+  }
+
+}
 
 
 /* =====================================================
@@ -1497,8 +1330,6 @@ async function deleteEvent(id){
 function eventPage(id){
 
   stopListener();
-
-
 
   app.innerHTML = `
 
@@ -1511,13 +1342,13 @@ function eventPage(id){
   wireHeader();
 
 
-
   activeListener =
     onValue(
       ref(
         db,
         "events/" + id
       ),
+
       snapshot=>{
 
         const shell =
@@ -1525,11 +1356,8 @@ function eventPage(id){
             "#eventShell"
           );
 
-
-
         if(!shell)
           return;
-
 
 
         if(!snapshot.exists()){
@@ -1552,35 +1380,27 @@ function eventPage(id){
           `;
 
           return;
-        }
 
+        }
 
 
         const event =
           snapshot.val();
 
-
-
         const user =
           auth.currentUser;
-
-
 
         const userUid =
           user?.uid || null;
 
-
-
         const isCreator =
           userUid === event.creatorUid;
-
 
 
         const responses =
           Object.entries(
             event.responses || {}
           );
-
 
 
         const coming =
@@ -1590,13 +1410,11 @@ function eventPage(id){
           );
 
 
-
         const notComing =
           responses.filter(
             ([,response]) =>
               response.status === "no"
           );
-
 
 
         const myResponse =
@@ -1605,26 +1423,17 @@ function eventPage(id){
             : null;
 
 
-
         shell.innerHTML = `
 
           <div class="box">
 
             <h2>
-              ${escapeHTML(
-                event.title
-              )}
+              ${escapeHTML(event.title)}
             </h2>
 
-
-
             <p>
-              ${formatDate(
-                event.when
-              )}
+              ${formatDate(event.when)}
             </p>
-
-
 
             ${
               event.note
@@ -1645,16 +1454,13 @@ function eventPage(id){
                     <p
                       style="white-space:pre-wrap"
                     >
-                      ${escapeHTML(
-                        event.note
-                      )}
+                      ${escapeHTML(event.note)}
                     </p>
 
                   </div>
                 `
                 : ""
             }
-
 
 
             <div class="person-info">
@@ -1664,9 +1470,7 @@ function eventPage(id){
                   ? `
                     <img
                       class="person-photo"
-                      src="${escapeHTML(
-                        event.creatorPhoto
-                      )}"
+                      src="${escapeHTML(event.creatorPhoto)}"
                       alt=""
                     >
                   `
@@ -1684,7 +1488,6 @@ function eventPage(id){
               </span>
 
             </div>
-
 
 
             ${
@@ -1712,7 +1515,6 @@ function eventPage(id){
             }
 
           </div>
-
 
 
           ${
@@ -1746,7 +1548,6 @@ function eventPage(id){
                   </h3>
 
 
-
                   <div class="choice">
 
                     <button
@@ -1757,17 +1558,12 @@ function eventPage(id){
                           : ""
                       }"
                     >
-
                       ${
                         myResponse?.status === "yes"
                           ? "✓ "
                           : ""
-                      }
-
-                      COMING
-
+                      }COMING
                     </button>
-
 
 
                     <button
@@ -1778,19 +1574,14 @@ function eventPage(id){
                           : ""
                       }"
                     >
-
                       ${
                         myResponse?.status === "no"
                           ? "✓ "
                           : ""
-                      }
-
-                      NOT COMING
-
+                      }NOT COMING
                     </button>
 
                   </div>
-
 
 
                   <label>
@@ -1808,11 +1599,9 @@ function eventPage(id){
                   </label>
 
 
-
                   <button id="saveResponse">
                     Save response
                   </button>
-
 
 
                   <p
@@ -1826,73 +1615,65 @@ function eventPage(id){
           }
 
 
-
           <div class="box">
 
             <h3>
               Coming · ${coming.length}
             </h3>
 
-
-
             ${
               coming.length
-                ? coming
-                    .map(
-                      ([,response]) => `
+                ? coming.map(
+                    ([,response])=>`
 
-                        <div class="person">
+                      <div class="person">
 
-                          <div class="person-head">
+                        <div class="person-head">
 
-                            <div class="person-info">
+                          <div class="person-info">
 
-                              ${
-                                response.photo
-                                  ? `
-                                    <img
-                                      class="person-photo"
-                                      src="${escapeHTML(
-                                        response.photo
-                                      )}"
-                                      alt=""
-                                    >
-                                  `
-                                  : ""
-                              }
+                            ${
+                              response.photo
+                                ? `
+                                  <img
+                                    class="person-photo"
+                                    src="${escapeHTML(response.photo)}"
+                                    alt=""
+                                  >
+                                `
+                                : ""
+                            }
 
-                              <strong>
-                                ${escapeHTML(
-                                  response.name ||
-                                  "Unknown"
-                                )}
-                              </strong>
-
-                            </div>
-
-                            <b>✓</b>
+                            <strong>
+                              ${escapeHTML(
+                                response.name ||
+                                "Unknown"
+                              )}
+                            </strong>
 
                           </div>
 
-
-
-                          ${
-                            response.note
-                              ? `
-                                <div class="response-note">
-                                  ${escapeHTML(
-                                    response.note
-                                  )}
-                                </div>
-                              `
-                              : ""
-                          }
+                          <b>✓</b>
 
                         </div>
 
-                      `
-                    )
-                    .join("")
+
+                        ${
+                          response.note
+                            ? `
+                              <div class="response-note">
+                                ${escapeHTML(
+                                  response.note
+                                )}
+                              </div>
+                            `
+                            : ""
+                        }
+
+                      </div>
+
+                    `
+                  ).join("")
                 : `
                     <p class="muted">
                       Nobody yet.
@@ -1901,7 +1682,6 @@ function eventPage(id){
             }
 
           </div>
-
 
 
           <div class="box">
@@ -1910,66 +1690,59 @@ function eventPage(id){
               Not coming · ${notComing.length}
             </h3>
 
-
-
             ${
               notComing.length
-                ? notComing
-                    .map(
-                      ([,response]) => `
+                ? notComing.map(
+                    ([,response])=>`
 
-                        <div class="person">
+                      <div class="person">
 
-                          <div class="person-head">
+                        <div class="person-head">
 
-                            <div class="person-info">
+                          <div class="person-info">
 
-                              ${
-                                response.photo
-                                  ? `
-                                    <img
-                                      class="person-photo"
-                                      src="${escapeHTML(
-                                        response.photo
-                                      )}"
-                                      alt=""
-                                    >
-                                  `
-                                  : ""
-                              }
+                            ${
+                              response.photo
+                                ? `
+                                  <img
+                                    class="person-photo"
+                                    src="${escapeHTML(response.photo)}"
+                                    alt=""
+                                  >
+                                `
+                                : ""
+                            }
 
-                              <strong>
-                                ${escapeHTML(
-                                  response.name ||
-                                  "Unknown"
-                                )}
-                              </strong>
-
-                            </div>
-
-                            <b>×</b>
+                            <strong>
+                              ${escapeHTML(
+                                response.name ||
+                                "Unknown"
+                              )}
+                            </strong>
 
                           </div>
 
-
-
-                          ${
-                            response.note
-                              ? `
-                                <div class="response-note">
-                                  ${escapeHTML(
-                                    response.note
-                                  )}
-                                </div>
-                              `
-                              : ""
-                          }
+                          <b>×</b>
 
                         </div>
 
-                      `
-                    )
-                    .join("")
+
+                        ${
+                          response.note
+                            ? `
+                              <div class="response-note">
+                                ${escapeHTML(
+                                  response.note
+                                )}
+                              </div>
+                            `
+                            : ""
+                        }
+
+                      </div>
+
+                    `
+                  ).join("")
                 : `
                     <p class="muted">
                       Nobody yet.
@@ -1980,22 +1753,15 @@ function eventPage(id){
           </div>
 
 
-
           <div class="box">
 
             <strong>
               Share this event
             </strong>
 
-
-
             <div class="link">
-              ${escapeHTML(
-                eventURL(id)
-              )}
+              ${escapeHTML(eventURL(id))}
             </div>
-
-
 
             <div class="actions">
 
@@ -2014,7 +1780,6 @@ function eventPage(id){
         `;
 
 
-
         /* EDIT */
 
         document
@@ -2023,7 +1788,6 @@ function eventPage(id){
             "click",
             ()=>editEvent(id)
           );
-
 
 
         /* DELETE */
@@ -2036,8 +1800,7 @@ function eventPage(id){
           );
 
 
-
-        /* SIGN IN TO RESPOND */
+        /* SIGN IN */
 
         document
           .querySelector("#respondButton")
@@ -2050,9 +1813,9 @@ function eventPage(id){
 
               if(signedIn)
                 eventPage(id);
+
             }
           );
-
 
 
         /* SHARE */
@@ -2069,7 +1832,6 @@ function eventPage(id){
           );
 
 
-
         /* COPY */
 
         document
@@ -2083,21 +1845,14 @@ function eventPage(id){
                   "#copyButton"
                 );
 
-
-
               try{
 
-                await navigator.clipboard
-                  .writeText(
-                    eventURL(id)
-                  );
-
-
+                await navigator.clipboard.writeText(
+                  eventURL(id)
+                );
 
                 button.textContent =
                   "Copied!";
-
-
 
                 setTimeout(()=>{
 
@@ -2113,10 +1868,11 @@ function eventPage(id){
                   "Copy this event link:",
                   eventURL(id)
                 );
+
               }
+
             }
           );
-
 
 
         /* RESPONSE */
@@ -2125,10 +1881,8 @@ function eventPage(id){
           return;
 
 
-
         let choice =
           myResponse?.status || "";
-
 
 
         const yesButton =
@@ -2136,27 +1890,20 @@ function eventPage(id){
             "#yesButton"
           );
 
-
-
         const noButton =
           document.querySelector(
             "#noButton"
           );
-
-
 
         const responseNote =
           document.querySelector(
             "#responseNote"
           );
 
-
-
         const message =
           document.querySelector(
             "#responseMessage"
           );
-
 
 
         function updateChoice(){
@@ -2166,13 +1913,10 @@ function eventPage(id){
             choice === "yes"
           );
 
-
-
           noButton?.classList.toggle(
             "selected",
             choice === "no"
           );
-
 
 
           if(yesButton){
@@ -2181,8 +1925,8 @@ function eventPage(id){
               choice === "yes"
                 ? "✓ COMING"
                 : "COMING";
-          }
 
+          }
 
 
           if(noButton){
@@ -2191,9 +1935,10 @@ function eventPage(id){
               choice === "no"
                 ? "✓ NOT COMING"
                 : "NOT COMING";
-          }
-        }
 
+          }
+
+        }
 
 
         yesButton?.addEventListener(
@@ -2205,7 +1950,6 @@ function eventPage(id){
         );
 
 
-
         noButton?.addEventListener(
           "click",
           ()=>{
@@ -2213,7 +1957,6 @@ function eventPage(id){
             updateChoice();
           }
         );
-
 
 
         document
@@ -2231,23 +1974,19 @@ function eventPage(id){
                   "Choose COMING or NOT COMING.";
 
                 return;
-              }
 
+              }
 
 
               const currentUser =
                 auth.currentUser;
 
-
-
               if(!currentUser)
                 return;
 
 
-
               const note =
                 responseNote.value.trim();
-
 
 
               try{
@@ -2263,7 +2002,6 @@ function eventPage(id){
                   ),
 
                   {
-
                     name:
                       currentUser.displayName ||
                       "Unknown",
@@ -2280,8 +2018,8 @@ function eventPage(id){
                     updatedAt:
                       Date.now()
                   }
-                );
 
+                );
 
 
                 message.textContent =
@@ -2301,13 +2039,47 @@ function eventPage(id){
                   errorObject.code +
                   "\n" +
                   errorObject.message;
+
               }
+
             }
           );
-      }
-    );
-}
 
+      },
+
+      error=>{
+
+        console.error(
+          "EVENT ERROR:",
+          error
+        );
+
+        const shell =
+          document.querySelector(
+            "#eventShell"
+          );
+
+        if(shell){
+
+          shell.innerHTML = `
+            <div class="box">
+              <p class="error">
+                Couldn't load event.
+
+                ${escapeHTML(
+                  error.message || ""
+                )}
+              </p>
+            </div>
+          `;
+
+        }
+
+      }
+
+    );
+
+}
 
 
 /* =====================================================
@@ -2319,11 +2091,8 @@ function profilePage(){
   const user =
     auth.currentUser;
 
-
-
   if(!user)
     return;
-
 
 
   app.innerHTML = `
@@ -2337,16 +2106,12 @@ function profilePage(){
           ? `
             <img
               class="profile-photo"
-              src="${escapeHTML(
-                user.photoURL
-              )}"
+              src="${escapeHTML(user.photoURL)}"
               alt=""
             >
           `
           : ""
       }
-
-
 
       <h2>
         ${escapeHTML(
@@ -2355,15 +2120,11 @@ function profilePage(){
         )}
       </h2>
 
-
-
       <p class="muted">
         ${escapeHTML(
           user.email || ""
         )}
       </p>
-
-
 
       <button id="signOutButton">
         Sign out
@@ -2373,10 +2134,7 @@ function profilePage(){
 
   `;
 
-
-
   wireHeader();
-
 
 
   document
@@ -2388,9 +2146,10 @@ function profilePage(){
       location.hash = "";
 
       route();
-    };
-}
 
+    };
+
+}
 
 
 /* =====================================================
@@ -2402,12 +2161,10 @@ function route(){
   stopListener();
 
 
-
   const match =
     location.hash.match(
       /^#e=(.+)$/
     );
-
 
 
   if(match){
@@ -2419,15 +2176,22 @@ function route(){
     );
 
     return;
+
   }
 
 
+  /*
+    There is intentionally NO #events route.
 
+    Events is opened directly by the Events
+    navigation button.
 
+    Any non-event URL opens Create.
+  */
 
   createPage();
-}
 
+}
 
 
 /* =====================================================
@@ -2440,7 +2204,6 @@ onAuthStateChanged(
     route();
   }
 );
-
 
 
 window.addEventListener(
