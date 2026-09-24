@@ -423,21 +423,22 @@ function wireHeader(){
       createPage
     );
 
-
-  /*
-    IMPORTANT:
-
-    Events is NOT a route.
-    Do NOT change location.hash here.
-  */
-
   document
     .querySelector("#eventsButton")
     ?.addEventListener(
       "click",
-      eventsPage
-    );
+      () => {
 
+        history.replaceState(
+          null,
+          "",
+          location.pathname + location.search
+        );
+
+        eventsPage();
+
+      }
+    );
 
   document
     .querySelector("#accountButton")
@@ -454,16 +455,14 @@ function wireHeader(){
             route();
 
           return;
-
         }
 
         profilePage();
-
       }
     );
-
 }
 
+  
 
 /* =====================================================
    SHARE
