@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>വരുന്നുണ്ടോ???</title>
 
+<meta property="og:title" content="വരുന്നുണ്ടോ???">
+<meta property="og:description" content="Are you coming?">
+<meta property="og:type" content="website">
+
 <style>
 *{box-sizing:border-box}
 
@@ -516,13 +520,51 @@ async function shareEvent(id,button){
 
   const url = eventURL(id);
 
+  const snapshot =
+    await get(ref(db,"events/"+id));
+
+  const event =
+    snapshot.val();
+
+  if(!event)
+    return;
+
+  const date =
+    new Date(event.when);
+
+  const dateText =
+    date.toLocaleDateString(
+      "en-IN",
+      {
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+      }
+    );
+
+  const timeText =
+    date.toLocaleTimeString(
+      "en-IN",
+      {
+        hour:"numeric",
+        minute:"2-digit",
+        hour12:true
+      }
+    );
+
+  const message =
+`${event.title}
+${dateText} · ${timeText}
+
+# വരുന്നുണ്ടോ???`;
+
   if(navigator.share){
 
     try{
 
       await navigator.share({
         title:"വരുന്നുണ്ടോ???",
-        text:"Are you coming?",
+        text:message,
         url
       });
 
@@ -537,10 +579,11 @@ async function shareEvent(id,button){
 
   }
 
-
   try{
 
-    await navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(
+      message + "\n\n" + url
+    );
 
     if(button){
 
@@ -561,8 +604,8 @@ async function shareEvent(id,button){
   }catch{
 
     prompt(
-      "Copy this event link:",
-      url
+      "Copy this event message:",
+      message + "\n\n" + url
     );
 
   }
