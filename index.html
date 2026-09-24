@@ -173,6 +173,7 @@ textarea.input-field {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .back-btn {
@@ -183,6 +184,7 @@ textarea.input-field {
   align-items: center;
   justify-content: center;
   padding: 0;
+  flex-shrink: 0;
 }
 
 .app-title {
@@ -190,6 +192,18 @@ textarea.input-field {
   font-weight: 800;
   letter-spacing: -0.03em;
   margin: 0;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Responsive Logo Styles */
+.app-logo-img {
+  height: clamp(24px, 5vw, 32px);
+  width: auto;
+  max-width: 60vw;
+  object-fit: contain;
+  display: block;
 }
 
 .avatar-btn {
@@ -200,6 +214,7 @@ textarea.input-field {
   border: 1px solid var(--border);
   background: #E7E5E4;
   padding: 0;
+  flex-shrink: 0;
 }
 
 .avatar-btn img {
@@ -472,7 +487,7 @@ let signingIn = false;
 let currentTab = 'upcoming';
 
 /* =====================================================
-   HELPERS & SVGS MATCHING REFERENCE DESIGN ACCURATELY
+   HELPERS & SVGS
 ===================================================== */
 function escapeHTML(value){
   return String(value ?? "")
@@ -514,9 +529,7 @@ function parseEventDate(value) {
   };
 }
 
-// Hand-drawn SVGs recreated precisely from reference screenshots
 const SVGS = {
-  // Main Sun/Landscape Illustration with Palm Tree
   landscape: `<svg viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="140" cy="42" r="24" fill="#F2C94C"/>
     <path d="M 20 95 C 70 65, 120 105, 170 85 C 220 65, 250 85, 260 90" stroke="#1C1917" stroke-width="2.2" stroke-linecap="round" fill="none"/>
@@ -525,7 +538,6 @@ const SVGS = {
     <path d="M 240 45 C 228 38, 220 48, 218 50 M 240 45 C 235 32, 245 28, 250 30 M 240 45 C 252 38, 260 48, 262 50 M 240 45 C 250 55, 258 52, 260 55" stroke="#1C1917" stroke-width="1.8" stroke-linecap="round" fill="none"/>
   </svg>`,
 
-  // Landscape variant with colored green hill accent (for details screen)
   landscapeGreen: `<svg viewBox="0 0 280 110" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="178" cy="36" r="20" fill="#F2C94C"/>
     <path d="M 10 85 C 70 50, 150 95, 270 75 L 270 100 L 10 100 Z" fill="#93A38C" opacity="0.6"/>
@@ -533,7 +545,6 @@ const SVGS = {
     <path d="M 220 38 Q 225 32 230 38 M 235 34 Q 240 28 245 34" stroke="#1C1917" stroke-width="1.8" stroke-linecap="round" fill="none"/>
   </svg>`,
 
-  // Calendar Icon inside Input
   createCalendarIcon: `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="22" y="20" width="36" height="38" rx="6" stroke="#1C1917" stroke-width="2.5" fill="none"/>
     <path d="M 30 14 L 30 22 M 50 14 L 50 22" stroke="#1C1917" stroke-width="2.5" stroke-linecap="round"/>
@@ -579,7 +590,9 @@ function renderHeader(showBack = false){
         ${showBack ? `
           <button class="back-btn" id="backButton">${SVGS.back}</button>
         ` : ''}
-        <h1 class="app-title" id="homeTitle" style="cursor:pointer;">വരുന്നുണ്ടോ???</h1>
+        <h1 class="app-title" id="homeTitle" style="cursor:pointer;">
+          <img src="logo.png" alt="വരുന്നുണ്ടോ???" class="app-logo-img" onerror="this.onerror=null; this.replaceWith(document.createTextNode('വരുന്നുണ്ടോ???'));">
+        </h1>
       </div>
       <button class="avatar-btn" id="accountButton">
         ${user ? `<img src="${escapeHTML(user.photoURL || "")}" alt="Profile">` : `<span style="font-size:11px; font-weight:700;">Sign in</span>`}
