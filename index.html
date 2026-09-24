@@ -6,13 +6,15 @@
 <title>വരുന്നുണ്ടോ???</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
   background:#fff9ef;
   color:#222;
-  font:17px system-ui,sans-serif;
+  font:17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   line-height:1.45;
 }
 
@@ -23,15 +25,13 @@ main{
 }
 
 h1{
-  text-align:center;
-  font-size:clamp(34px,8vw,42px);
+  font-size:clamp(34px,8vw,44px);
   line-height:1;
-  margin:0 0 28px;
+  margin:0;
 }
 
 h2,h3{
   line-height:1.15;
-  margin-top:0;
 }
 
 button,
@@ -61,7 +61,8 @@ textarea{
   padding:11px;
   border:2px solid #222;
   border-radius:11px;
-  margin:7px 0 12px;
+  margin:7px 0 14px;
+  background:white;
 }
 
 textarea{
@@ -87,14 +88,13 @@ textarea{
 }
 
 .top h1{
-  margin:0;
-  text-align:left;
+  flex:1;
 }
 
 .nav{
   display:flex;
   gap:8px;
-  margin:12px 0 20px;
+  margin-bottom:20px;
 }
 
 .nav button{
@@ -131,10 +131,23 @@ textarea{
 .error{
   color:#b00020;
   font-weight:700;
+  white-space:pre-wrap;
 }
 
 .success{
+  color:#08752b;
   font-weight:700;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.actions button{
+  flex:1;
+  min-width:120px;
 }
 
 .choice{
@@ -159,13 +172,17 @@ textarea{
   background:#ff9b9b;
 }
 
+.danger{
+  background:#ff9b9b;
+}
+
 .person{
   padding:11px 0;
   border-bottom:1px solid #ddd;
 }
 
 .person:last-child{
-  border:0;
+  border-bottom:0;
 }
 
 .person-head{
@@ -187,6 +204,7 @@ textarea{
   border-radius:50%;
   object-fit:cover;
   border:2px solid #222;
+  flex:none;
 }
 
 .response-note{
@@ -211,22 +229,24 @@ textarea{
   object-fit:cover;
 }
 
-.actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
+@media(max-width:420px){
 
-.actions button{
-  flex:1;
-  min-width:120px;
-}
+  .top{
+    align-items:flex-start;
+  }
 
-.danger{
-  background:#ff9b9b;
-}
+  .top h1{
+    font-size:34px;
+  }
 
-@media(max-width:360px){
+  .nav{
+    flex-wrap:wrap;
+  }
+
+  .nav button{
+    min-width:30%;
+  }
+
   .choice{
     flex-direction:column;
   }
@@ -240,35 +260,33 @@ textarea{
   <div id="app"></div>
 </main>
 
+
 <script type="module">
 
-import{
+import {
   initializeApp
-}
-from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-import{
+import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
   onAuthStateChanged
-}
-from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-import{
+import {
   getDatabase,
   ref,
   get,
   set,
   onValue
-}
-from"https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
-/* ==================================================
+/* =====================================================
    FIREBASE
-================================================== */
+===================================================== */
 
 const firebaseConfig = {
   apiKey: "AIzaSyAagNLnoAEmzYzEY9OMeq_m5LR6bmId9zk",
@@ -280,74 +298,247 @@ const firebaseConfig = {
   appId: "1:733075243873:web:9a232cc80e5c9004517b20"
 };
 
-const firebaseApp=initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
 
-const auth=getAuth(firebaseApp);
-const db=getDatabase(firebaseApp);
-const googleProvider=new GoogleAuthProvider();
+const auth = getAuth(firebaseApp);
 
-const app=document.querySelector("#app");
+const db = getDatabase(firebaseApp);
 
-let signingIn=false;
-let activeListener=null;
+const googleProvider = new GoogleAuthProvider();
+
+const app = document.querySelector("#app");
+
+let activeListener = null;
+let signingIn = false;
 
 
-/* ==================================================
+/* =====================================================
    HELPERS
-================================================== */
+===================================================== */
 
-const esc=value=>
-  String(value??"").replace(/[&<>"']/g,char=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[char]));
+function escapeHTML(value){
 
-const uid=()=>
-  auth.currentUser?.uid||null;
+  return String(value ?? "")
+    .replace(/[&<>"']/g, character => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[character]));
+}
 
-const newId=()=>
-  crypto.randomUUID()
-    .replaceAll("-","")
+
+function newEventId(){
+
+  return crypto.randomUUID()
+    .replaceAll("-", "")
     .slice(0,12);
+}
 
-const eventUrl=id=>
-  location.origin+
-  location.pathname+
-  "#e="+id;
 
-const formatDate=value=>{
+function eventURL(id){
+
+  return (
+    location.origin +
+    location.pathname +
+    "#e=" +
+    id
+  );
+}
+
+
+function formatDate(value){
 
   if(!value)
     return "Date unavailable";
 
-  return new Date(value).toLocaleString([],{
-    day:"2-digit",
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime()))
+    return "Date unavailable";
+
+  return date.toLocaleString([],{
+    day:"numeric",
     month:"long",
     year:"numeric",
-    hour:"2-digit",
+    hour:"numeric",
     minute:"2-digit"
   });
-};
+}
+
 
 function stopListener(){
 
   if(activeListener){
+
     activeListener();
-    activeListener=null;
+
+    activeListener = null;
   }
 }
 
 
-/* ==================================================
+/* =====================================================
+   AUTH
+===================================================== */
+
+async function requireAuth(){
+
+  if(auth.currentUser)
+    return true;
+
+  if(signingIn)
+    return false;
+
+  signingIn = true;
+
+  try{
+
+    await signInWithPopup(
+      auth,
+      googleProvider
+    );
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "Firebase Auth Error:",
+      error
+    );
+
+    if(
+      error.code === "auth/popup-closed-by-user" ||
+      error.code === "auth/cancelled-popup-request" ||
+      error.code === "auth/popup-blocked"
+    ){
+      return false;
+    }
+
+    alert(
+      "Google sign-in failed.\n\n" +
+      error.code +
+      "\n\n" +
+      error.message
+    );
+
+    return false;
+
+  }finally{
+
+    signingIn = false;
+  }
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+function renderHeader(){
+
+  const user = auth.currentUser;
+
+  return `
+
+    <div class="top">
+
+      <h1>വരുന്നുണ്ടോ???</h1>
+
+      <button id="accountButton">
+
+        ${
+          user
+            ? "Account"
+            : "Sign in"
+        }
+
+      </button>
+
+    </div>
+
+
+    <div class="nav">
+
+      <button id="homeButton">
+        Home
+      </button>
+
+      <button id="myEventsButton">
+        My Events
+      </button>
+
+      <button id="createButton">
+        Create
+      </button>
+
+    </div>
+
+  `;
+}
+
+
+function wireHeader(){
+
+  document
+    .querySelector("#homeButton")
+    ?.addEventListener(
+      "click",
+      ()=>{
+        location.hash = "";
+        homePage();
+      }
+    );
+
+
+  document
+    .querySelector("#myEventsButton")
+    ?.addEventListener(
+      "click",
+      myEventsPage
+    );
+
+
+  document
+    .querySelector("#createButton")
+    ?.addEventListener(
+      "click",
+      createPage
+    );
+
+
+  document
+    .querySelector("#accountButton")
+    ?.addEventListener(
+      "click",
+      async()=>{
+
+        if(!auth.currentUser){
+
+          const signedIn =
+            await requireAuth();
+
+          if(signedIn)
+            route();
+
+          return;
+        }
+
+        profilePage();
+      }
+    );
+}
+
+
+/* =====================================================
    SHARE
-================================================== */
+===================================================== */
 
 async function shareEvent(id,button){
 
-  const url=eventUrl(id);
+  const url = eventURL(id);
 
   if(navigator.share){
 
@@ -363,10 +554,11 @@ async function shareEvent(id,button){
 
     }catch(error){
 
-      if(error?.name==="AbortError")
+      if(error?.name === "AbortError")
         return;
     }
   }
+
 
   try{
 
@@ -374,15 +566,15 @@ async function shareEvent(id,button){
 
     if(button){
 
-      const oldText=
+      const original =
         button.textContent;
 
-      button.textContent="Copied!";
+      button.textContent = "Copied!";
 
       setTimeout(()=>{
 
         if(button.isConnected)
-          button.textContent=oldText;
+          button.textContent = original;
 
       },1200);
     }
@@ -397,161 +589,9 @@ async function shareEvent(id,button){
 }
 
 
-/* ==================================================
-   AUTH
-================================================== */
-
-async function requireAuth(){
-
-  if(auth.currentUser)
-    return true;
-
-  if(signingIn)
-    return false;
-
-  signingIn=true;
-
-  try{
-
-    await signInWithPopup(
-      auth,
-      googleProvider
-    );
-
-    return true;
-
-  }catch(error){
-
-    console.error(
-      "Firebase Auth Error:",
-      error.code,
-      error.message
-    );
-
-    if(
-      error.code==="auth/popup-closed-by-user" ||
-      error.code==="auth/cancelled-popup-request" ||
-      error.code==="auth/popup-blocked"
-    ){
-      return false;
-    }
-
-    alert(
-      "Google sign-in failed.\n\n"+
-      error.code+
-      "\n\n"+
-      error.message
-    );
-
-    return false;
-
-  }finally{
-
-    signingIn=false;
-  }
-}
-
-
-/* ==================================================
-   HEADER
-================================================== */
-
-function header(){
-
-  const user=auth.currentUser;
-
-  return `
-
-    <div class="top">
-
-      <h1>വരുന്നുണ്ടോ???</h1>
-
-      <button id="account">
-
-        ${
-          user
-          ? esc(
-              user.displayName||
-              "Account"
-            )
-          : "Sign in"
-        }
-
-      </button>
-
-    </div>
-
-
-    <div class="nav">
-
-      <button id="home">
-        Home
-      </button>
-
-      <button id="myEvents">
-        My Events
-      </button>
-
-      <button id="create">
-        Create
-      </button>
-
-    </div>
-  `;
-}
-
-
-function wireHeader(){
-
-  document.querySelector("#home")
-    ?.addEventListener(
-      "click",
-      ()=>{
-        location.hash="";
-        homePage();
-      }
-    );
-
-
-  document.querySelector("#myEvents")
-    ?.addEventListener(
-      "click",
-      myEventsPage
-    );
-
-
-  document.querySelector("#create")
-    ?.addEventListener(
-      "click",
-      createPage
-    );
-
-
-  document.querySelector("#account")
-    ?.addEventListener(
-      "click",
-      async()=>{
-
-        if(!auth.currentUser){
-
-          const signedIn=
-            await requireAuth();
-
-          if(signedIn)
-            route();
-
-          return;
-        }
-
-        profilePage();
-      }
-    );
-}
-
-
-/* ==================================================
+/* =====================================================
    EVENT CARD
-================================================== */
+===================================================== */
 
 function eventCard(id,event){
 
@@ -559,50 +599,54 @@ function eventCard(id,event){
 
     <div
       class="box event"
-      data-id="${esc(id)}"
+      data-id="${escapeHTML(id)}"
     >
 
       <div class="event-title">
-        ${esc(event.title)}
+
+        ${escapeHTML(event.title)}
+
       </div>
 
+
       <div>
+
         ${formatDate(event.when)}
+
       </div>
+
 
       ${
         event.note
-        ? `
-          <p>
-            ${esc(event.note)}
-          </p>
-        `
-        : ""
+          ? `
+            <p style="white-space:pre-wrap">
+              ${escapeHTML(event.note)}
+            </p>
+          `
+          : ""
       }
+
 
       <p class="muted small">
 
         Created by
-        ${esc(
-          event.creatorName||
-          "Unknown"
+        ${escapeHTML(
+          event.creatorName || "Unknown"
         )}
 
       </p>
 
-      <div class="actions">
 
-        <button
-          class="shareEvent"
-          data-id="${esc(id)}"
-          type="button"
-        >
-          Share
-        </button>
-
-      </div>
+      <button
+        class="shareEvent"
+        data-id="${escapeHTML(id)}"
+        type="button"
+      >
+        Share
+      </button>
 
     </div>
+
   `;
 }
 
@@ -624,8 +668,9 @@ function wireEventCards(container){
           )
             return;
 
-          location.hash=
-            "e="+element.dataset.id;
+          location.hash =
+            "e=" +
+            element.dataset.id;
         }
       );
     });
@@ -651,24 +696,28 @@ function wireEventCards(container){
 }
 
 
-/* ==================================================
+/* =====================================================
    HOME
-================================================== */
+===================================================== */
 
 function homePage(){
 
   stopListener();
 
-  app.innerHTML=`
+  app.innerHTML = `
 
-    ${header()}
+    ${renderHeader()}
+
 
     <div class="box">
 
-      <h2>Events</h2>
+      <h2>
+        Are you coming?
+      </h2>
 
       <p class="muted">
-        Create an event and share the link.
+        Create an event, share the link,
+        and see who's coming.
       </p>
 
       <button id="homeCreate">
@@ -677,24 +726,27 @@ function homePage(){
 
     </div>
 
+
     <div id="eventList"></div>
+
   `;
 
   wireHeader();
 
 
-  document.querySelector("#homeCreate")
+  document
+    .querySelector("#homeCreate")
     ?.addEventListener(
       "click",
       createPage
     );
 
 
-  activeListener=onValue(
+  activeListener = onValue(
     ref(db,"events"),
     snapshot=>{
 
-      const list=
+      const list =
         document.querySelector(
           "#eventList"
         );
@@ -702,24 +754,25 @@ function homePage(){
       if(!list)
         return;
 
-      const data=
-        snapshot.val()||{};
+
+      const data =
+        snapshot.val() || {};
 
 
-      const events=
+      const events =
         Object.entries(data)
           .sort(
             (a,b)=>
-              (a[1].when||"")
-              .localeCompare(
-                b[1].when||""
-              )
+              (a[1].when || "")
+                .localeCompare(
+                  b[1].when || ""
+                )
           );
 
 
       if(!events.length){
 
-        list.innerHTML=`
+        list.innerHTML = `
 
           <div class="box">
 
@@ -728,16 +781,17 @@ function homePage(){
             </p>
 
           </div>
+
         `;
 
         return;
       }
 
 
-      list.innerHTML=
+      list.innerHTML =
         events
           .map(
-            ([id,event])=>
+            ([id,event]) =>
               eventCard(id,event)
           )
           .join("");
@@ -749,46 +803,51 @@ function homePage(){
 }
 
 
-/* ==================================================
+/* =====================================================
    MY EVENTS
-================================================== */
+===================================================== */
 
 function myEventsPage(){
 
   stopListener();
 
-  const user=auth.currentUser;
+
+  const user = auth.currentUser;
 
 
   if(!user){
 
-    app.innerHTML=`
+    app.innerHTML = `
 
-      ${header()}
+      ${renderHeader()}
 
       <div class="box">
 
-        <h2>My Events</h2>
+        <h2>
+          My Events
+        </h2>
 
         <p>
-          Sign in to see the events
-          you created.
+          Sign in with Google to see
+          the events you created.
         </p>
 
-        <button id="google">
+        <button id="googleButton">
           Continue with Google
         </button>
 
       </div>
+
     `;
 
     wireHeader();
 
 
-    document.querySelector("#google")
-      .onclick=async()=>{
+    document
+      .querySelector("#googleButton")
+      .onclick = async()=>{
 
-        const signedIn=
+        const signedIn =
           await requireAuth();
 
         if(signedIn)
@@ -799,27 +858,30 @@ function myEventsPage(){
   }
 
 
-  app.innerHTML=`
+  app.innerHTML = `
 
-    ${header()}
+    ${renderHeader()}
 
     <div class="box">
 
-      <h2>My Events</h2>
+      <h2>
+        My Events
+      </h2>
 
     </div>
 
     <div id="eventList"></div>
+
   `;
 
   wireHeader();
 
 
-  activeListener=onValue(
+  activeListener = onValue(
     ref(db,"events"),
     snapshot=>{
 
-      const list=
+      const list =
         document.querySelector(
           "#eventList"
         );
@@ -828,45 +890,47 @@ function myEventsPage(){
         return;
 
 
-      const data=
-        snapshot.val()||{};
+      const data =
+        snapshot.val() || {};
 
 
-      const events=
+      const events =
         Object.entries(data)
           .filter(
-            ([,event])=>
-              event?.creatorUid===user.uid
+            ([,event]) =>
+              event?.creatorUid === user.uid
           )
           .sort(
             (a,b)=>
-              (a[1].when||"")
-              .localeCompare(
-                b[1].when||""
-              )
+              (a[1].when || "")
+                .localeCompare(
+                  b[1].when || ""
+                )
           );
 
 
       if(!events.length){
 
-        list.innerHTML=`
+        list.innerHTML = `
 
           <div class="box">
 
             <p class="muted">
-              You haven't created
-              any events yet.
+              You haven't created any
+              events yet.
             </p>
 
-            <button id="makeOne">
+            <button id="makeEvent">
               Create an event →
             </button>
 
           </div>
+
         `;
 
 
-        document.querySelector("#makeOne")
+        document
+          .querySelector("#makeEvent")
           ?.addEventListener(
             "click",
             createPage
@@ -876,10 +940,10 @@ function myEventsPage(){
       }
 
 
-      list.innerHTML=
+      list.innerHTML =
         events
           .map(
-            ([id,event])=>
+            ([id,event]) =>
               eventCard(id,event)
           )
           .join("");
@@ -891,9 +955,9 @@ function myEventsPage(){
 }
 
 
-/* ==================================================
-   CREATE EVENT
-================================================== */
+/* =====================================================
+   CREATE
+===================================================== */
 
 function createPage(){
 
@@ -902,33 +966,37 @@ function createPage(){
 
   if(!auth.currentUser){
 
-    app.innerHTML=`
+    app.innerHTML = `
 
-      ${header()}
+      ${renderHeader()}
 
       <div class="box">
 
-        <h2>Create an event</h2>
+        <h2>
+          Create an event
+        </h2>
 
         <p>
-          Sign in with Google
-          to create an event.
+          Sign in with Google to
+          create an event.
         </p>
 
-        <button id="google">
+        <button id="googleButton">
           Continue with Google
         </button>
 
       </div>
+
     `;
 
     wireHeader();
 
 
-    document.querySelector("#google")
-      .onclick=async()=>{
+    document
+      .querySelector("#googleButton")
+      .onclick = async()=>{
 
-        const signedIn=
+        const signedIn =
           await requireAuth();
 
         if(signedIn)
@@ -939,13 +1007,15 @@ function createPage(){
   }
 
 
-  app.innerHTML=`
+  app.innerHTML = `
 
-    ${header()}
+    ${renderHeader()}
 
     <div class="box">
 
-      <h2>Create an event</h2>
+      <h2>
+        Create an event
+      </h2>
 
 
       <label>
@@ -997,33 +1067,35 @@ function createPage(){
       </button>
 
     </div>
+
   `;
 
   wireHeader();
 
 
-  document.querySelector("#saveEvent")
-    .onclick=async()=>{
+  document
+    .querySelector("#saveEvent")
+    .onclick = async()=>{
 
-      const error=
+      const error =
         document.querySelector(
           "#eventError"
         );
 
 
-      const title=
+      const title =
         document.querySelector(
           "#title"
         ).value.trim();
 
 
-      const when=
+      const when =
         document.querySelector(
           "#when"
         ).value;
 
 
-      const note=
+      const note =
         document.querySelector(
           "#eventNote"
         ).value.trim();
@@ -1031,7 +1103,7 @@ function createPage(){
 
       if(!title){
 
-        error.textContent=
+        error.textContent =
           "Give the event a title.";
 
         return;
@@ -1040,44 +1112,53 @@ function createPage(){
 
       if(!when){
 
-        error.textContent=
+        error.textContent =
           "Choose a date and time.";
 
         return;
       }
 
 
-      const whenMs=
+      const whenMs =
         new Date(when).getTime();
 
 
       if(
         !Number.isFinite(whenMs) ||
-        whenMs<=Date.now()
+        whenMs <= Date.now()
       ){
 
-        error.textContent=
+        error.textContent =
           "Choose a future date and time.";
 
         return;
       }
 
 
-      const user=auth.currentUser;
+      const user =
+        auth.currentUser;
+
 
       if(!user){
 
-        error.textContent=
+        error.textContent =
           "Please sign in first.";
 
         return;
       }
 
 
-      const id=newId();
+      const id =
+        newEventId();
 
 
-      const event={
+      /*
+        IMPORTANT:
+        There is intentionally NO
+        responses:{} here.
+      */
+
+      const event = {
 
         title,
 
@@ -1089,17 +1170,15 @@ function createPage(){
           user.uid,
 
         creatorName:
-          user.displayName||
+          user.displayName ||
           "Unknown",
 
         creatorPhoto:
-          user.photoURL||
+          user.photoURL ||
           "",
 
         createdAt:
-          Date.now(),
-
-        responses:{}
+          Date.now()
 
       };
 
@@ -1109,58 +1188,72 @@ function createPage(){
         await set(
           ref(
             db,
-            "events/"+id
+            "events/" + id
           ),
           event
         );
 
 
-        location.hash=
-          "e="+id;
+        location.hash =
+          "e=" + id;
 
       }catch(errorObject){
 
         console.error(
+          "CREATE EVENT ERROR:",
           errorObject
         );
 
-        error.textContent=
-          "Couldn't create the event.";
+        error.textContent =
+          "Couldn't create event.\n\n" +
+          errorObject.code +
+          "\n" +
+          errorObject.message;
       }
     };
 }
 
 
-/* ==================================================
-   EDIT EVENT
-================================================== */
+/* =====================================================
+   EDIT
+===================================================== */
 
 async function editEvent(id){
 
-  const user=auth.currentUser;
+  const user =
+    auth.currentUser;
+
 
   if(!user)
     return;
 
 
-  const snapshot=
+  const snapshot =
     await get(
-      ref(db,"events/"+id)
+      ref(
+        db,
+        "events/" + id
+      )
     );
 
 
   if(!snapshot.exists()){
 
-    alert("Event not found.");
+    alert(
+      "Event not found."
+    );
 
     return;
   }
 
 
-  const event=snapshot.val();
+  const event =
+    snapshot.val();
 
 
-  if(event.creatorUid!==user.uid){
+  if(
+    event.creatorUid !== user.uid
+  ){
 
     alert(
       "Only the creator can edit this event."
@@ -1170,13 +1263,15 @@ async function editEvent(id){
   }
 
 
-  app.innerHTML=`
+  app.innerHTML = `
 
-    ${header()}
+    ${renderHeader()}
 
     <div class="box">
 
-      <h2>Edit event</h2>
+      <h2>
+        Edit event
+      </h2>
 
 
       <label>
@@ -1186,7 +1281,9 @@ async function editEvent(id){
         <input
           id="title"
           maxlength="100"
-          value="${esc(event.title)}"
+          value="${escapeHTML(
+            event.title
+          )}"
         >
 
       </label>
@@ -1199,7 +1296,9 @@ async function editEvent(id){
         <input
           id="when"
           type="datetime-local"
-          value="${esc(event.when)}"
+          value="${escapeHTML(
+            event.when
+          )}"
         >
 
       </label>
@@ -1212,7 +1311,9 @@ async function editEvent(id){
         <textarea
           id="eventNote"
           maxlength="1000"
-        >${esc(event.note||"")}</textarea>
+        >${escapeHTML(
+          event.note || ""
+        )}</textarea>
 
       </label>
 
@@ -1236,37 +1337,41 @@ async function editEvent(id){
       </div>
 
     </div>
+
   `;
 
   wireHeader();
 
 
-  document.querySelector("#cancel")
-    .onclick=()=>eventPage(id);
+  document
+    .querySelector("#cancel")
+    .onclick = () =>
+      eventPage(id);
 
 
-  document.querySelector("#saveEvent")
-    .onclick=async()=>{
+  document
+    .querySelector("#saveEvent")
+    .onclick = async()=>{
 
-      const error=
+      const error =
         document.querySelector(
           "#eventError"
         );
 
 
-      const title=
+      const title =
         document.querySelector(
           "#title"
         ).value.trim();
 
 
-      const when=
+      const when =
         document.querySelector(
           "#when"
         ).value;
 
 
-      const note=
+      const note =
         document.querySelector(
           "#eventNote"
         ).value.trim();
@@ -1274,7 +1379,7 @@ async function editEvent(id){
 
       if(!title){
 
-        error.textContent=
+        error.textContent =
           "Give the event a title.";
 
         return;
@@ -1283,63 +1388,72 @@ async function editEvent(id){
 
       if(!when){
 
-        error.textContent=
+        error.textContent =
           "Choose a date and time.";
 
         return;
       }
 
 
-      const whenMs=
+      const whenMs =
         new Date(when).getTime();
 
 
       if(
         !Number.isFinite(whenMs) ||
-        whenMs<=Date.now()
+        whenMs <= Date.now()
       ){
 
-        error.textContent=
+        error.textContent =
           "Choose a future date and time.";
 
         return;
       }
 
 
-      const updated={
-
-        title,
-
-        when,
-
-        note,
-
-        creatorUid:
-          event.creatorUid,
-
-        creatorName:
-          event.creatorName,
-
-        creatorPhoto:
-          event.creatorPhoto||"",
-
-        createdAt:
-          event.createdAt,
-
-        responses:
-          event.responses||{}
-
-      };
-
-
       try{
+
+        /*
+          Update ONLY these fields.
+
+          This preserves:
+          creatorUid
+          creatorName
+          creatorPhoto
+          createdAt
+          responses
+        */
 
         await set(
           ref(
             db,
-            "events/"+id
+            "events/" +
+            id +
+            "/title"
           ),
-          updated
+          title
+        );
+
+
+        await set(
+          ref(
+            db,
+            "events/" +
+            id +
+            "/when"
+          ),
+          when
+        );
+
+
+        await set(
+          ref(
+            db,
+            "events/" +
+            id +
+            "/note"
+          ),
+          note
         );
 
 
@@ -1348,46 +1462,60 @@ async function editEvent(id){
       }catch(errorObject){
 
         console.error(
+          "EDIT EVENT ERROR:",
           errorObject
         );
 
-        error.textContent=
-          "Couldn't save the changes.";
+        error.textContent =
+          "Couldn't save changes.\n\n" +
+          errorObject.code +
+          "\n" +
+          errorObject.message;
       }
     };
 }
 
 
-/* ==================================================
-   DELETE EVENT
-================================================== */
+/* =====================================================
+   DELETE
+===================================================== */
 
 async function deleteEvent(id){
 
-  const user=auth.currentUser;
+  const user =
+    auth.currentUser;
+
 
   if(!user)
     return;
 
 
-  const snapshot=
+  const snapshot =
     await get(
-      ref(db,"events/"+id)
+      ref(
+        db,
+        "events/" + id
+      )
     );
 
 
   if(!snapshot.exists()){
 
-    alert("Event not found.");
+    alert(
+      "Event not found."
+    );
 
     return;
   }
 
 
-  const event=snapshot.val();
+  const event =
+    snapshot.val();
 
 
-  if(event.creatorUid!==user.uid){
+  if(
+    event.creatorUid !== user.uid
+  ){
 
     alert(
       "Only the creator can delete this event."
@@ -1397,816 +1525,905 @@ async function deleteEvent(id){
   }
 
 
-  if(!confirm(
-    "Delete this event?\n\nThis cannot be undone."
-  ))
+  if(
+    !confirm(
+      "Delete this event?\n\n" +
+      "This cannot be undone."
+    )
+  )
     return;
 
 
   try{
 
     await set(
-      ref(db,"events/"+id),
+      ref(
+        db,
+        "events/" + id
+      ),
       null
     );
 
 
-    location.hash="";
+    location.hash = "";
 
     homePage();
 
   }catch(errorObject){
 
     console.error(
+      "DELETE EVENT ERROR:",
       errorObject
     );
 
     alert(
-      "Couldn't delete the event."
+      "Couldn't delete the event.\n\n" +
+      errorObject.code +
+      "\n" +
+      errorObject.message
     );
   }
 }
 
 
-/* ==================================================
+/* =====================================================
    EVENT PAGE
-================================================== */
+===================================================== */
 
 function eventPage(id){
 
   stopListener();
 
 
-  app.innerHTML=`
+  app.innerHTML = `
 
-    ${header()}
+    ${renderHeader()}
 
     <div id="eventShell"></div>
+
   `;
 
   wireHeader();
 
 
-  activeListener=onValue(
-    ref(db,"events/"+id),
-    snapshot=>{
+  activeListener =
+    onValue(
+      ref(
+        db,
+        "events/" + id
+      ),
+      snapshot=>{
 
-      const shell=
-        document.querySelector(
-          "#eventShell"
-        );
+        const shell =
+          document.querySelector(
+            "#eventShell"
+          );
 
 
-      if(!shell)
-        return;
+        if(!shell)
+          return;
 
 
-      if(!snapshot.exists()){
+        if(!snapshot.exists()){
 
-        shell.innerHTML=`
+          shell.innerHTML = `
+
+            <div class="box">
+
+              <h2>
+                Event not found.
+              </h2>
+
+              <p class="muted">
+                This event doesn't exist
+                or has been deleted.
+              </p>
+
+            </div>
+
+          `;
+
+          return;
+        }
+
+
+        const event =
+          snapshot.val();
+
+
+        const user =
+          auth.currentUser;
+
+
+        const userUid =
+          user?.uid || null;
+
+
+        const isCreator =
+          userUid === event.creatorUid;
+
+
+        const responses =
+          Object.entries(
+            event.responses || {}
+          );
+
+
+        const coming =
+          responses.filter(
+            ([,response]) =>
+              response.status === "yes"
+          );
+
+
+        const notComing =
+          responses.filter(
+            ([,response]) =>
+              response.status === "no"
+          );
+
+
+        const myResponse =
+          userUid
+            ? event.responses?.[userUid]
+            : null;
+
+
+        shell.innerHTML = `
 
           <div class="box">
 
             <h2>
-              Event not found.
+              ${escapeHTML(
+                event.title
+              )}
             </h2>
 
-            <p class="muted">
-              This event doesn't exist
-              or has been deleted.
-            </p>
 
-          </div>
-        `;
-
-        return;
-      }
-
-
-      const event=snapshot.val();
-
-      const user=auth.currentUser;
-
-      const userUid=
-        user?.uid||null;
-
-      const isCreator=
-        userUid===event.creatorUid;
-
-
-      const responses=
-        Object.entries(
-          event.responses||{}
-        );
-
-
-      const coming=
-        responses.filter(
-          ([,response])=>
-            response.status==="yes"
-        );
-
-
-      const notComing=
-        responses.filter(
-          ([,response])=>
-            response.status==="no"
-        );
-
-
-      const myResponse=
-        userUid
-        ? event.responses?.[userUid]
-        : null;
-
-
-      shell.innerHTML=`
-
-        <div class="box">
-
-          <h2>
-            ${esc(event.title)}
-          </h2>
-
-
-          <p>
-            ${formatDate(event.when)}
-          </p>
-
-
-          ${
-            event.note
-            ? `
-              <div class="box">
-
-                <strong>
-                  Note
-                </strong>
-
-                <p style="white-space:pre-wrap">
-                  ${esc(event.note)}
-                </p>
-
-              </div>
-            `
-            : ""
-          }
-
-
-          <div class="person-info">
-
-            ${
-              event.creatorPhoto
-              ? `
-                <img
-                  class="person-photo"
-                  src="${esc(
-                    event.creatorPhoto
-                  )}"
-                  alt=""
-                >
-              `
-              : ""
-            }
-
-            <p class="muted small">
-              Created by
-              ${esc(
-                event.creatorName||
-                "Unknown"
+            <p>
+              ${formatDate(
+                event.when
               )}
             </p>
 
+
+            ${
+              event.note
+                ? `
+                  <div
+                    style="
+                      background:#f1eee7;
+                      border-radius:12px;
+                      padding:14px;
+                      margin:16px 0;
+                    "
+                  >
+
+                    <strong>
+                      Note
+                    </strong>
+
+                    <p
+                      style="white-space:pre-wrap"
+                    >
+                      ${escapeHTML(
+                        event.note
+                      )}
+                    </p>
+
+                  </div>
+                `
+                : ""
+            }
+
+
+            <div class="person-info">
+
+              ${
+                event.creatorPhoto
+                  ? `
+                    <img
+                      class="person-photo"
+                      src="${escapeHTML(
+                        event.creatorPhoto
+                      )}"
+                      alt=""
+                    >
+                  `
+                  : ""
+              }
+
+              <span class="muted small">
+
+                Created by
+                ${escapeHTML(
+                  event.creatorName ||
+                  "Unknown"
+                )}
+
+              </span>
+
+            </div>
+
+
+            ${
+              isCreator
+                ? `
+                  <div
+                    class="actions"
+                    style="margin-top:16px"
+                  >
+
+                    <button id="editButton">
+                      Edit
+                    </button>
+
+                    <button
+                      id="deleteButton"
+                      class="danger"
+                    >
+                      Delete
+                    </button>
+
+                  </div>
+                `
+                : ""
+            }
+
           </div>
-
-
-          ${
-            isCreator
-            ? `
-              <div
-                class="actions"
-                style="margin-top:14px"
-              >
-
-                <button id="edit">
-                  Edit
-                </button>
-
-                <button
-                  id="delete"
-                  class="danger"
-                >
-                  Delete
-                </button>
-
-              </div>
-            `
-            : ""
-          }
 
 
           ${
             !userUid
-            ? `
-              <div class="box">
+              ? `
 
-                <p>
-                  Sign in with Google
-                  to respond.
-                </p>
+                <div class="box">
 
-                <button id="respond">
-                  Continue with Google
-                </button>
+                  <h3>
+                    Are you coming?
+                  </h3>
 
-              </div>
-            `
-            : `
-              <h3>
-                Are you coming?
-              </h3>
+                  <p>
+                    Sign in with Google
+                    to respond.
+                  </p>
 
+                  <button id="respondButton">
+                    Continue with Google
+                  </button>
 
-              <div class="choice">
+                </div>
 
-                <button
-                  id="yes"
-                  class="yes ${
-                    myResponse?.status==="yes"
-                    ? "selected"
-                    : ""
-                  }"
-                >
+              `
+              : `
 
-                  ${
-                    myResponse?.status==="yes"
-                    ? "✓ "
-                    : ""
-                  }
+                <div class="box">
 
-                  COMING
-
-                </button>
+                  <h3>
+                    Are you coming?
+                  </h3>
 
 
-                <button
-                  id="no"
-                  class="no ${
-                    myResponse?.status==="no"
-                    ? "selected"
-                    : ""
-                  }"
-                >
+                  <div class="choice">
 
-                  ${
-                    myResponse?.status==="no"
-                    ? "✓ "
-                    : ""
-                  }
+                    <button
+                      id="yesButton"
+                      class="yes ${
+                        myResponse?.status === "yes"
+                          ? "selected"
+                          : ""
+                      }"
+                    >
 
-                  NOT COMING
+                      ${
+                        myResponse?.status === "yes"
+                          ? "✓ "
+                          : ""
+                      }
 
-                </button>
+                      COMING
 
-              </div>
-
-
-              <label>
-
-                Your note
-
-                <textarea
-                  id="responseNote"
-                  maxlength="500"
-                  placeholder="Anything you want people to know?"
-                >${esc(
-                  myResponse?.note||""
-                )}</textarea>
-
-              </label>
+                    </button>
 
 
-              <button id="saveResponse">
-                Save response
+                    <button
+                      id="noButton"
+                      class="no ${
+                        myResponse?.status === "no"
+                          ? "selected"
+                          : ""
+                      }"
+                    >
+
+                      ${
+                        myResponse?.status === "no"
+                          ? "✓ "
+                          : ""
+                      }
+
+                      NOT COMING
+
+                    </button>
+
+                  </div>
+
+
+                  <label>
+
+                    Your note
+
+                    <textarea
+                      id="responseNote"
+                      maxlength="500"
+                      placeholder="Anything you want people to know?"
+                    >${escapeHTML(
+                      myResponse?.note || ""
+                    )}</textarea>
+
+                  </label>
+
+
+                  <button id="saveResponse">
+                    Save response
+                  </button>
+
+
+                  <p
+                    id="responseMessage"
+                    class="success"
+                  ></p>
+
+                </div>
+
+              `
+          }
+
+
+          <div class="box">
+
+            <h3>
+              Coming · ${coming.length}
+            </h3>
+
+
+            ${
+              coming.length
+                ? coming
+                    .map(
+                      ([,response]) => `
+
+                        <div class="person">
+
+                          <div class="person-head">
+
+                            <div class="person-info">
+
+                              ${
+                                response.photo
+                                  ? `
+                                    <img
+                                      class="person-photo"
+                                      src="${escapeHTML(
+                                        response.photo
+                                      )}"
+                                      alt=""
+                                    >
+                                  `
+                                  : ""
+                              }
+
+                              <strong>
+                                ${escapeHTML(
+                                  response.name ||
+                                  "Unknown"
+                                )}
+                              </strong>
+
+                            </div>
+
+                            <b>✓</b>
+
+                          </div>
+
+
+                          ${
+                            response.note
+                              ? `
+                                <div class="response-note">
+                                  ${escapeHTML(
+                                    response.note
+                                  )}
+                                </div>
+                              `
+                              : ""
+                          }
+
+                        </div>
+
+                      `
+                    )
+                    .join("")
+                : `
+                    <p class="muted">
+                      Nobody yet.
+                    </p>
+                  `
+            }
+
+          </div>
+
+
+          <div class="box">
+
+            <h3>
+              Not coming · ${notComing.length}
+            </h3>
+
+
+            ${
+              notComing.length
+                ? notComing
+                    .map(
+                      ([,response]) => `
+
+                        <div class="person">
+
+                          <div class="person-head">
+
+                            <div class="person-info">
+
+                              ${
+                                response.photo
+                                  ? `
+                                    <img
+                                      class="person-photo"
+                                      src="${escapeHTML(
+                                        response.photo
+                                      )}"
+                                      alt=""
+                                    >
+                                  `
+                                  : ""
+                              }
+
+                              <strong>
+                                ${escapeHTML(
+                                  response.name ||
+                                  "Unknown"
+                                )}
+                              </strong>
+
+                            </div>
+
+                            <b>×</b>
+
+                          </div>
+
+
+                          ${
+                            response.note
+                              ? `
+                                <div class="response-note">
+                                  ${escapeHTML(
+                                    response.note
+                                  )}
+                                </div>
+                              `
+                              : ""
+                          }
+
+                        </div>
+
+                      `
+                    )
+                    .join("")
+                : `
+                    <p class="muted">
+                      Nobody yet.
+                    </p>
+                  `
+            }
+
+          </div>
+
+
+          <div class="box">
+
+            <strong>
+              Share this event
+            </strong>
+
+
+            <div class="link">
+              ${escapeHTML(
+                eventURL(id)
+              )}
+            </div>
+
+
+            <div class="actions">
+
+              <button id="shareButton">
+                Share
               </button>
 
+              <button id="copyButton">
+                Copy link
+              </button>
 
-              <p
-                id="message"
-                class="success"
-              ></p>
-            `
-          }
-
-        </div>
-
-
-        <div class="box">
-
-          <h3>
-            Coming · ${coming.length}
-          </h3>
-
-
-          ${
-            coming.length
-            ? coming.map(
-                ([,response])=>`
-
-                  <div class="person">
-
-                    <div class="person-head">
-
-                      <div class="person-info">
-
-                        ${
-                          response.photo
-                          ? `
-                            <img
-                              class="person-photo"
-                              src="${esc(
-                                response.photo
-                              )}"
-                              alt=""
-                            >
-                          `
-                          : ""
-                        }
-
-                        <strong>
-                          ${esc(
-                            response.name||
-                            "Unknown"
-                          )}
-                        </strong>
-
-                      </div>
-
-                      <b>✓</b>
-
-                    </div>
-
-
-                    ${
-                      response.note
-                      ? `
-                        <div class="response-note">
-                          ${esc(
-                            response.note
-                          )}
-                        </div>
-                      `
-                      : ""
-                    }
-
-                  </div>
-
-                `
-              ).join("")
-            : `
-              <p class="muted">
-                Nobody yet.
-              </p>
-            `
-          }
-
-        </div>
-
-
-        <div class="box">
-
-          <h3>
-            Not coming · ${notComing.length}
-          </h3>
-
-
-          ${
-            notComing.length
-            ? notComing.map(
-                ([,response])=>`
-
-                  <div class="person">
-
-                    <div class="person-head">
-
-                      <div class="person-info">
-
-                        ${
-                          response.photo
-                          ? `
-                            <img
-                              class="person-photo"
-                              src="${esc(
-                                response.photo
-                              )}"
-                              alt=""
-                            >
-                          `
-                          : ""
-                        }
-
-                        <strong>
-                          ${esc(
-                            response.name||
-                            "Unknown"
-                          )}
-                        </strong>
-
-                      </div>
-
-                      <b>×</b>
-
-                    </div>
-
-
-                    ${
-                      response.note
-                      ? `
-                        <div class="response-note">
-                          ${esc(
-                            response.note
-                          )}
-                        </div>
-                      `
-                      : ""
-                    }
-
-                  </div>
-
-                `
-              ).join("")
-            : `
-              <p class="muted">
-                Nobody yet.
-              </p>
-            `
-          }
-
-        </div>
-
-
-        <div class="box">
-
-          <strong>
-            Share this event
-          </strong>
-
-
-          <div class="link">
-            ${esc(eventUrl(id))}
-          </div>
-
-
-          <div class="actions">
-
-            <button id="share">
-              Share
-            </button>
-
-            <button id="copy">
-              Copy link
-            </button>
+            </div>
 
           </div>
 
-        </div>
-      `;
+        `;
 
 
-      /* EDIT */
+        /* EDIT */
 
-      document.querySelector("#edit")
-        ?.addEventListener(
-          "click",
-          ()=>editEvent(id)
-        );
-
-
-      /* DELETE */
-
-      document.querySelector("#delete")
-        ?.addEventListener(
-          "click",
-          ()=>deleteEvent(id)
-        );
+        document
+          .querySelector("#editButton")
+          ?.addEventListener(
+            "click",
+            ()=>editEvent(id)
+          );
 
 
-      /* GOOGLE SIGN-IN */
+        /* DELETE */
 
-      document.querySelector("#respond")
-        ?.addEventListener(
-          "click",
-          async()=>{
-
-            const signedIn=
-              await requireAuth();
-
-            if(signedIn)
-              eventPage(id);
-          }
-        );
+        document
+          .querySelector("#deleteButton")
+          ?.addEventListener(
+            "click",
+            ()=>deleteEvent(id)
+          );
 
 
-      /* SHARE */
+        /* SIGN IN TO RESPOND */
 
-      document.querySelector("#share")
-        ?.addEventListener(
-          "click",
-          event=>
-            shareEvent(
-              id,
-              event.currentTarget
-            )
-        );
+        document
+          .querySelector("#respondButton")
+          ?.addEventListener(
+            "click",
+            async()=>{
 
+              const signedIn =
+                await requireAuth();
 
-      /* COPY */
-
-      document.querySelector("#copy")
-        ?.addEventListener(
-          "click",
-          async()=>{
-
-            const button=
-              document.querySelector(
-                "#copy"
-              );
-
-            try{
-
-              await navigator.clipboard.writeText(
-                eventUrl(id)
-              );
-
-              button.textContent="Copied!";
-
-              setTimeout(()=>{
-
-                if(button.isConnected)
-                  button.textContent=
-                    "Copy link";
-
-              },1200);
-
-            }catch{
-
-              prompt(
-                "Copy this event link:",
-                eventUrl(id)
-              );
+              if(signedIn)
+                eventPage(id);
             }
-          }
-        );
+          );
 
 
-      /* RESPONSE */
+        /* SHARE */
 
-      if(!userUid)
-        return;
-
-
-      let choice=
-        myResponse?.status||"";
-
-
-      const yes=
-        document.querySelector("#yes");
-
-      const no=
-        document.querySelector("#no");
-
-      const responseNote=
-        document.querySelector(
-          "#responseNote"
-        );
-
-      const message=
-        document.querySelector(
-          "#message"
-        );
+        document
+          .querySelector("#shareButton")
+          ?.addEventListener(
+            "click",
+            event =>
+              shareEvent(
+                id,
+                event.currentTarget
+              )
+          );
 
 
-      const updateChoice=()=>{
+        /* COPY */
 
-        yes?.classList.toggle(
-          "selected",
-          choice==="yes"
-        );
+        document
+          .querySelector("#copyButton")
+          ?.addEventListener(
+            "click",
+            async()=>{
 
-        no?.classList.toggle(
-          "selected",
-          choice==="no"
-        );
-
-
-        if(yes)
-          yes.textContent=
-            choice==="yes"
-            ? "✓ COMING"
-            : "COMING";
+              const button =
+                document.querySelector(
+                  "#copyButton"
+                );
 
 
-        if(no)
-          no.textContent=
-            choice==="no"
-            ? "✓ NOT COMING"
-            : "NOT COMING";
-      };
+              try{
+
+                await navigator.clipboard
+                  .writeText(
+                    eventURL(id)
+                  );
 
 
-      yes?.addEventListener(
-        "click",
-        ()=>{
-          choice="yes";
-          updateChoice();
-        }
-      );
+                button.textContent =
+                  "Copied!";
 
 
-      no?.addEventListener(
-        "click",
-        ()=>{
-          choice="no";
-          updateChoice();
-        }
-      );
+                setTimeout(()=>{
 
+                  if(button.isConnected)
+                    button.textContent =
+                      "Copy link";
 
-      document.querySelector(
-        "#saveResponse"
-      )?.addEventListener(
-        "click",
-        async()=>{
+                },1200);
 
-          if(
-            choice!=="yes" &&
-            choice!=="no"
-          ){
+              }catch{
 
-            message.textContent=
-              "Choose COMING or NOT COMING.";
-
-            return;
-          }
-
-
-          const currentUser=
-            auth.currentUser;
-
-
-          if(!currentUser)
-            return;
-
-
-          const note=
-            responseNote.value.trim();
-
-
-          try{
-
-            await set(
-
-              ref(
-                db,
-                "events/"
-                +id+
-                "/responses/"
-                +currentUser.uid
-              ),
-
-              {
-
-                name:
-                  currentUser.displayName||
-                  "Unknown",
-
-                photo:
-                  currentUser.photoURL||
-                  "",
-
-                status:
-                  choice,
-
-                note,
-
-                updatedAt:
-                  Date.now()
-
+                prompt(
+                  "Copy this event link:",
+                  eventURL(id)
+                );
               }
-            );
+            }
+          );
 
 
-            message.textContent=
-              choice==="yes"
-              ? "You're coming."
-              : "You're not coming.";
+        /* RESPONSE */
 
-          }catch(errorObject){
+        if(!userUid)
+          return;
 
-            console.error(
-              errorObject
-            );
 
-            message.textContent=
-              "Couldn't save your response.";
+        let choice =
+          myResponse?.status || "";
+
+
+        const yesButton =
+          document.querySelector(
+            "#yesButton"
+          );
+
+
+        const noButton =
+          document.querySelector(
+            "#noButton"
+          );
+
+
+        const responseNote =
+          document.querySelector(
+            "#responseNote"
+          );
+
+
+        const message =
+          document.querySelector(
+            "#responseMessage"
+          );
+
+
+        function updateChoice(){
+
+          yesButton?.classList.toggle(
+            "selected",
+            choice === "yes"
+          );
+
+
+          noButton?.classList.toggle(
+            "selected",
+            choice === "no"
+          );
+
+
+          if(yesButton){
+
+            yesButton.textContent =
+              choice === "yes"
+                ? "✓ COMING"
+                : "COMING";
+          }
+
+
+          if(noButton){
+
+            noButton.textContent =
+              choice === "no"
+                ? "✓ NOT COMING"
+                : "NOT COMING";
           }
         }
-      );
-    }
-  );
+
+
+        yesButton?.addEventListener(
+          "click",
+          ()=>{
+            choice = "yes";
+            updateChoice();
+          }
+        );
+
+
+        noButton?.addEventListener(
+          "click",
+          ()=>{
+            choice = "no";
+            updateChoice();
+          }
+        );
+
+
+        document
+          .querySelector("#saveResponse")
+          ?.addEventListener(
+            "click",
+            async()=>{
+
+              if(
+                choice !== "yes" &&
+                choice !== "no"
+              ){
+
+                message.textContent =
+                  "Choose COMING or NOT COMING.";
+
+                return;
+              }
+
+
+              const currentUser =
+                auth.currentUser;
+
+
+              if(!currentUser)
+                return;
+
+
+              const note =
+                responseNote.value.trim();
+
+
+              try{
+
+                await set(
+
+                  ref(
+                    db,
+                    "events/" +
+                    id +
+                    "/responses/" +
+                    currentUser.uid
+                  ),
+
+                  {
+
+                    name:
+                      currentUser.displayName ||
+                      "Unknown",
+
+                    photo:
+                      currentUser.photoURL ||
+                      "",
+
+                    status:
+                      choice,
+
+                    note,
+
+                    updatedAt:
+                      Date.now()
+                  }
+                );
+
+
+                message.textContent =
+                  choice === "yes"
+                    ? "You're coming."
+                    : "You're not coming.";
+
+              }catch(errorObject){
+
+                console.error(
+                  "RESPONSE ERROR:",
+                  errorObject
+                );
+
+                message.textContent =
+                  "Couldn't save your response.\n\n" +
+                  errorObject.code +
+                  "\n" +
+                  errorObject.message;
+              }
+            }
+          );
+      }
+    );
 }
 
 
-/* ==================================================
-   PROFILE
-================================================== */
+/* =====================================================
+   ACCOUNT
+===================================================== */
 
 function profilePage(){
 
-  const user=auth.currentUser;
+  const user =
+    auth.currentUser;
+
 
   if(!user)
     return;
 
 
-  app.innerHTML=`
+  app.innerHTML = `
 
-    ${header()}
+    ${renderHeader()}
 
     <div class="box center">
 
       ${
         user.photoURL
-        ? `
-          <img
-            class="profile-photo"
-            src="${esc(
-              user.photoURL
-            )}"
-            alt=""
-          >
-        `
-        : ""
+          ? `
+            <img
+              class="profile-photo"
+              src="${escapeHTML(
+                user.photoURL
+              )}"
+              alt=""
+            >
+          `
+          : ""
       }
 
 
       <h2>
-        ${esc(
-          user.displayName||
+        ${escapeHTML(
+          user.displayName ||
           "Google account"
         )}
       </h2>
 
 
       <p class="muted">
-        ${esc(
-          user.email||
-          ""
+        ${escapeHTML(
+          user.email || ""
         )}
       </p>
 
 
-      <button id="signout">
+      <button id="signOutButton">
         Sign out
       </button>
 
     </div>
+
   `;
 
 
   wireHeader();
 
 
-  document.querySelector("#signout")
-    .onclick=async()=>{
+  document
+    .querySelector("#signOutButton")
+    .onclick = async()=>{
 
       await signOut(auth);
 
-      location.hash="";
+      location.hash = "";
 
       route();
     };
 }
 
 
-/* ==================================================
+/* =====================================================
    ROUTER
-================================================== */
+===================================================== */
 
 function route(){
 
   stopListener();
 
 
-  const match=
+  const match =
     location.hash.match(
-      /^#e=([^]+)$/
+      /^#e=(.+)$/
     );
 
 
   if(match){
 
-    eventPage(match[1]);
+    eventPage(
+      decodeURIComponent(
+        match[1]
+      )
+    );
 
     return;
   }
@@ -2216,9 +2433,9 @@ function route(){
 }
 
 
-/* ==================================================
+/* =====================================================
    START
-================================================== */
+===================================================== */
 
 onAuthStateChanged(
   auth,
@@ -2228,7 +2445,7 @@ onAuthStateChanged(
 );
 
 
-addEventListener(
+window.addEventListener(
   "hashchange",
   route
 );
