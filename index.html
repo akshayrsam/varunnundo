@@ -82,15 +82,18 @@ textarea{
 
 .nav{
   display:flex;
+  align-items:center;
+  justify-content:space-between;
   gap:8px;
   margin-bottom:20px;
 }
 
 .nav button{
-  flex:1;
+  flex:0 0 auto;
+  width:auto;
   background:#fff;
 }
-
+  
 .muted{color:#777}
 .small{font-size:14px}
 .center{text-align:center}
@@ -188,8 +191,8 @@ textarea{
 @media(max-width:420px){
   .top{align-items:flex-start}
   .top h1{font-size:34px}
-  .nav{flex-wrap:wrap}
-  .nav button{min-width:30%}
+  .nav{flex-wrap:nowrap}
+  .nav button{min-width:0}
   .choice{flex-direction:column}
 }
 </style>
@@ -394,7 +397,7 @@ function renderHeader(){
         style="cursor:pointer;"
       >
         വരുന്നുണ്ടോ???
-      </h1>      
+      </h1>
 
       <button
         id="accountButton"
@@ -427,22 +430,20 @@ function renderHeader(){
 
     <div class="nav">
 
-    <div class="nav">
-    
       <button id="eventsButton">
         Events
       </button>
-    
+
       <button id="createButton">
         Create
       </button>
-    
+
     </div>
 
   `;
 
 }
-
+  
 
 function wireHeader(){
 
