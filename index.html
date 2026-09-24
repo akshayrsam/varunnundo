@@ -526,7 +526,7 @@ textarea.input-field {
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="16"></line>
-        <line x1="8" y1="12" x2="16" y2="12"></line>
+        <line x1="8" y1="8" x2="16" y2="12"></line>
       </svg>
       <span>Create</span>
     </button>
@@ -1123,125 +1123,197 @@ function eventPage(id){
 
     if(!snapshot.exists()){
       shell.innerHTML = `
-        <div class="details-card" style="text-align:center; padding: 2rem 1rem;">
-          <h2 style="margin-bottom:0.5rem; font-size: 1.25rem;">Event Not Found</h2>
-          <p style="color:var(--text-muted); margin-bottom:1.25rem; font-size:0.875rem;">This event may have been deleted or the link is incorrect.</p>
-          <button class="btn-primary" id="goHomeBtn">Go to Events</button>
+        <div class="details-card" style="text-align:center;">
+          <h2 style="font-size:1.2rem;">Event not found</h2>
+          <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.4rem;">This event doesn't exist or has been deleted.</p>
         </div>
       `;
-      document.querySelector("#goHomeBtn")?.addEventListener("click", goToEventsPage);
       return;
     }
 
     const event = snapshot.val();
     const user = auth.currentUser;
+    const userUid = user?.uid || null;
+    const isCreator = userUid === event.creatorUid;
+
+    const eventTime = new Date(event.when).getTime();
+    const isLocked = Number.isFinite(eventTime) && eventTime <= Date.now();
+
     const dateData = parseEventDate(event.when);
-    const responses = Object.values(event.responses || {});
-    const yesResponses = responses.filter(r => r.status === "yes");
-    const noResponses = responses.filter(r => r.status === "no");
-    
-    const userResponse = user ? event.responses?.[user.uid]?.status : null;
-    const isCreator = user && user.uid === event.creatorUid;
-    const isPast = dateData && dateData.raw.getTime() < Date.now();
+    const responses = Object.entries(event.responses || {});
+    const coming = responses.filter(([,r]) => r.status === "yes");
+    const notComing = responses.filter(([,r]) => r.status === "no");
+    const myResponse = userUid ? event.responses?.[userUid] : null;
+
+    let selectedStatus = myResponse?.status || null;
 
     shell.innerHTML = `
+      <div class="hero-illustration" style="padding:0 0 0.5rem;">
+        ${SVGS.landscapeGreen}
+      </div>
+
       <div class="details-card">
-        <h2 style="font-size:1.5rem; margin-bottom:0.5rem;">${escapeHTML(event.title)}</h2>
-        <div style="display:flex; align-items:center; gap:0.5rem; color:var(--text-muted); font-size:0.875rem; margin-bottom:1rem;">
+        <h1 class="serif-title">${escapeHTML(event.title)}</h1>
+        
+        <div style="display:flex; align-items:center; gap:0.45rem; color:var(--text-muted); margin-top:0.4rem; font-size:0.875rem;">
           ${SVGS.calendar}
-          <span>${dateData ? dateData.formatted : 'TBD'}</span>
+          <span>${dateData ? dateData.formatted : 'Date unavailable'}</span>
+        </div>
+
+        <div style="display:inline-block; background:#FAF8F5; border:1px solid var(--border); padding:0.25rem 0.65rem; border-radius:999px; font-size:0.75rem; font-weight:600; margin-top:0.5rem;">
+          ${coming.length} coming
         </div>
 
         ${event.note ? `
           <div class="note-box">
-            <strong>Note:</strong> ${escapeHTML(event.note)}
+            <div style="font-weight:700; display:flex; align-items:center; gap:0.35rem; margin-bottom:0.2rem; font-size:0.8rem;">
+              ${SVGS.note} Note
+            </div>
+            <div style="white-space:pre-wrap; color:var(--text-main); font-size:0.875rem;">${escapeHTML(event.note)}</div>
           </div>
         ` : ''}
 
         <div class="creator-info">
-          ${event.creatorPhoto ? `<img src="${escapeHTML(event.creatorPhoto)}" class="creator-photo" alt="">` : ''}
-          <span>Hosted by <strong>${escapeHTML(event.creatorName || "Unknown")}</strong></span>
+          ${event.creatorPhoto ? `<img class="creator-photo" src="${escapeHTML(event.creatorPhoto)}" alt="">` : ''}
+          <span>Created by <strong>${escapeHTML(event.creatorName || "Unknown")}</strong></span>
         </div>
+
+        ${isCreator ? `
+          <div style="display:flex; gap:0.5rem; margin-top:0.85rem; border-top:1px solid var(--border); padding-top:0.85rem;">
+            ${!isLocked ? `<button class="btn-secondary" id="editButton" style="padding:0.45rem 0.8rem; font-size:0.8rem;">Edit</button>` : ''}
+            <button class="btn-secondary" id="deleteButton" style="padding:0.45rem 0.8rem; font-size:0.8rem; color:#dc2626; border-color:#fca5a5;">Delete</button>
+          </div>
+        ` : ''}
       </div>
 
-      <!-- RSVP Section -->
-      ${isPast ? `
-        <div class="locked-badge">This event has ended. Responses are locked.</div>
-      ` : user ? `
-        <div class="rsvp-grid">
-          <button class="rsvp-btn yes ${userResponse === 'yes' ? 'selected' : ''}" id="rsvpYes">✓ I'm Coming</button>
-          <button class="rsvp-btn no ${userResponse === 'no' ? 'selected' : ''}" id="rsvpNo">✕ Can't Make It</button>
-        </div>
-      ` : `
-        <button class="btn-primary" id="rsvpSignIn" style="margin-bottom:1rem;">Sign in to RSVP</button>
-      `}
-
-      <!-- Actions (Share, Edit, Delete) -->
-      <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem;">
-        <button class="btn-secondary" id="shareBtn" style="flex:1;">${SVGS.share} Share</button>
-        <button class="btn-secondary" id="copyBtn" style="flex:1;">${SVGS.copy} Copy Link</button>
-      </div>
-
-      ${isCreator && !isPast ? `
-        <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem;">
-          <button class="btn-secondary" id="editBtn" style="flex:1;">Edit Event</button>
-          <button class="btn-secondary" id="deleteBtn" style="flex:1; color:#dc2626; border-color:#dc2626;">Delete</button>
-        </div>
-      ` : ''}
-
-      <!-- Attendees Lists -->
+      <!-- RSVP Box -->
       <div class="details-card">
-        <h3 style="font-size:1rem; margin-bottom:0.75rem;">Coming (${yesResponses.length})</h3>
-        ${yesResponses.length ? yesResponses.map(r => `
+        <h3 style="font-size:1rem;">Are you coming?</h3>
+        
+        ${isLocked ? `
+          <div class="locked-badge">This event has already started. Responses are locked.</div>
+        ` : !userUid ? `
+          <p style="font-size:0.85rem; color:var(--text-muted); margin: 0.4rem 0 0.85rem;">Sign in with Google to submit your response.</p>
+          <button class="btn-primary" id="respondButton">Continue with Google</button>
+        ` : `
+          <div class="rsvp-grid">
+            <button class="rsvp-btn yes ${selectedStatus === 'yes' ? 'selected' : ''}" id="yesButton">
+              ${selectedStatus === 'yes' ? '✓ ' : ''}COMING
+            </button>
+            <button class="rsvp-btn no ${selectedStatus === 'no' ? 'selected' : ''}" id="noButton">
+              ${selectedStatus === 'no' ? '✓ ' : ''}NOT COMING
+            </button>
+          </div>
+
+          <div class="input-group">
+            <textarea class="input-field" id="responseNote" maxlength="500" placeholder="Add a note (optional)" style="min-height:65px;">${escapeHTML(myResponse?.note || "")}</textarea>
+          </div>
+
+          <button class="btn-primary" id="saveResponse">Save response</button>
+          <p id="responseMessage" class="success"></p>
+        `}
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex; gap:0.5rem; margin-bottom:1.25rem;">
+        <button class="btn-secondary" id="shareButton" style="flex:1; display:flex; gap:0.45rem;">
+          ${SVGS.share} Share
+        </button>
+        <button class="btn-secondary" id="copyButton" style="flex:1; display:flex; gap:0.45rem;">
+          ${SVGS.copy} Copy Text
+        </button>
+      </div>
+
+      <!-- Coming List -->
+      <div class="details-card">
+        <h3 style="font-size:0.95rem; margin-bottom:0.65rem;">Coming · ${coming.length}</h3>
+        ${coming.length ? coming.map(([,r]) => `
           <div class="person-row">
             <div class="person-detail">
-              <img src="${escapeHTML(r.photoURL || '')}" class="person-avatar" alt="" onerror="this.style.display='none'">
-              <span>${escapeHTML(r.name || 'Anonymous')}</span>
+              ${r.photo ? `<img class="person-avatar" src="${escapeHTML(r.photo)}" alt="">` : `<div class="person-avatar"></div>`}
+              <div>
+                <div style="font-weight:600; font-size:0.875rem;">${escapeHTML(r.name || "Unknown")}</div>
+                ${r.note ? `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.05rem;">${escapeHTML(r.note)}</div>` : ''}
+              </div>
             </div>
+            <span style="color:var(--yes-text); font-weight:700;">✓</span>
           </div>
-        `).join('') : '<p style="color:var(--text-muted); font-size:0.85rem; margin:0;">No one yet.</p>'}
+        `).join('') : `<p style="font-size:0.8rem; color:var(--text-muted);">Nobody yet.</p>`}
       </div>
 
-      ${noResponses.length ? `
+      <!-- Not Coming List -->
+      ${notComing.length ? `
         <div class="details-card">
-          <h3 style="font-size:1rem; margin-bottom:0.75rem;">Can't Come (${noResponses.length})</h3>${noResponses.map(r => `
+          <h3 style="font-size:0.95rem; margin-bottom:0.65rem;">Not coming · ${notComing.length}</h3>${notComing.map(([,r]) => `
             <div class="person-row">
               <div class="person-detail">
-                <img src="${escapeHTML(r.photoURL || '')}" class="person-avatar" alt="" onerror="this.style.display='none'">
-                <span>${escapeHTML(r.name || 'Anonymous')}</span>
+                ${r.photo ? `<img class="person-avatar" src="${escapeHTML(r.photo)}" alt="">` : `<div class="person-avatar"></div>`}
+                <div>
+                  <div style="font-weight:600; font-size:0.875rem;">${escapeHTML(r.name || "Unknown")}</div>
+                  ${r.note ? `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.05rem;">${escapeHTML(r.note)}</div>` : ''}
+                </div>
               </div>
+              <span style="color:var(--no-text); font-weight:700;">×</span>
             </div>
           `).join('')}
         </div>
       ` : ''}
     `;
 
-    // Event Handlers
-    document.querySelector("#shareBtn")?.addEventListener("click", () => shareEvent(id));
-    document.querySelector("#copyBtn")?.addEventListener("click", (e) => copyEventMessage(id, e.currentTarget));
-    document.querySelector("#editBtn")?.addEventListener("click", () => editEvent(id));
-    document.querySelector("#deleteBtn")?.addEventListener("click", () => deleteEvent(id));
-    document.querySelector("#rsvpSignIn")?.addEventListener("click", async () => {
-      const signedIn = await requireAuth();
-      if(signedIn) eventPage(id);
-    });
+    document.querySelector("#shareButton")?.addEventListener("click", () => shareEvent(id));
+    document.querySelector("#copyButton")?.addEventListener("click", function(){ copyEventMessage(id, this); });
 
-    const setRSVP = async (status) => {
-      if(!user) return;
-      try {
-        await set(ref(db, `events/${id}/responses/${user.uid}`), {
-          status,
-          name: user.displayName || "Anonymous",
-          photoURL: user.photoURL || "",
-          updatedAt: Date.now()
-        });
-      } catch(err) {
-        alert("Couldn't update RSVP: " + err.message);
-      }
-    };
+    if(isCreator){
+      if(!isLocked) document.querySelector("#editButton")?.addEventListener("click", () => editEvent(id));
+      document.querySelector("#deleteButton")?.addEventListener("click", () => deleteEvent(id));
+    }
 
-    document.querySelector("#rsvpYes")?.addEventListener("click", () => setRSVP("yes"));
-    document.querySelector("#rsvpNo")?.addEventListener("click", () => setRSVP("no"));
+    if(!userUid){
+      document.querySelector("#respondButton")?.addEventListener("click", async () => {
+        const signedIn = await requireAuth();
+        if(signedIn) eventPage(id);
+      });
+    } else if(!isLocked) {
+      const yesBtn = document.querySelector("#yesButton");
+      const noBtn = document.querySelector("#noButton");
+
+      yesBtn.onclick = () => {
+        selectedStatus = "yes";
+        yesBtn.classList.add("selected");
+        noBtn.classList.remove("selected");
+      };
+
+      noBtn.onclick = () => {
+        selectedStatus = "no";
+        noBtn.classList.add("selected");
+        yesBtn.classList.remove("selected");
+      };
+
+      document.querySelector("#saveResponse").onclick = async () => {
+        const msg = document.querySelector("#responseMessage");
+        const note = document.querySelector("#responseNote").value.trim();
+
+        if(!selectedStatus){
+          alert("Select COMING or NOT COMING first.");
+          return;
+        }
+
+        try {
+          await set(ref(db, "events/" + id + "/responses/" + userUid), {
+            status: selectedStatus,
+            note,
+            name: user.displayName || "Unknown",
+            photo: user.photoURL || "",
+            updatedAt: Date.now()
+          });
+          msg.textContent = "Response saved!";
+          setTimeout(() => { if(msg) msg.textContent = ""; }, 2000);
+        } catch(err){
+          console.error("RESPONSE ERROR:", err);
+          alert("Couldn't save response: " + err.message);
+        }
+      };
+    }
   });
 }
 
@@ -1251,8 +1323,8 @@ function eventPage(id){
 function profilePage(){
   stopListener();
   updateBottomNav("");
-
   const user = auth.currentUser;
+
   if(!user){
     goToEventsPage();
     return;
@@ -1260,35 +1332,44 @@ function profilePage(){
 
   app.innerHTML = `
     ${renderHeader(true)}
-    <div class="details-card" style="text-align:center; padding:2rem 1rem;">
-      <img src="${escapeHTML(user.photoURL || '')}" style="width:4rem; height:4rem; border-radius:50%; margin-bottom:0.75rem; object-fit:cover;" alt="Profile">
-      <h2 style="font-size:1.25rem;">${escapeHTML(user.displayName || 'User')}</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1.5rem;">${escapeHTML(user.email || '')}</p>
-      <button class="btn-secondary" id="signOutBtn" style="color:#dc2626; border-color:#dc2626;">Sign Out</button>
+
+    <div style="text-align:center; padding: 2.5rem 1rem 1rem;">
+      <div style="width:80px; height:80px; border-radius:50%; overflow:hidden; margin: 0 auto 1rem; border:2px solid var(--border); position:relative;">
+        <img src="${escapeHTML(user.photoURL || "")}" alt="Profile" style="width:100%; height:100%; object-fit:cover;">
+        <div style="position:absolute; bottom:0; right:0; background:#fff; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:800; border:1px solid var(--border);">G</div>
+      </div>
+      <h2 style="font-size:1.3rem;">${escapeHTML(user.displayName || "User")}</h2>
+      <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem; margin-bottom:2rem;">${escapeHTML(user.email || "")}</p>
+
+      <button class="btn-secondary" id="signOutButton" style="max-width:280px; margin:0 auto;">Sign out</button>
     </div>
   `;
 
   wireHeader();
 
-  document.querySelector("#signOutBtn")?.addEventListener("click", async () => {
+  document.querySelector("#signOutButton").onclick = async () => {
     await signOut(auth);
     goToEventsPage();
-  });
+  };
 }
 
 /* =====================================================
-   ROUTER
+   ROUTER & INITIALIZATION
 ===================================================== */
 function route(){
   const hash = location.hash;
-  if(hash.startsWith("#e=")){
-    const id = hash.replace("#e=", "");
-    eventPage(id);
-  } else if(hash === "#create"){
+  if(hash === "#create"){
     createPage();
   } else if(hash === "#profile"){
     profilePage();
+  } else if(hash.startsWith("#e=")){
+    const id = hash.slice(3);
+    if(id) {
+      eventPage(id);
+      return;
+    }
   } else {
+    currentTab = 'upcoming'; // Always default to upcoming on main events route
     eventsPage();
   }
 }
