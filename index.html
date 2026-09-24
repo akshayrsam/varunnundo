@@ -102,10 +102,6 @@ textarea{
   background:#fff;
 }
 
-.nav button.active{
-  background:#ffcf4a;
-}
-
 .event{
   cursor:pointer;
 }
@@ -141,24 +137,6 @@ textarea{
   font-weight:700;
 }
 
-.badge{
-  display:inline-block;
-  padding:4px 9px;
-  border:2px solid #222;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:800;
-  margin-top:8px;
-}
-
-.yes{
-  background:#8ee6a8;
-}
-
-.no{
-  background:#ff9b9b;
-}
-
 .choice{
   display:flex;
   gap:10px;
@@ -173,37 +151,12 @@ textarea{
   outline:4px solid #222;
 }
 
-.scope{
-  display:grid;
-  gap:9px;
-  margin:12px 0 18px;
+.yes{
+  background:#8ee6a8;
 }
 
-.scope label{
-  display:block;
-  border:2px solid #222;
-  border-radius:12px;
-  padding:12px;
-  cursor:pointer;
-  background:#fff;
-}
-
-.scope input{
-  width:auto;
-  min-height:auto;
-  margin:0 8px 0 0;
-}
-
-.invite-row{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:9px 0;
-  border-bottom:1px solid #ddd;
-}
-
-.invite-row:last-child{
-  border:0;
+.no{
+  background:#ff9b9b;
 }
 
 .person{
@@ -218,11 +171,26 @@ textarea{
 .person-head{
   display:flex;
   justify-content:space-between;
+  align-items:center;
   gap:12px;
 }
 
+.person-info{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.person-photo{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid #222;
+}
+
 .response-note{
-  margin:5px 0 0;
+  margin:5px 0 0 48px;
   color:#555;
   white-space:pre-wrap;
 }
@@ -258,21 +226,6 @@ textarea{
   background:#ff9b9b;
 }
 
-.past-toggle{
-  width:100%;
-  background:#fff;
-  text-align:left;
-}
-
-details{
-  margin-top:18px;
-}
-
-summary{
-  cursor:pointer;
-  font-weight:800;
-}
-
 @media(max-width:360px){
   .choice{
     flex-direction:column;
@@ -282,30 +235,35 @@ summary{
 </head>
 
 <body>
+
 <main>
   <div id="app"></div>
 </main>
 
 <script type="module">
 
-import { initializeApp }
-  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import{
+  initializeApp
+}
+from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-import {
+import{
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+  signOut,
+  onAuthStateChanged
+}
+from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-import {
+import{
   getDatabase,
   ref,
   get,
   set,
-  onValue,
-  runTransaction
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+  onValue
+}
+from"https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
 /* ==================================================
@@ -322,23 +280,24 @@ const firebaseConfig = {
   appId: "1:733075243873:web:9a232cc80e5c9004517b20"
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
-const auth = getAuth(firebaseApp);
-const db = getDatabase(firebaseApp);
-const googleProvider = new GoogleAuthProvider();
+const firebaseApp=initializeApp(firebaseConfig);
 
-const app = document.querySelector("#app");
+const auth=getAuth(firebaseApp);
+const db=getDatabase(firebaseApp);
+const googleProvider=new GoogleAuthProvider();
 
-let signingIn = false;
-let activeListener = null;
+const app=document.querySelector("#app");
+
+let signingIn=false;
+let activeListener=null;
 
 
 /* ==================================================
    HELPERS
 ================================================== */
 
-const esc = value =>
-  String(value ?? "").replace(/[&<>"']/g,char=>({
+const esc=value=>
+  String(value??"").replace(/[&<>"']/g,char=>({
     "&":"&amp;",
     "<":"&lt;",
     ">":"&gt;",
@@ -346,16 +305,23 @@ const esc = value =>
     "'":"&#39;"
   }[char]));
 
-const uid = () => auth.currentUser?.uid || null;
+const uid=()=>
+  auth.currentUser?.uid||null;
 
-const newId = () =>
-  crypto.randomUUID().replaceAll("-","").slice(0,12);
+const newId=()=>
+  crypto.randomUUID()
+    .replaceAll("-","")
+    .slice(0,12);
 
-const eventUrl = id =>
-  location.origin + location.pathname + "#e=" + id;
+const eventUrl=id=>
+  location.origin+
+  location.pathname+
+  "#e="+id;
 
-const formatDate = value => {
-  if(!value) return "Date unavailable";
+const formatDate=value=>{
+
+  if(!value)
+    return "Date unavailable";
 
   return new Date(value).toLocaleString([],{
     day:"2-digit",
@@ -366,90 +332,68 @@ const formatDate = value => {
   });
 };
 
-const isPast = event =>
-  Number(event?.whenMs || new Date(event?.when || 0).getTime()) <= Date.now();
+function stopListener(){
 
-const validUsername = value =>
-  /^[a-zA-Z0-9_]{3,20}$/.test(value);
-
-const stopListener = () => {
   if(activeListener){
     activeListener();
     activeListener=null;
   }
-};
+}
+
+
+/* ==================================================
+   SHARE
+================================================== */
 
 async function shareEvent(id,button){
-  const url = eventUrl(id);
+
+  const url=eventUrl(id);
 
   if(navigator.share){
+
     try{
+
       await navigator.share({
         title:"വരുന്നുണ്ടോ???",
         text:"Are you coming?",
         url
       });
+
       return;
+
     }catch(error){
-      if(error?.name==="AbortError") return;
+
+      if(error?.name==="AbortError")
+        return;
     }
   }
 
   try{
+
     await navigator.clipboard.writeText(url);
 
     if(button){
-      const oldText=button.textContent;
+
+      const oldText=
+        button.textContent;
+
       button.textContent="Copied!";
+
       setTimeout(()=>{
+
         if(button.isConnected)
           button.textContent=oldText;
+
       },1200);
     }
+
   }catch{
-    prompt("Copy this event link:",url);
+
+    prompt(
+      "Copy this event link:",
+      url
+    );
   }
-}
-
-function eventCard(id,event,relationship=""){
-  const past=isPast(event);
-
-  return `
-    <div class="box event" data-id="${esc(id)}">
-      <div class="event-title">${esc(event.title)}</div>
-      <div>${formatDate(event.when)}</div>
-
-      ${event.note
-        ? `<p>${esc(event.note)}</p>`
-        : ""
-      }
-
-      <p class="muted small">
-        by @${esc(event.creatorUsername || "unknown")}
-      </p>
-
-      <span class="badge">
-        ${past ? "Past event" :
-          relationship==="creator"
-          ? "Created by you"
-          : relationship==="invited"
-          ? "Invited"
-          : event.scope==="public"
-          ? "Public"
-          : "Shared"}
-      </span>
-
-      <div class="actions" style="margin-top:12px">
-        <button
-          class="shareEvent"
-          data-id="${esc(id)}"
-          type="button"
-        >
-          Share
-        </button>
-      </div>
-    </div>
-  `;
 }
 
 
@@ -458,6 +402,7 @@ function eventCard(id,event,relationship=""){
 ================================================== */
 
 async function requireAuth(){
+
   if(auth.currentUser)
     return true;
 
@@ -467,9 +412,16 @@ async function requireAuth(){
   signingIn=true;
 
   try{
-    await signInWithPopup(auth,googleProvider);
+
+    await signInWithPopup(
+      auth,
+      googleProvider
+    );
+
     return true;
+
   }catch(error){
+
     console.error(
       "Firebase Auth Error:",
       error.code,
@@ -485,200 +437,217 @@ async function requireAuth(){
     }
 
     alert(
-      "Google sign-in failed.\n\n" +
-      error.code +
-      "\n\n" +
+      "Google sign-in failed.\n\n"+
+      error.code+
+      "\n\n"+
       error.message
     );
 
     return false;
+
   }finally{
+
     signingIn=false;
   }
 }
 
 
 /* ==================================================
-   PROFILE
-================================================== */
-
-async function getProfile(){
-  const user=auth.currentUser;
-
-  if(!user)
-    return null;
-
-  const snapshot =
-    await get(ref(db,"users/"+user.uid));
-
-  return snapshot.exists()
-    ? snapshot.val()
-    : null;
-}
-
-async function ensureProfile(){
-  const user=auth.currentUser;
-
-  if(!user)
-    return null;
-
-  const existing=await getProfile();
-
-  if(existing?.username)
-    return existing;
-
-  return new Promise(resolve=>{
-
-    app.innerHTML=`
-      <div class="box">
-        <h2>Welcome.</h2>
-        <p>Choose your username.</p>
-
-        <input
-          id="username"
-          maxlength="20"
-          placeholder="akshay"
-          autocomplete="off"
-        >
-
-        <p class="muted small">
-          3–20 characters.
-          Letters, numbers and underscore.
-        </p>
-
-        <p id="usernameError" class="error"></p>
-
-        <button id="continue">
-          Continue →
-        </button>
-      </div>
-    `;
-
-    document.querySelector("#continue").onclick=async()=>{
-
-      const input=document.querySelector("#username");
-      const error=document.querySelector("#usernameError");
-
-      const username=input.value.trim();
-      const usernameLower=username.toLowerCase();
-
-      if(!validUsername(username)){
-        error.textContent =
-          "Use 3–20 letters, numbers or underscores.";
-        return;
-      }
-
-      error.textContent="Checking…";
-
-      try{
-        const usernameRef =
-          ref(db,"usernames/"+usernameLower);
-
-        const result =
-          await runTransaction(
-            usernameRef,
-            current=>{
-              if(current===null)
-                return user.uid;
-
-              return;
-            }
-          );
-
-        if(!result.committed){
-          error.textContent =
-            "That username is already taken.";
-          return;
-        }
-
-        const profile={
-          username,
-          usernameLower,
-          displayName:user.displayName || username,
-          photoURL:user.photoURL || "",
-          createdAt:Date.now()
-        };
-
-        await set(
-          ref(db,"users/"+user.uid),
-          profile
-        );
-
-        resolve(profile);
-
-      }catch(errorObject){
-        console.error(errorObject);
-        error.textContent =
-          "Couldn't create your profile.";
-      }
-    };
-  });
-}
-
-
-/* ==================================================
-   NAVIGATION
+   HEADER
 ================================================== */
 
 function header(){
+
   const user=auth.currentUser;
 
   return `
+
     <div class="top">
+
       <h1>വരുന്നുണ്ടോ???</h1>
 
       <button id="account">
-        ${user
-          ? "@"+esc(user.displayName || "Account")
+
+        ${
+          user
+          ? esc(
+              user.displayName||
+              "Account"
+            )
           : "Sign in"
         }
+
       </button>
+
     </div>
 
+
     <div class="nav">
-      <button id="home">Home</button>
-      <button id="myEvents">My Events</button>
-      <button id="create">Create</button>
+
+      <button id="home">
+        Home
+      </button>
+
+      <button id="myEvents">
+        My Events
+      </button>
+
+      <button id="create">
+        Create
+      </button>
+
     </div>
   `;
 }
 
+
 function wireHeader(){
-  document.querySelector("#home")?.addEventListener(
-    "click",
-    ()=>{
-      location.hash="";
-      feedPage();
-    }
-  );
 
-  document.querySelector("#myEvents")?.addEventListener(
-    "click",
-    eventsPage
-  );
+  document.querySelector("#home")
+    ?.addEventListener(
+      "click",
+      ()=>{
+        location.hash="";
+        homePage();
+      }
+    );
 
-  document.querySelector("#create")?.addEventListener(
-    "click",
-    createPage
-  );
 
-  document.querySelector("#account")?.addEventListener(
-    "click",
-    async()=>{
-      if(!auth.currentUser){
-        const signedIn=await requireAuth();
+  document.querySelector("#myEvents")
+    ?.addEventListener(
+      "click",
+      myEventsPage
+    );
 
-        if(signedIn){
-          await ensureProfile();
-          route();
+
+  document.querySelector("#create")
+    ?.addEventListener(
+      "click",
+      createPage
+    );
+
+
+  document.querySelector("#account")
+    ?.addEventListener(
+      "click",
+      async()=>{
+
+        if(!auth.currentUser){
+
+          const signedIn=
+            await requireAuth();
+
+          if(signedIn)
+            route();
+
+          return;
         }
 
-        return;
+        profilePage();
+      }
+    );
+}
+
+
+/* ==================================================
+   EVENT CARD
+================================================== */
+
+function eventCard(id,event){
+
+  return `
+
+    <div
+      class="box event"
+      data-id="${esc(id)}"
+    >
+
+      <div class="event-title">
+        ${esc(event.title)}
+      </div>
+
+      <div>
+        ${formatDate(event.when)}
+      </div>
+
+      ${
+        event.note
+        ? `
+          <p>
+            ${esc(event.note)}
+          </p>
+        `
+        : ""
       }
 
-      profilePage();
-    }
-  );
+      <p class="muted small">
+
+        Created by
+        ${esc(
+          event.creatorName||
+          "Unknown"
+        )}
+
+      </p>
+
+      <div class="actions">
+
+        <button
+          class="shareEvent"
+          data-id="${esc(id)}"
+          type="button"
+        >
+          Share
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+function wireEventCards(container){
+
+  container
+    .querySelectorAll(".event")
+    .forEach(element=>{
+
+      element.addEventListener(
+        "click",
+        event=>{
+
+          if(
+            event.target.closest(
+              ".shareEvent"
+            )
+          )
+            return;
+
+          location.hash=
+            "e="+element.dataset.id;
+        }
+      );
+    });
+
+
+  container
+    .querySelectorAll(".shareEvent")
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        event=>{
+
+          event.stopPropagation();
+
+          shareEvent(
+            button.dataset.id,
+            button
+          );
+        }
+      );
+    });
 }
 
 
@@ -686,77 +655,93 @@ function wireHeader(){
    HOME
 ================================================== */
 
-function feedPage(){
+function homePage(){
+
   stopListener();
 
   app.innerHTML=`
+
     ${header()}
 
     <div class="box">
-      <h2>Home</h2>
-      <p class="muted">Public events.</p>
+
+      <h2>Events</h2>
+
+      <p class="muted">
+        Create an event and share the link.
+      </p>
+
+      <button id="homeCreate">
+        Create an event →
+      </button>
+
     </div>
 
-    <div id="feedList"></div>
+    <div id="eventList"></div>
   `;
 
   wireHeader();
+
+
+  document.querySelector("#homeCreate")
+    ?.addEventListener(
+      "click",
+      createPage
+    );
+
 
   activeListener=onValue(
     ref(db,"events"),
     snapshot=>{
 
-      const list=document.querySelector("#feedList");
-      if(!list) return;
+      const list=
+        document.querySelector(
+          "#eventList"
+        );
 
-      const data=snapshot.val() || {};
+      if(!list)
+        return;
 
-      const events=Object.entries(data)
-        .filter(([,event])=>event?.scope==="public")
-        .sort((a,b)=>{
-          const ap=isPast(a[1]);
-          const bp=isPast(b[1]);
+      const data=
+        snapshot.val()||{};
 
-          if(ap!==bp)
-            return ap ? 1 : -1;
 
-          return (a[1].when||"")
-            .localeCompare(b[1].when||"");
-        });
+      const events=
+        Object.entries(data)
+          .sort(
+            (a,b)=>
+              (a[1].when||"")
+              .localeCompare(
+                b[1].when||""
+              )
+          );
 
-      const upcoming=events.filter(([,event])=>!isPast(event));
-      const past=events.filter(([,event])=>isPast(event));
 
-      let html="";
+      if(!events.length){
 
-      if(!upcoming.length){
-        html+=`
+        list.innerHTML=`
+
           <div class="box">
-            <p class="muted">No upcoming public events.</p>
-            <button id="homeCreate">
-              Create an event →
-            </button>
+
+            <p class="muted">
+              No events yet.
+            </p>
+
           </div>
         `;
-      }else{
-        html+=upcoming
-          .map(([id,event])=>eventCard(id,event))
+
+        return;
+      }
+
+
+      list.innerHTML=
+        events
+          .map(
+            ([id,event])=>
+              eventCard(id,event)
+          )
           .join("");
-      }
 
-      if(past.length){
-        html+=`
-          <details>
-            <summary>View past events (${past.length})</summary>
-            ${past.map(([id,event])=>eventCard(id,event)).join("")}
-          </details>
-        `;
-      }
-
-      list.innerHTML=html;
-
-      document.querySelector("#homeCreate")
-        ?.addEventListener("click",createPage);
 
       wireEventCards(list);
     }
@@ -768,52 +753,60 @@ function feedPage(){
    MY EVENTS
 ================================================== */
 
-function eventsPage(){
+function myEventsPage(){
+
   stopListener();
 
   const user=auth.currentUser;
 
+
   if(!user){
+
     app.innerHTML=`
+
       ${header()}
 
       <div class="box">
+
         <h2>My Events</h2>
 
         <p>
           Sign in to see the events
-          you've created or been invited to.
+          you created.
         </p>
 
         <button id="google">
           Continue with Google
         </button>
+
       </div>
     `;
 
     wireHeader();
 
-    document.querySelector("#google").onclick=async()=>{
-      const signedIn=await requireAuth();
 
-      if(signedIn){
-        await ensureProfile();
-        eventsPage();
-      }
-    };
+    document.querySelector("#google")
+      .onclick=async()=>{
+
+        const signedIn=
+          await requireAuth();
+
+        if(signedIn)
+          myEventsPage();
+      };
 
     return;
   }
 
+
   app.innerHTML=`
+
     ${header()}
 
     <div class="box">
+
       <h2>My Events</h2>
 
-      <p class="muted">
-        Events you've created or been invited to.
-      </p>
     </div>
 
     <div id="eventList"></div>
@@ -821,508 +814,320 @@ function eventsPage(){
 
   wireHeader();
 
+
   activeListener=onValue(
     ref(db,"events"),
     snapshot=>{
 
-      const list=document.querySelector("#eventList");
-      if(!list) return;
+      const list=
+        document.querySelector(
+          "#eventList"
+        );
 
-      const data=snapshot.val() || {};
+      if(!list)
+        return;
 
-      const events=Object.entries(data)
-        .filter(([,event])=>{
-          return event?.creatorUid===user.uid ||
-            !!event?.invitedUsers?.[user.uid];
-        })
-        .map(([id,event])=>({
-          id,
-          event,
-          relationship:
-            event.creatorUid===user.uid
-              ? "creator"
-              : "invited"
-        }))
-        .sort((a,b)=>{
-          const ap=isPast(a.event);
-          const bp=isPast(b.event);
 
-          if(ap!==bp)
-            return ap ? 1 : -1;
+      const data=
+        snapshot.val()||{};
 
-          return (a.event.when||"")
-            .localeCompare(b.event.when||"");
-        });
 
-      const upcoming=events.filter(
-        item=>!isPast(item.event)
-      );
+      const events=
+        Object.entries(data)
+          .filter(
+            ([,event])=>
+              event?.creatorUid===user.uid
+          )
+          .sort(
+            (a,b)=>
+              (a[1].when||"")
+              .localeCompare(
+                b[1].when||""
+              )
+          );
 
-      const past=events.filter(
-        item=>isPast(item.event)
-      );
 
-      let html="";
+      if(!events.length){
 
-      if(!upcoming.length){
-        html+=`
+        list.innerHTML=`
+
           <div class="box">
+
             <p class="muted">
-              You don't have any upcoming events yet.
+              You haven't created
+              any events yet.
             </p>
 
             <button id="makeOne">
               Create an event →
             </button>
+
           </div>
         `;
-      }else{
-        html+=upcoming
-          .map(item=>
-            eventCard(
-              item.id,
-              item.event,
-              item.relationship
-            )
+
+
+        document.querySelector("#makeOne")
+          ?.addEventListener(
+            "click",
+            createPage
+          );
+
+        return;
+      }
+
+
+      list.innerHTML=
+        events
+          .map(
+            ([id,event])=>
+              eventCard(id,event)
           )
           .join("");
-      }
 
-      if(past.length){
-        html+=`
-          <details>
-            <summary>View past events (${past.length})</summary>
-            ${past.map(item=>
-              eventCard(
-                item.id,
-                item.event,
-                item.relationship
-              )
-            ).join("")}
-          </details>
-        `;
-      }
-
-      list.innerHTML=html;
-
-      document.querySelector("#makeOne")
-        ?.addEventListener("click",createPage);
 
       wireEventCards(list);
     }
   );
 }
 
-function wireEventCards(container){
-  container.querySelectorAll(".event").forEach(element=>{
-    element.addEventListener("click",event=>{
-      if(event.target.closest(".shareEvent"))
-        return;
-
-      location.hash="e="+element.dataset.id;
-    });
-  });
-
-  container.querySelectorAll(".shareEvent").forEach(button=>{
-    button.addEventListener("click",event=>{
-      event.stopPropagation();
-      shareEvent(button.dataset.id,button);
-    });
-  });
-}
-
 
 /* ==================================================
-   CREATE / EDIT EVENT FORM
-================================================== */
-
-async function eventForm(existingId=null){
-
-  if(!auth.currentUser){
-    createPage();
-    return;
-  }
-
-  const profile=await getProfile();
-
-  if(!profile){
-    await ensureProfile();
-  }
-
-  const currentProfile=await getProfile();
-
-  let existing=null;
-
-  if(existingId){
-    const snapshot=
-      await get(ref(db,"events/"+existingId));
-
-    if(!snapshot.exists()){
-      alert("Event not found.");
-      return;
-    }
-
-    existing=snapshot.val();
-
-    if(existing.creatorUid!==uid()){
-      alert("Only the creator can edit this event.");
-      return;
-    }
-
-    if(isPast(existing)){
-      eventPage(existingId);
-      return;
-    }
-  }
-
-  const isEdit=!!existing;
-
-  let invited=[];
-
-  if(existing?.invitedUsers){
-    for(const invitedUid of Object.keys(existing.invitedUsers)){
-      const snapshot=
-        await get(ref(db,"users/"+invitedUid+"/username"));
-
-      if(snapshot.exists())
-        invited.push(snapshot.val().toLowerCase());
-    }
-  }
-
-  app.innerHTML=`
-    ${header()}
-
-    <div class="box">
-      <h2>
-        ${isEdit ? "Edit event" : "Create event"}
-      </h2>
-
-      <label>
-        Event title
-        <input
-          id="title"
-          maxlength="100"
-          placeholder="Evening walk"
-          value="${esc(existing?.title || "")}"
-        >
-      </label>
-
-      <label>
-        Date and time
-        <input
-          id="when"
-          type="datetime-local"
-          value="${esc(existing?.when || "")}"
-        >
-      </label>
-
-      <label>
-        Note
-        <textarea
-          id="eventNote"
-          maxlength="1000"
-          placeholder="Anything people should know?"
-        >${esc(existing?.note || "")}</textarea>
-      </label>
-
-      <h3>Who can respond?</h3>
-
-      <div class="scope">
-        <label>
-          <input
-            type="radio"
-            name="scope"
-            value="link"
-            ${existing?.scope==="link" || !existing ? "checked" : ""}
-          >
-          <strong>Send link</strong><br>
-          <span class="muted small">
-            Anyone with the link can respond.
-          </span>
-        </label>
-
-        <label>
-          <input
-            type="radio"
-            name="scope"
-            value="invited"
-            ${existing?.scope==="invited" ? "checked" : ""}
-          >
-          <strong>Invited people</strong><br>
-          <span class="muted small">
-            Only invited people can respond.
-          </span>
-        </label>
-
-        <label>
-          <input
-            type="radio"
-            name="scope"
-            value="public"
-            ${existing?.scope==="public" ? "checked" : ""}
-          >
-          <strong>Public</strong><br>
-          <span class="muted small">
-            Anyone can discover it in Home.
-          </span>
-        </label>
-      </div>
-
-      <div id="inviteBox"></div>
-
-      <p id="eventError" class="error"></p>
-
-      <div class="actions">
-        <button id="saveEvent">
-          ${isEdit ? "Save changes" : "Create →"}
-        </button>
-
-        ${
-          isEdit
-          ? `
-            <button id="cancelEdit" type="button">
-              Cancel
-            </button>
-          `
-          : ""
-        }
-      </div>
-    </div>
-  `;
-
-  wireHeader();
-
-  const renderInvites=()=>{
-
-    const box=document.querySelector("#inviteBox");
-
-    const scope=
-      document.querySelector(
-        'input[name="scope"]:checked'
-      )?.value;
-
-    if(scope!=="invited"){
-      box.innerHTML="";
-      return;
-    }
-
-    box.innerHTML=`
-      <h3>Invite people</h3>
-
-      <input
-        id="inviteUsername"
-        placeholder="@username"
-        maxlength="20"
-      >
-
-      <button id="addInvite" type="button">
-        Add person
-      </button>
-
-      <div id="inviteList">
-        ${invited.map((username,index)=>`
-          <div class="invite-row">
-            <span>@${esc(username)}</span>
-            <button
-              type="button"
-              data-index="${index}"
-            >
-              Remove
-            </button>
-          </div>
-        `).join("")}
-      </div>
-    `;
-
-    document.querySelector("#addInvite").onclick=async()=>{
-
-      const input=
-        document.querySelector("#inviteUsername");
-
-      const username=input.value.trim();
-      const lower=username.toLowerCase();
-
-      if(!validUsername(username)){
-        alert("Enter a valid username.");
-        return;
-      }
-
-      if(invited.includes(lower)){
-        input.value="";
-        return;
-      }
-
-      const snapshot=
-        await get(ref(db,"usernames/"+lower));
-
-      if(!snapshot.exists()){
-        alert("That username doesn't exist.");
-        return;
-      }
-
-      if(snapshot.val()===uid()){
-        alert("You are already the creator.");
-        return;
-      }
-
-      invited.push(lower);
-      input.value="";
-      renderInvites();
-    };
-
-    document.querySelectorAll("#inviteList button")
-      .forEach(button=>{
-        button.onclick=()=>{
-          invited.splice(
-            Number(button.dataset.index),
-            1
-          );
-          renderInvites();
-        };
-      });
-  };
-
-  document.querySelectorAll('input[name="scope"]')
-    .forEach(input=>{
-      input.onchange=renderInvites;
-    });
-
-  renderInvites();
-
-  document.querySelector("#cancelEdit")
-    ?.addEventListener(
-      "click",
-      ()=>eventPage(existingId)
-    );
-
-  document.querySelector("#saveEvent").onclick=async()=>{
-
-    const error=document.querySelector("#eventError");
-
-    const title=
-      document.querySelector("#title").value.trim();
-
-    const when=
-      document.querySelector("#when").value;
-
-    const note=
-      document.querySelector("#eventNote").value.trim();
-
-    const scope=
-      document.querySelector(
-        'input[name="scope"]:checked'
-      )?.value;
-
-    if(!title){
-      error.textContent="Give the event a title.";
-      return;
-    }
-
-    if(!when){
-      error.textContent="Choose a date and time.";
-      return;
-    }
-
-    const whenMs=new Date(when).getTime();
-
-    if(!Number.isFinite(whenMs) || whenMs<=Date.now()){
-      error.textContent=
-        "Choose a future date and time.";
-      return;
-    }
-
-    if(scope==="invited" && !invited.length){
-      error.textContent="Add at least one person.";
-      return;
-    }
-
-    const invitedUsers={};
-
-    for(const username of invited){
-      const snapshot=
-        await get(ref(db,"usernames/"+username));
-
-      if(snapshot.exists())
-        invitedUsers[snapshot.val()]=true;
-    }
-
-    const id=existingId || newId();
-
-    const createdAt=
-      existing?.createdAt || Date.now();
-
-    const event={
-      title,
-      note,
-      when,
-      whenMs,
-      scope,
-      creatorUid:uid(),
-      creatorUsername:currentProfile.username,
-      createdAt,
-      invitedUsers,
-      responses:existing?.responses || {}
-    };
-
-    try{
-      await set(
-        ref(db,"events/"+id),
-        event
-      );
-
-      location.hash="e="+id;
-
-    }catch(errorObject){
-      console.error(errorObject);
-
-      error.textContent=
-        isEdit
-        ? "Couldn't save the changes."
-        : "Couldn't create the event.";
-    }
-  };
-}
-
-
-/* ==================================================
-   CREATE PAGE
+   CREATE EVENT
 ================================================== */
 
 function createPage(){
+
   stopListener();
 
+
   if(!auth.currentUser){
+
     app.innerHTML=`
+
       ${header()}
 
       <div class="box">
+
         <h2>Create an event</h2>
 
         <p>
-          Sign in to create an event.
+          Sign in with Google
+          to create an event.
         </p>
 
         <button id="google">
           Continue with Google
         </button>
+
       </div>
     `;
 
     wireHeader();
 
-    document.querySelector("#google").onclick=async()=>{
-      const signedIn=await requireAuth();
 
-      if(signedIn){
-        await ensureProfile();
-        eventForm(null);
-      }
-    };
+    document.querySelector("#google")
+      .onclick=async()=>{
+
+        const signedIn=
+          await requireAuth();
+
+        if(signedIn)
+          createPage();
+      };
 
     return;
   }
 
-  eventForm(null);
+
+  app.innerHTML=`
+
+    ${header()}
+
+    <div class="box">
+
+      <h2>Create an event</h2>
+
+
+      <label>
+
+        Event title
+
+        <input
+          id="title"
+          maxlength="100"
+          placeholder="Evening walk"
+        >
+
+      </label>
+
+
+      <label>
+
+        Date and time
+
+        <input
+          id="when"
+          type="datetime-local"
+        >
+
+      </label>
+
+
+      <label>
+
+        Note
+
+        <textarea
+          id="eventNote"
+          maxlength="1000"
+          placeholder="Anything people should know?"
+        ></textarea>
+
+      </label>
+
+
+      <p
+        id="eventError"
+        class="error"
+      ></p>
+
+
+      <button id="saveEvent">
+        Create →
+      </button>
+
+    </div>
+  `;
+
+  wireHeader();
+
+
+  document.querySelector("#saveEvent")
+    .onclick=async()=>{
+
+      const error=
+        document.querySelector(
+          "#eventError"
+        );
+
+
+      const title=
+        document.querySelector(
+          "#title"
+        ).value.trim();
+
+
+      const when=
+        document.querySelector(
+          "#when"
+        ).value;
+
+
+      const note=
+        document.querySelector(
+          "#eventNote"
+        ).value.trim();
+
+
+      if(!title){
+
+        error.textContent=
+          "Give the event a title.";
+
+        return;
+      }
+
+
+      if(!when){
+
+        error.textContent=
+          "Choose a date and time.";
+
+        return;
+      }
+
+
+      const whenMs=
+        new Date(when).getTime();
+
+
+      if(
+        !Number.isFinite(whenMs) ||
+        whenMs<=Date.now()
+      ){
+
+        error.textContent=
+          "Choose a future date and time.";
+
+        return;
+      }
+
+
+      const user=auth.currentUser;
+
+      if(!user){
+
+        error.textContent=
+          "Please sign in first.";
+
+        return;
+      }
+
+
+      const id=newId();
+
+
+      const event={
+
+        title,
+
+        when,
+
+        note,
+
+        creatorUid:
+          user.uid,
+
+        creatorName:
+          user.displayName||
+          "Unknown",
+
+        creatorPhoto:
+          user.photoURL||
+          "",
+
+        createdAt:
+          Date.now(),
+
+        responses:{}
+
+      };
+
+
+      try{
+
+        await set(
+          ref(
+            db,
+            "events/"+id
+          ),
+          event
+        );
+
+
+        location.hash=
+          "e="+id;
+
+      }catch(errorObject){
+
+        console.error(
+          errorObject
+        );
+
+        error.textContent=
+          "Couldn't create the event.";
+      }
+    };
 }
 
 
@@ -1330,8 +1135,226 @@ function createPage(){
    EDIT EVENT
 ================================================== */
 
-function editEvent(id){
-  eventForm(id);
+async function editEvent(id){
+
+  const user=auth.currentUser;
+
+  if(!user)
+    return;
+
+
+  const snapshot=
+    await get(
+      ref(db,"events/"+id)
+    );
+
+
+  if(!snapshot.exists()){
+
+    alert("Event not found.");
+
+    return;
+  }
+
+
+  const event=snapshot.val();
+
+
+  if(event.creatorUid!==user.uid){
+
+    alert(
+      "Only the creator can edit this event."
+    );
+
+    return;
+  }
+
+
+  app.innerHTML=`
+
+    ${header()}
+
+    <div class="box">
+
+      <h2>Edit event</h2>
+
+
+      <label>
+
+        Event title
+
+        <input
+          id="title"
+          maxlength="100"
+          value="${esc(event.title)}"
+        >
+
+      </label>
+
+
+      <label>
+
+        Date and time
+
+        <input
+          id="when"
+          type="datetime-local"
+          value="${esc(event.when)}"
+        >
+
+      </label>
+
+
+      <label>
+
+        Note
+
+        <textarea
+          id="eventNote"
+          maxlength="1000"
+        >${esc(event.note||"")}</textarea>
+
+      </label>
+
+
+      <p
+        id="eventError"
+        class="error"
+      ></p>
+
+
+      <div class="actions">
+
+        <button id="saveEvent">
+          Save changes
+        </button>
+
+        <button id="cancel">
+          Cancel
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  wireHeader();
+
+
+  document.querySelector("#cancel")
+    .onclick=()=>eventPage(id);
+
+
+  document.querySelector("#saveEvent")
+    .onclick=async()=>{
+
+      const error=
+        document.querySelector(
+          "#eventError"
+        );
+
+
+      const title=
+        document.querySelector(
+          "#title"
+        ).value.trim();
+
+
+      const when=
+        document.querySelector(
+          "#when"
+        ).value;
+
+
+      const note=
+        document.querySelector(
+          "#eventNote"
+        ).value.trim();
+
+
+      if(!title){
+
+        error.textContent=
+          "Give the event a title.";
+
+        return;
+      }
+
+
+      if(!when){
+
+        error.textContent=
+          "Choose a date and time.";
+
+        return;
+      }
+
+
+      const whenMs=
+        new Date(when).getTime();
+
+
+      if(
+        !Number.isFinite(whenMs) ||
+        whenMs<=Date.now()
+      ){
+
+        error.textContent=
+          "Choose a future date and time.";
+
+        return;
+      }
+
+
+      const updated={
+
+        title,
+
+        when,
+
+        note,
+
+        creatorUid:
+          event.creatorUid,
+
+        creatorName:
+          event.creatorName,
+
+        creatorPhoto:
+          event.creatorPhoto||"",
+
+        createdAt:
+          event.createdAt,
+
+        responses:
+          event.responses||{}
+
+      };
+
+
+      try{
+
+        await set(
+          ref(
+            db,
+            "events/"+id
+          ),
+          updated
+        );
+
+
+        eventPage(id);
+
+      }catch(errorObject){
+
+        console.error(
+          errorObject
+        );
+
+        error.textContent=
+          "Couldn't save the changes.";
+      }
+    };
 }
 
 
@@ -1341,43 +1364,66 @@ function editEvent(id){
 
 async function deleteEvent(id){
 
-  if(!auth.currentUser)
+  const user=auth.currentUser;
+
+  if(!user)
     return;
+
 
   const snapshot=
-    await get(ref(db,"events/"+id));
+    await get(
+      ref(db,"events/"+id)
+    );
+
 
   if(!snapshot.exists()){
+
     alert("Event not found.");
+
     return;
   }
+
 
   const event=snapshot.val();
 
-  if(event.creatorUid!==uid()){
-    alert("Only the creator can delete this event.");
+
+  if(event.creatorUid!==user.uid){
+
+    alert(
+      "Only the creator can delete this event."
+    );
+
     return;
   }
 
-  if(isPast(event)){
-    alert("Past events are locked.");
-    return;
-  }
 
   if(!confirm(
     "Delete this event?\n\nThis cannot be undone."
   ))
     return;
 
+
   try{
-    await set(ref(db,"events/"+id),null);
+
+    await set(
+      ref(db,"events/"+id),
+      null
+    );
+
 
     location.hash="";
-    feedPage();
+
+    homePage();
 
   }catch(errorObject){
-    console.error(errorObject);
-    alert("Couldn't delete the event.");
+
+    console.error(
+      errorObject
+    );
+
+    alert(
+      "Couldn't delete the event."
+    );
   }
 }
 
@@ -1390,7 +1436,9 @@ function eventPage(id){
 
   stopListener();
 
+
   app.innerHTML=`
+
     ${header()}
 
     <div id="eventShell"></div>
@@ -1398,167 +1446,189 @@ function eventPage(id){
 
   wireHeader();
 
+
   activeListener=onValue(
     ref(db,"events/"+id),
-    async snapshot=>{
+    snapshot=>{
 
-      const shell=document.querySelector("#eventShell");
-      if(!shell) return;
+      const shell=
+        document.querySelector(
+          "#eventShell"
+        );
+
+
+      if(!shell)
+        return;
+
 
       if(!snapshot.exists()){
+
         shell.innerHTML=`
+
           <div class="box">
-            <h2>Event not found.</h2>
+
+            <h2>
+              Event not found.
+            </h2>
+
             <p class="muted">
-              This event doesn't exist.
+              This event doesn't exist
+              or has been deleted.
             </p>
+
           </div>
         `;
 
         return;
       }
 
+
       const event=snapshot.val();
+
       const user=auth.currentUser;
-      const userUid=user?.uid || null;
 
-      const past=isPast(event);
-      const isCreator=userUid===event.creatorUid;
-      const isInvited=
-        !!userUid && !!event.invitedUsers?.[userUid];
+      const userUid=
+        user?.uid||null;
 
-      const isPublic=event.scope==="public";
+      const isCreator=
+        userUid===event.creatorUid;
 
-      const canRespond=
-        !!userUid &&
-        !past &&
-        (
-          event.scope==="link" ||
-          isPublic ||
-          isCreator ||
-          isInvited
-        );
 
       const responses=
-        Object.entries(event.responses || {});
+        Object.entries(
+          event.responses||{}
+        );
+
 
       const coming=
         responses.filter(
-          ([,response])=>response.status==="yes"
+          ([,response])=>
+            response.status==="yes"
         );
+
 
       const notComing=
         responses.filter(
-          ([,response])=>response.status==="no"
+          ([,response])=>
+            response.status==="no"
         );
+
 
       const myResponse=
         userUid
         ? event.responses?.[userUid]
         : null;
 
+
       shell.innerHTML=`
 
         <div class="box">
 
-          <p class="muted">
-            ${
-              past
-              ? "Past event · Locked"
-              : event.scope==="public"
-              ? "Public event"
-              : event.scope==="invited"
-              ? "Invited event"
-              : "Shared event"
-            }
+          <h2>
+            ${esc(event.title)}
+          </h2>
+
+
+          <p>
+            ${formatDate(event.when)}
           </p>
 
-          <h2>${esc(event.title)}</h2>
-
-          <p>${formatDate(event.when)}</p>
 
           ${
             event.note
             ? `
               <div class="box">
-                <strong>Note</strong>
+
+                <strong>
+                  Note
+                </strong>
+
                 <p style="white-space:pre-wrap">
                   ${esc(event.note)}
                 </p>
+
               </div>
             `
             : ""
           }
 
-          <p class="muted small">
-            Created by @${esc(event.creatorUsername || "unknown")}
-            · ${formatDate(new Date(event.createdAt).toISOString())}
-          </p>
+
+          <div class="person-info">
+
+            ${
+              event.creatorPhoto
+              ? `
+                <img
+                  class="person-photo"
+                  src="${esc(
+                    event.creatorPhoto
+                  )}"
+                  alt=""
+                >
+              `
+              : ""
+            }
+
+            <p class="muted small">
+              Created by
+              ${esc(
+                event.creatorName||
+                "Unknown"
+              )}
+            </p>
+
+          </div>
+
 
           ${
-            isCreator && !past
+            isCreator
             ? `
-              <div class="actions">
-                <button id="edit">Edit</button>
-                <button id="delete" class="danger">
+              <div
+                class="actions"
+                style="margin-top:14px"
+              >
+
+                <button id="edit">
+                  Edit
+                </button>
+
+                <button
+                  id="delete"
+                  class="danger"
+                >
                   Delete
                 </button>
+
               </div>
             `
             : ""
           }
 
-          ${
-            past
-            ? `
-              <div class="box">
-                <strong>Past event · Locked</strong>
-                <p class="muted">
-                  Responses and event details can no longer be changed.
-                </p>
-              </div>
-            `
-            : ""
-          }
 
           ${
-            !userUid && !past
+            !userUid
             ? `
               <div class="box">
+
                 <p>
-                  You can view this event without signing in.
+                  Sign in with Google
+                  to respond.
                 </p>
 
                 <button id="respond">
-                  Sign in to respond
+                  Continue with Google
                 </button>
+
               </div>
             `
-            : ""
-          }
+            : `
+              <h3>
+                Are you coming?
+              </h3>
 
-          ${
-            userUid &&
-            !past &&
-            !canRespond &&
-            !isCreator
-            ? `
-              <div class="box">
-                <p>You're signed in.</p>
-                <p class="muted">
-                  You're not invited to respond to this event.
-                </p>
-              </div>
-            `
-            : ""
-          }
-
-          ${
-            canRespond
-            ? `
-              <h3>Are you coming?</h3>
 
               <div class="choice">
+
                 <button
                   id="yes"
                   class="yes ${
@@ -1567,12 +1637,17 @@ function eventPage(id){
                     : ""
                   }"
                 >
+
                   ${
                     myResponse?.status==="yes"
                     ? "✓ "
                     : ""
-                  }COMING
+                  }
+
+                  COMING
+
                 </button>
+
 
                 <button
                   id="no"
@@ -1582,30 +1657,45 @@ function eventPage(id){
                     : ""
                   }"
                 >
+
                   ${
                     myResponse?.status==="no"
                     ? "✓ "
                     : ""
-                  }NOT COMING
+                  }
+
+                  NOT COMING
+
                 </button>
+
               </div>
 
+
               <label>
+
                 Your note
+
                 <textarea
                   id="responseNote"
                   maxlength="500"
-                  placeholder="Anything you want the group to know?"
-                >${esc(myResponse?.note || "")}</textarea>
+                  placeholder="Anything you want people to know?"
+                >${esc(
+                  myResponse?.note||""
+                )}</textarea>
+
               </label>
+
 
               <button id="saveResponse">
                 Save response
               </button>
 
-              <p id="message" class="success"></p>
+
+              <p
+                id="message"
+                class="success"
+              ></p>
             `
-            : ""
           }
 
         </div>
@@ -1613,32 +1703,70 @@ function eventPage(id){
 
         <div class="box">
 
-          <h3>Coming · ${coming.length}</h3>
+          <h3>
+            Coming · ${coming.length}
+          </h3>
+
 
           ${
             coming.length
-            ? coming.map(([,response])=>`
-                <div class="person">
-                  <div class="person-head">
-                    <strong>
-                      @${esc(response.username)}
-                    </strong>
-                    <b>✓</b>
+            ? coming.map(
+                ([,response])=>`
+
+                  <div class="person">
+
+                    <div class="person-head">
+
+                      <div class="person-info">
+
+                        ${
+                          response.photo
+                          ? `
+                            <img
+                              class="person-photo"
+                              src="${esc(
+                                response.photo
+                              )}"
+                              alt=""
+                            >
+                          `
+                          : ""
+                        }
+
+                        <strong>
+                          ${esc(
+                            response.name||
+                            "Unknown"
+                          )}
+                        </strong>
+
+                      </div>
+
+                      <b>✓</b>
+
+                    </div>
+
+
+                    ${
+                      response.note
+                      ? `
+                        <div class="response-note">
+                          ${esc(
+                            response.note
+                          )}
+                        </div>
+                      `
+                      : ""
+                    }
+
                   </div>
 
-                  ${
-                    response.note
-                    ? `
-                      <div class="response-note">
-                        ${esc(response.note)}
-                      </div>
-                    `
-                    : ""
-                  }
-                </div>
-              `).join("")
+                `
+              ).join("")
             : `
-              <p class="muted">Nobody yet.</p>
+              <p class="muted">
+                Nobody yet.
+              </p>
             `
           }
 
@@ -1647,32 +1775,70 @@ function eventPage(id){
 
         <div class="box">
 
-          <h3>Not coming · ${notComing.length}</h3>
+          <h3>
+            Not coming · ${notComing.length}
+          </h3>
+
 
           ${
             notComing.length
-            ? notComing.map(([,response])=>`
-                <div class="person">
-                  <div class="person-head">
-                    <strong>
-                      @${esc(response.username)}
-                    </strong>
-                    <b>×</b>
+            ? notComing.map(
+                ([,response])=>`
+
+                  <div class="person">
+
+                    <div class="person-head">
+
+                      <div class="person-info">
+
+                        ${
+                          response.photo
+                          ? `
+                            <img
+                              class="person-photo"
+                              src="${esc(
+                                response.photo
+                              )}"
+                              alt=""
+                            >
+                          `
+                          : ""
+                        }
+
+                        <strong>
+                          ${esc(
+                            response.name||
+                            "Unknown"
+                          )}
+                        </strong>
+
+                      </div>
+
+                      <b>×</b>
+
+                    </div>
+
+
+                    ${
+                      response.note
+                      ? `
+                        <div class="response-note">
+                          ${esc(
+                            response.note
+                          )}
+                        </div>
+                      `
+                      : ""
+                    }
+
                   </div>
 
-                  ${
-                    response.note
-                    ? `
-                      <div class="response-note">
-                        ${esc(response.note)}
-                      </div>
-                    `
-                    : ""
-                  }
-                </div>
-              `).join("")
+                `
+              ).join("")
             : `
-              <p class="muted">Nobody yet.</p>
+              <p class="muted">
+                Nobody yet.
+              </p>
             `
           }
 
@@ -1681,19 +1847,33 @@ function eventPage(id){
 
         <div class="box">
 
-          <strong>Share this event</strong>
+          <strong>
+            Share this event
+          </strong>
+
 
           <div class="link">
             ${esc(eventUrl(id))}
           </div>
 
+
           <div class="actions">
-            <button id="share">Share</button>
-            <button id="copy">Copy link</button>
+
+            <button id="share">
+              Share
+            </button>
+
+            <button id="copy">
+              Copy link
+            </button>
+
           </div>
 
         </div>
       `;
+
+
+      /* EDIT */
 
       document.querySelector("#edit")
         ?.addEventListener(
@@ -1701,42 +1881,59 @@ function eventPage(id){
           ()=>editEvent(id)
         );
 
+
+      /* DELETE */
+
       document.querySelector("#delete")
         ?.addEventListener(
           "click",
           ()=>deleteEvent(id)
         );
 
+
+      /* GOOGLE SIGN-IN */
+
       document.querySelector("#respond")
         ?.addEventListener(
           "click",
           async()=>{
-            const signedIn=await requireAuth();
 
-            if(signedIn){
-              await ensureProfile();
+            const signedIn=
+              await requireAuth();
+
+            if(signedIn)
               eventPage(id);
-            }
           }
         );
+
+
+      /* SHARE */
 
       document.querySelector("#share")
         ?.addEventListener(
           "click",
-          event=>shareEvent(
-            id,
-            event.currentTarget
-          )
+          event=>
+            shareEvent(
+              id,
+              event.currentTarget
+            )
         );
+
+
+      /* COPY */
 
       document.querySelector("#copy")
         ?.addEventListener(
           "click",
           async()=>{
+
             const button=
-              document.querySelector("#copy");
+              document.querySelector(
+                "#copy"
+              );
 
             try{
+
               await navigator.clipboard.writeText(
                 eventUrl(id)
               );
@@ -1744,11 +1941,15 @@ function eventPage(id){
               button.textContent="Copied!";
 
               setTimeout(()=>{
+
                 if(button.isConnected)
-                  button.textContent="Copy link";
+                  button.textContent=
+                    "Copy link";
+
               },1200);
 
             }catch{
+
               prompt(
                 "Copy this event link:",
                 eventUrl(id)
@@ -1757,19 +1958,36 @@ function eventPage(id){
           }
         );
 
-      if(!canRespond)
+
+      /* RESPONSE */
+
+      if(!userUid)
         return;
 
-      let choice=myResponse?.status || "";
 
-      const yes=document.querySelector("#yes");
-      const no=document.querySelector("#no");
+      let choice=
+        myResponse?.status||"";
+
+
+      const yes=
+        document.querySelector("#yes");
+
+      const no=
+        document.querySelector("#no");
+
       const responseNote=
-        document.querySelector("#responseNote");
+        document.querySelector(
+          "#responseNote"
+        );
+
       const message=
-        document.querySelector("#message");
+        document.querySelector(
+          "#message"
+        );
+
 
       const updateChoice=()=>{
+
         yes?.classList.toggle(
           "selected",
           choice==="yes"
@@ -1780,11 +1998,13 @@ function eventPage(id){
           choice==="no"
         );
 
+
         if(yes)
           yes.textContent=
             choice==="yes"
             ? "✓ COMING"
             : "COMING";
+
 
         if(no)
           no.textContent=
@@ -1792,6 +2012,7 @@ function eventPage(id){
             ? "✓ NOT COMING"
             : "NOT COMING";
       };
+
 
       yes?.addEventListener(
         "click",
@@ -1801,6 +2022,7 @@ function eventPage(id){
         }
       );
 
+
       no?.addEventListener(
         "click",
         ()=>{
@@ -1809,55 +2031,87 @@ function eventPage(id){
         }
       );
 
-      document.querySelector("#saveResponse")
-        ?.addEventListener(
-          "click",
-          async()=>{
 
-            if(choice!=="yes" && choice!=="no"){
-              message.textContent=
-                "Choose COMING or NOT COMING.";
-              return;
-            }
+      document.querySelector(
+        "#saveResponse"
+      )?.addEventListener(
+        "click",
+        async()=>{
 
-            const profile=await getProfile();
+          if(
+            choice!=="yes" &&
+            choice!=="no"
+          ){
 
-            if(!profile)
-              return;
+            message.textContent=
+              "Choose COMING or NOT COMING.";
 
-            const note=
-              responseNote.value.trim();
-
-            try{
-              await set(
-                ref(
-                  db,
-                  "events/"
-                  +id
-                  +"/responses/"
-                  +userUid
-                ),
-                {
-                  username:profile.username,
-                  status:choice,
-                  note,
-                  updatedAt:Date.now()
-                }
-              );
-
-              message.textContent=
-                choice==="yes"
-                ? "You're coming."
-                : "You're not coming.";
-
-            }catch(errorObject){
-              console.error(errorObject);
-
-              message.textContent=
-                "Couldn't save your response.";
-            }
+            return;
           }
-        );
+
+
+          const currentUser=
+            auth.currentUser;
+
+
+          if(!currentUser)
+            return;
+
+
+          const note=
+            responseNote.value.trim();
+
+
+          try{
+
+            await set(
+
+              ref(
+                db,
+                "events/"
+                +id+
+                "/responses/"
+                +currentUser.uid
+              ),
+
+              {
+
+                name:
+                  currentUser.displayName||
+                  "Unknown",
+
+                photo:
+                  currentUser.photoURL||
+                  "",
+
+                status:
+                  choice,
+
+                note,
+
+                updatedAt:
+                  Date.now()
+
+              }
+            );
+
+
+            message.textContent=
+              choice==="yes"
+              ? "You're coming."
+              : "You're not coming.";
+
+          }catch(errorObject){
+
+            console.error(
+              errorObject
+            );
+
+            message.textContent=
+              "Couldn't save your response.";
+          }
+        }
+      );
     }
   );
 }
@@ -1867,41 +2121,50 @@ function eventPage(id){
    PROFILE
 ================================================== */
 
-async function profilePage(){
+function profilePage(){
 
-  if(!auth.currentUser)
+  const user=auth.currentUser;
+
+  if(!user)
     return;
 
-  const profile=await getProfile();
 
   app.innerHTML=`
+
     ${header()}
 
     <div class="box center">
 
       ${
-        profile?.photoURL
+        user.photoURL
         ? `
           <img
             class="profile-photo"
-            src="${esc(profile.photoURL)}"
+            src="${esc(
+              user.photoURL
+            )}"
             alt=""
           >
         `
         : ""
       }
 
+
       <h2>
-        @${esc(profile?.username || "unknown")}
+        ${esc(
+          user.displayName||
+          "Google account"
+        )}
       </h2>
+
 
       <p class="muted">
         ${esc(
-          profile?.displayName ||
-          auth.currentUser.displayName ||
+          user.email||
           ""
         )}
       </p>
+
 
       <button id="signout">
         Sign out
@@ -1910,14 +2173,19 @@ async function profilePage(){
     </div>
   `;
 
+
   wireHeader();
 
-  document.querySelector("#signout").onclick=async()=>{
-    await signOut(auth);
 
-    location.hash="";
-    route();
-  };
+  document.querySelector("#signout")
+    .onclick=async()=>{
+
+      await signOut(auth);
+
+      location.hash="";
+
+      route();
+    };
 }
 
 
@@ -1926,17 +2194,25 @@ async function profilePage(){
 ================================================== */
 
 function route(){
+
   stopListener();
 
+
   const match=
-    location.hash.match(/^#e=([^]+)$/);
+    location.hash.match(
+      /^#e=([^]+)$/
+    );
+
 
   if(match){
+
     eventPage(match[1]);
+
     return;
   }
 
-  feedPage();
+
+  homePage();
 }
 
 
@@ -1944,18 +2220,13 @@ function route(){
    START
 ================================================== */
 
-auth.onAuthStateChanged(
-  async user=>{
-    if(user){
-      const profile=await getProfile();
-
-      if(!profile)
-        await ensureProfile();
-    }
-
+onAuthStateChanged(
+  auth,
+  ()=>{
     route();
   }
 );
+
 
 addEventListener(
   "hashchange",
@@ -1963,5 +2234,6 @@ addEventListener(
 );
 
 </script>
+
 </body>
 </html>
