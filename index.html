@@ -144,12 +144,6 @@ textarea{
   font-weight:bold;
 }
 
-.event-note{
-  margin-top:7px;
-  color:#777;
-  white-space:pre-wrap;
-}
-
 .past-events{
   margin-top:28px;
 }
@@ -974,22 +968,6 @@ function renderEvents(entries){
                   )}
 
                 </div>
-
-                ${
-                  event.note
-                    ? `
-
-                      <div class="event-note">
-
-                        ${escapeHTML(
-                          event.note
-                        )}
-
-                      </div>
-
-                    `
-                    : ""
-                }
 
               </div>
 
