@@ -34,602 +34,634 @@
   --radius-sm: 10px;
 }
 
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html{
-  font-size:clamp(14px,1.1vw + 11px,16.5px);
+html {
+  font-size: clamp(14px,1.1vw + 11px,16.5px);
 }
 
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text-main);
-  font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  line-height:1.45;
-  -webkit-font-smoothing:antialiased;
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
 }
 
-main{
-  width:min(100%,540px);
-  margin:0 auto;
-  padding:1rem 1rem calc(5.5rem + env(safe-area-inset-bottom,0px));
-  min-height:100vh;
-  position:relative;
+main {
+  width: min(100%,540px);
+  margin: 0 auto;
+  padding: 1rem 1rem calc(5.5rem + env(safe-area-inset-bottom,0px));
+  min-height: 100vh;
+  position: relative;
 }
 
-h1,h2,h3{
-  margin:0;
-  font-weight:700;
-  letter-spacing:-0.02em;
+h1,h2,h3 {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
-.serif-title{
-  font-family:Georgia,serif;
-  font-weight:400;
-  font-size:clamp(1.5rem,3.2vw,2rem);
+.serif-title {
+  font-family: Georgia,serif;
+  font-weight: 400;
+  font-size: clamp(1.5rem,3.2vw,2rem);
 }
 
-button,input,textarea,select{
-  font:inherit;
-  color:inherit;
-  -webkit-appearance:none;
-  appearance:none;
+button,input,textarea,select {
+  font: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-button{
-  border:none;
-  background:none;
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  transition:all .15s ease;
-  user-select:none;
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s ease;
+  user-select: none;
 }
 
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
 }
 
-.btn-primary{
-  width:100%;
-  padding:.85rem 1.1rem;
-  background:var(--primary);
-  color:var(--text-main);
-  border-radius:var(--radius-md);
-  font-weight:600;
-  font-size:.95rem;
-  box-shadow:0 1px 2px rgba(0,0,0,.05);
+.btn-primary {
+  width: 100%;
+  padding: .85rem 1.1rem;
+  background: var(--primary);
+  color: var(--text-main);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: .95rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
 }
 
-.btn-primary:hover{
-  background:var(--primary-hover);
+.btn-primary:hover {
+  background: var(--primary-hover);
 }
 
-.btn-secondary{
-  width:100%;
-  padding:.85rem 1.1rem;
-  background:transparent;
-  color:var(--text-main);
-  border:1px solid var(--border-dark);
-  border-radius:var(--radius-md);
-  font-weight:600;
-  font-size:.95rem;
+.btn-secondary {
+  width: 100%;
+  padding: .85rem 1.1rem;
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: .95rem;
 }
 
-.input-group{
-  margin-bottom:1rem;
+.input-group {
+  margin-bottom: 1rem;
 }
 
-.input-label{
-  display:block;
-  font-size:.8rem;
-  font-weight:600;
-  color:var(--text-muted);
-  margin-bottom:.35rem;
+.input-label {
+  display: block;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: .35rem;
 }
 
-.input-field{
-  width:100%;
-  padding:.75rem .85rem .75rem 2.4rem;
-  border:1px solid var(--border);
-  border-radius:var(--radius-md);
-  background:var(--input-bg);
-  font-size:.9rem;
-  outline:none;
-  transition:border-color .15s ease;
+.input-field {
+  width: 100%;
+  padding: .75rem .85rem .75rem 2.4rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--input-bg);
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .15s ease;
 }
 
-.input-field:focus{
-  border-color:var(--border-dark);
-  background:#fff;
+.input-field:focus {
+  border-color: var(--border-dark);
+  background: #fff;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: .85rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  display: flex;
+  z-index: 2;
 }
 
-.input-wrapper{
-  position:relative;
-  display:flex;
-  align-items:center;
+textarea.input-field {
+  min-height: 100px;
+  resize: vertical;
+  padding-left: .85rem;
 }
 
-.input-icon{
-  position:absolute;
-  left:.85rem;
-  color:var(--text-muted);
-  pointer-events:none;
-  display:flex;
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0 1.25rem;
 }
 
-textarea.input-field{
-  min-height:100px;
-  resize:vertical;
-  padding-left:.85rem;
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-width: 0;
 }
 
-.header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:1rem 0 1.25rem;
+.back-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
 }
 
-.header-left{
-  display:flex;
-  align-items:center;
-  gap:.75rem;
-  min-width:0;
+.app-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
-.back-btn{
-  width:2.25rem;
-  height:2.25rem;
-  background:transparent;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:0;
-  flex-shrink:0;
+.app-logo-img {
+  height: clamp(70px,14vw,115px);
+  width: auto;
+  max-width: 85vw;
+  object-fit: contain;
+  display: block;
 }
 
-.app-title{
-  font-size:1.35rem;
-  font-weight:800;
-  letter-spacing:-.03em;
-  margin:0;
-  display:flex;
-  align-items:center;
-  min-width:0;
+.avatar-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #E7E5E4;
+  padding: 0;
+  flex-shrink: 0;
 }
 
-.app-logo-img{
-  height:clamp(70px,14vw,115px);
-  width:auto;
-  max-width:85vw;
-  object-fit:contain;
-  display:block;
+.avatar-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.avatar-btn{
-  width:2.5rem;
-  height:2.5rem;
-  border-radius:50%;
-  overflow:hidden;
-  border:1px solid var(--border);
-  background:#E7E5E4;
-  padding:0;
-  flex-shrink:0;
+.hero-illustration {
+  text-align: center;
+  padding: .4rem 0 1rem;
 }
 
-.avatar-btn img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.hero-illustration svg {
+  width: 100%;
+  max-width: 290px;
+  height: auto;
 }
 
-.hero-illustration{
-  text-align:center;
-  padding:.4rem 0 1rem;
+.tab-container {
+  display: flex;
+  background: #EBE8E1;
+  padding: .25rem;
+  border-radius: 999px;
+  margin-bottom: 1.25rem;
 }
+
+.tab-btn {
+  flex: 1;
+  padding: .55rem 1rem;
+  border-radius: 999px;
+  font-size: .875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.tab-btn.active {
+  background: var(--tab-active);
+  color: #fff;
+}
+
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+
+.event-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: .95rem 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform .1s ease,box-shadow .1s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.03);
+}
+
+.date-badge {
+  background: #FAF8F5;
+  border-radius: var(--radius-sm);
+  padding: .4rem .65rem;
+  text-align: center;
+  min-width: 3.2rem;
+  border: 1px solid var(--border);
+}
+
+.date-badge-month {
+  font-size: .65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.date-badge-day {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.event-info {
+  flex: 1;
+  min-width: 0;
+}
 
-.hero-illustration svg{
-  width:100%;
-  max-width:290px;
-  height:auto;
+.event-name {
+  font-weight: 700;
+  font-size: .95rem;
+  margin-bottom: .15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.tab-container{
-  display:flex;
-  background:#EBE8E1;
-  padding:.25rem;
-  border-radius:999px;
-  margin-bottom:1.25rem;
+.event-meta {
+  font-size: .775rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.tab-btn{
-  flex:1;
-  padding:.55rem 1rem;
-  border-radius:999px;
-  font-size:.875rem;
-  font-weight:600;
-  color:var(--text-muted);
-}
-
-.tab-btn.active{
-  background:var(--tab-active);
-  color:#fff;
-}
-
-.event-list{
-  display:flex;
-  flex-direction:column;
-  gap:.8rem;
+.count-pill {
+  padding: .3rem .65rem;
+  border-radius: 999px;
+  background: #FAF8F5;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .775rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
-
-.event-card{
-  background:var(--card-bg);
-  border:1px solid var(--border);
-  border-radius:var(--radius-md);
-  padding:.95rem 1.05rem;
-  display:flex;
-  align-items:center;
-  gap:1rem;
-  cursor:pointer;
-  transition:transform .1s ease,box-shadow .1s ease;
-}
-
-.event-card:hover{
-  transform:translateY(-1px);
-  box-shadow:0 4px 12px rgba(0,0,0,.03);
-}
-
-.date-badge{
-  background:#FAF8F5;
-  border-radius:var(--radius-sm);
-  padding:.4rem .65rem;
-  text-align:center;
-  min-width:3.2rem;
-  border:1px solid var(--border);
+
+.visibility-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .25rem .55rem;
+  border-radius: 999px;
+  font-size: .68rem;
+  font-weight: 700;
+  background: #F3F4F6;
+  color: #57534E;
+  border: 1px solid var(--border);
+  margin-top: .35rem;
 }
 
-.date-badge-month{
-  font-size:.65rem;
-  font-weight:700;
-  text-transform:uppercase;
-  color:var(--text-muted);
-  line-height:1;
-}
+.visibility-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .25rem;
+  padding: .25rem;
+  background: #EBE8E1;
+  border-radius: 999px;
+}
 
-.date-badge-day{
-  font-size:1.15rem;
-  font-weight:800;
-  color:var(--text-main);
-  line-height:1.2;
+.visibility-option {
+  padding: .65rem .75rem;
+  border-radius: 999px;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--text-muted);
 }
 
-.event-info{
-  flex:1;
-  min-width:0;
+.visibility-option.active {
+  background: #fff;
+  color: var(--text-main);
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
 }
 
-.event-name{
-  font-weight:700;
-  font-size:.95rem;
-  margin-bottom:.15rem;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.visibility-hint {
+  font-size: .75rem;
+  color: var(--text-muted);
+  margin-top: .45rem;
 }
+
+/* =====================================================
+   LOCATION
+===================================================== */
 
-.event-meta{
-  font-size:.775rem;
-  color:var(--text-muted);
+.location-autocomplete {
+  position: relative;
+  width: 100%;
 }
 
-.count-pill{
-  padding:.3rem .65rem;
-  border-radius:999px;
-  background:#FAF8F5;
-  border:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:.775rem;
-  font-weight:600;
-  color:var(--text-muted);
-  white-space:nowrap;
-  flex-shrink:0;
+.location-autocomplete input {
+  width: 100%;
+  padding: .75rem .85rem .75rem 2.4rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--input-bg);
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .15s ease,background .15s ease;
 }
 
-.visibility-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:.25rem;
-  padding:.25rem .55rem;
-  border-radius:999px;
-  font-size:.68rem;
-  font-weight:700;
-  background:#F3F4F6;
-  color:#57534E;
-  border:1px solid var(--border);
-  margin-top:.35rem;
+.location-autocomplete input:focus {
+  border-color: var(--border-dark);
+  background: #fff;
 }
 
-.visibility-toggle{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:.25rem;
-  padding:.25rem;
-  background:#EBE8E1;
-  border-radius:999px;
-}
-
-.visibility-option{
-  padding:.65rem .75rem;
-  border-radius:999px;
-  font-size:.8rem;
-  font-weight:700;
-  color:var(--text-muted);
-}
+.location-status {
+  font-size: .7rem;
+  color: var(--text-muted);
+  margin-top: .35rem;
+}
 
-.visibility-option.active{
-  background:#fff;
-  color:var(--text-main);
-  box-shadow:0 1px 3px rgba(0,0,0,.08);
+.location-status.selected {
+  color: var(--yes-text);
 }
-
-.visibility-hint{
-  font-size:.75rem;
-  color:var(--text-muted);
-  margin-top:.45rem;
-}
-
-.location-fields{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:.5rem;
-}
-
-.location-map{
-  width:100%;
-  height:230px;
-  border:0;
-  border-radius:var(--radius-md);
-  overflow:hidden;
-  background:#E7E5E4;
-  margin-top:.85rem;
+
+.location-status.fallback {
+  color: var(--text-muted);
 }
 
-.location-map iframe{
-  width:100%;
-  height:100%;
-  border:0;
+.location-box {
+  margin-top: 1rem;
+  padding: .85rem;
+  border: 1px solid var(--border);
+  background: #FAF8F5;
+  border-radius: var(--radius-md);
 }
 
-.location-placeholder{
-  min-height:180px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:1rem;
-  color:var(--text-muted);
-  font-size:.8rem;
+.location-header {
+  display: flex;
+  gap: .55rem;
+  align-items: flex-start;
 }
 
-.location-box{
-  margin-top:1rem;
-  padding:.85rem;
-  border:1px solid var(--border);
-  background:#FAF8F5;
-  border-radius:var(--radius-md);
+.location-header-icon {
+  color: #166534;
+  display: flex;
+  padding-top: .1rem;
+  flex-shrink: 0;
 }
 
-.location-header{
-  display:flex;
-  gap:.55rem;
-  align-items:flex-start;
+.maps-link {
+  display: inline-flex;
+  margin-top: .45rem;
+  font-size: .75rem;
+  font-weight: 700;
+  color: #166534;
+  text-decoration: none;
 }
 
-.location-header-icon{
-  color:#166534;
-  display:flex;
-  padding-top:.1rem;
+.maps-link:hover {
+  text-decoration: underline;
 }
 
-.maps-link{
-  display:inline-flex;
-  margin-top:.45rem;
-  font-size:.75rem;
-  font-weight:700;
-  color:#166534;
-  text-decoration:none;
+/*
+  The autocomplete dropdown created by Google is positioned
+  outside our input wrapper. Give it a clean appearance where
+  supported by the browser/widget.
+*/
+.pac-container {
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  border: 1px solid var(--border);
+  border-top: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  font-family: 'Plus Jakarta Sans',sans-serif;
+  z-index: 2000;
 }
 
-.maps-link:hover{
-  text-decoration:underline;
+.pac-item {
+  padding: .55rem .7rem;
+  font-size: .8rem;
+  line-height: 1.35;
 }
-
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:rgba(245,243,239,.92);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  border-top:1px solid var(--border);
-  padding:.5rem 1rem calc(.5rem + env(safe-area-inset-bottom,0px));
-  display:flex;
-  justify-content:center;
-  z-index:1000;
+
+.pac-item:hover {
+  background: #FAF8F5;
 }
 
-.bottom-nav-inner{
-  width:min(100%,540px);
-  display:flex;
-  align-items:center;
-  justify-content:space-around;
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(245,243,239,.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  padding: .5rem 1rem calc(.5rem + env(safe-area-inset-bottom,0px));
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.nav-item{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:.2rem;
-  font-size:.725rem;
-  font-weight:600;
-  color:var(--text-muted);
-  padding:.25rem 1.25rem;
-  border-radius:var(--radius-sm);
-  transition:color .15s ease;
+.bottom-nav-inner {
+  width: min(100%,540px);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
-.nav-item.active{
-  color:var(--text-main);
-  font-weight:700;
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .2rem;
+  font-size: .725rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: .25rem 1.25rem;
+  border-radius: var(--radius-sm);
+  transition: color .15s ease;
 }
 
-.nav-item svg{
-  width:22px;
-  height:22px;
-  stroke:currentColor;
+.nav-item.active {
+  color: var(--text-main);
+  font-weight: 700;
 }
 
-.rsvp-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:.75rem;
-  margin:1rem 0;
+.nav-item svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
 }
 
-.rsvp-btn{
-  padding:.75rem;
-  border-radius:var(--radius-md);
-  font-weight:700;
-  font-size:.85rem;
-  border:1px solid transparent;
-  background:var(--input-bg);
-  color:var(--text-muted);
+.rsvp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+  margin: 1rem 0;
 }
 
-.rsvp-btn.yes.selected{
-  background:var(--yes-bg);
-  color:var(--yes-text);
-  border-color:rgba(22,101,52,.2);
+.rsvp-btn {
+  padding: .75rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: .85rem;
+  border: 1px solid transparent;
+  background: var(--input-bg);
+  color: var(--text-muted);
 }
 
-.rsvp-btn.no.selected{
-  background:var(--no-bg);
-  color:var(--no-text);
-  border-color:rgba(157,23,77,.2);
+.rsvp-btn.yes.selected {
+  background: var(--yes-bg);
+  color: var(--yes-text);
+  border-color: rgba(22,101,52,.2);
 }
 
-.details-card{
-  background:var(--card-bg);
-  border-radius:var(--radius-lg);
-  padding:1.25rem;
-  border:1px solid var(--border);
-  margin-bottom:1rem;
+.rsvp-btn.no.selected {
+  background: var(--no-bg);
+  color: var(--no-text);
+  border-color: rgba(157,23,77,.2);
 }
 
-.note-box{
-  background:#FAF8F5;
-  border-radius:var(--radius-md);
-  padding:.85rem;
-  margin:1rem 0;
-  font-size:.875rem;
-  border:1px solid var(--border);
+.details-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
 }
 
-.creator-info{
-  display:flex;
-  align-items:center;
-  gap:.6rem;
-  margin-top:1rem;
-  font-size:.825rem;
-  color:var(--text-muted);
+.note-box {
+  background: #FAF8F5;
+  border-radius: var(--radius-md);
+  padding: .85rem;
+  margin: 1rem 0;
+  font-size: .875rem;
+  border: 1px solid var(--border);
 }
 
-.creator-photo{
-  width:1.8rem;
-  height:1.8rem;
-  border-radius:50%;
-  object-fit:cover;
+.creator-info {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-top: 1rem;
+  font-size: .825rem;
+  color: var(--text-muted);
 }
 
-.locked-badge{
-  background:#F3F4F6;
-  border:1px solid #E5E7EB;
-  color:#6B7280;
-  padding:.75rem 1rem;
-  border-radius:var(--radius-md);
-  font-size:.85rem;
-  font-weight:600;
-  text-align:center;
-  margin-top:.5rem;
+.creator-photo {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.person-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:.65rem 0;
-  border-bottom:1px solid var(--border);
+.locked-badge {
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  color: #6B7280;
+  padding: .75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: .85rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: .5rem;
 }
 
-.person-row:last-child{
-  border-bottom:none;
+.person-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .65rem 0;
+  border-bottom: 1px solid var(--border);
 }
 
-.person-detail{
-  display:flex;
-  align-items:center;
-  gap:.65rem;
+.person-row:last-child {
+  border-bottom: none;
 }
 
-.person-avatar{
-  width:2rem;
-  height:2rem;
-  border-radius:50%;
-  object-fit:cover;
-  background:#E7E5E4;
+.person-detail {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
 }
 
-.error{
-  color:#dc2626;
-  font-size:.8rem;
-  margin-top:.35rem;
-  font-weight:500;
+.person-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #E7E5E4;
 }
 
-.success{
-  color:#166534;
-  font-size:.8rem;
-  margin-top:.35rem;
-  font-weight:500;
+.error {
+  color: #dc2626;
+  font-size: .8rem;
+  margin-top: .35rem;
+  font-weight: 500;
+  white-space: pre-wrap;
 }
 
-.private-banner{
-  background:#F8F5E9;
-  border:1px solid #E9DFAE;
-  border-radius:var(--radius-md);
-  padding:.7rem .8rem;
-  font-size:.75rem;
-  color:#6B5B18;
-  margin-bottom:1rem;
+.success {
+  color: #166534;
+  font-size: .8rem;
+  margin-top: .35rem;
+  font-weight: 500;
 }
 
-@media(max-width:380px){
-  .nav-item{
-    padding-left:.8rem;
-    padding-right:.8rem;
-  }
+.private-banner {
+  background: #F8F5E9;
+  border: 1px solid #E9DFAE;
+  border-radius: var(--radius-md);
+  padding: .7rem .8rem;
+  font-size: .75rem;
+  color: #6B5B18;
+  margin-bottom: 1rem;
+}
 
-  .location-fields{
-    grid-template-columns:1fr;
+@media(max-width:380px) {
+  .nav-item {
+    padding-left: .8rem;
+    padding-right: .8rem;
   }
 }
 </style>
@@ -665,7 +697,9 @@ textarea.input-field{
 </nav>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 import {
   getAuth,
   GoogleAuthProvider,
@@ -700,28 +734,32 @@ const firebaseConfig = {
 
 
 /* =====================================================
-   GOOGLE MAPS
+   GOOGLE MAPS / PLACES
 ===================================================== */
 
 /*
-  Put your Google Maps Demo Key here.
+  Replace this with your actual Google Maps Demo Key.
 
-  The Demo Key is intended for Maps JavaScript API
-  prototyping.
+  The app does NOT depend on Google Maps being available.
 
-  This app deliberately does NOT use:
-  - Places API
-  - Geocoding API
-  - Directions API
+  If the key is missing, invalid, unavailable, or the Maps
+  JavaScript API cannot load, the location field simply
+  behaves like a normal text field.
 */
-const GOOGLE_MAPS_DEMO_KEY = "YOUR_GOOGLE_MAPS_DEMO_KEY";
+const GOOGLE_MAPS_DEMO_KEY =
+  "AIzaSyCAtNuRRuXFTnPKqGP5WXtMEaTNbgzRqhM";
 
 let googleMapsPromise = null;
 
-function loadGoogleMaps(){
-  if(window.google?.maps) return Promise.resolve();
+function loadGoogleMapsPlaces(){
 
-  if(googleMapsPromise) return googleMapsPromise;
+  if(window.google?.maps?.places){
+    return Promise.resolve();
+  }
+
+  if(googleMapsPromise){
+    return googleMapsPromise;
+  }
 
   if(
     !GOOGLE_MAPS_DEMO_KEY ||
@@ -732,32 +770,57 @@ function loadGoogleMaps(){
     );
   }
 
-  googleMapsPromise = new Promise((resolve,reject) => {
-    const existing = document.querySelector(
-      'script[data-google-maps="true"]'
-    );
+  googleMapsPromise =
+    new Promise((resolve,reject) => {
 
-    if(existing){
-      existing.addEventListener("load",resolve,{once:true});
-      existing.addEventListener("error",reject,{once:true});
-      return;
-    }
+      const existing =
+        document.querySelector(
+          'script[data-google-maps="true"]'
+        );
 
-    const script = document.createElement("script");
-    script.src =
-      "https://maps.googleapis.com/maps/api/js?key=" +
-      encodeURIComponent(GOOGLE_MAPS_DEMO_KEY);
+      if(existing){
 
-    script.async = true;
-    script.defer = true;
-    script.dataset.googleMaps = "true";
+        existing.addEventListener(
+          "load",
+          resolve,
+          {once:true}
+        );
 
-    script.onload = resolve;
-    script.onerror = () =>
-      reject(new Error("Google Maps could not be loaded."));
+        existing.addEventListener(
+          "error",
+          reject,
+          {once:true}
+        );
 
-    document.head.appendChild(script);
-  });
+        return;
+      }
+
+      const script =
+        document.createElement("script");
+
+      script.src =
+        "https://maps.googleapis.com/maps/api/js" +
+        "?key=" +
+        encodeURIComponent(
+          GOOGLE_MAPS_DEMO_KEY
+        ) +
+        "&libraries=places";
+
+      script.async = true;
+      script.defer = true;
+      script.dataset.googleMaps = "true";
+
+      script.onload = resolve;
+
+      script.onerror = () =>
+        reject(
+          new Error(
+            "Google Maps could not be loaded."
+          )
+        );
+
+      document.head.appendChild(script);
+    });
 
   return googleMapsPromise;
 }
@@ -767,12 +830,20 @@ function loadGoogleMaps(){
    APP
 ===================================================== */
 
-const firebaseApp = initializeApp(firebaseConfig);
-const auth = getAuth(firebaseApp);
-const db = getDatabase(firebaseApp);
-const googleProvider = new GoogleAuthProvider();
+const firebaseApp =
+  initializeApp(firebaseConfig);
 
-const app = document.querySelector("#app");
+const auth =
+  getAuth(firebaseApp);
+
+const db =
+  getDatabase(firebaseApp);
+
+const googleProvider =
+  new GoogleAuthProvider();
+
+const app =
+  document.querySelector("#app");
 
 let activeListener = null;
 let signingIn = false;
@@ -784,80 +855,193 @@ let currentTab = "upcoming";
 ===================================================== */
 
 function escapeHTML(value){
+
   return String(value ?? "")
-    .replace(/[&<>"']/g,character => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-    }[character]));
+    .replace(
+      /[&<>"']/g,
+      character => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+      }[character])
+    );
 }
 
 function newEventId(){
-  return crypto.randomUUID().replaceAll("-","").slice(0,12);
+
+  return crypto
+    .randomUUID()
+    .replaceAll("-","")
+    .slice(0,12);
 }
 
 function newInviteToken(){
-  return crypto.randomUUID().replaceAll("-","") +
-         crypto.randomUUID().replaceAll("-","");
+
+  return (
+    crypto.randomUUID().replaceAll("-","") +
+    crypto.randomUUID().replaceAll("-","")
+  );
 }
 
 function eventURL(id,event = null){
+
   if(
     event?.visibility === "private" &&
     event?.inviteToken
   ){
+
     return (
       "https://akshayrsam.github.io/varunnundo/#invite=" +
-      encodeURIComponent(event.inviteToken)
+      encodeURIComponent(
+        event.inviteToken
+      )
     );
   }
 
-  return "https://akshayrsam.github.io/varunnundo/#e=" + id;
+  return (
+    "https://akshayrsam.github.io/varunnundo/#e=" +
+    id
+  );
+}
+
+
+/*
+  Location is now an object.
+
+  Google-selected:
+  {
+    text,
+    name,
+    address,
+    placeId,
+    lat,
+    lng,
+    source:"google"
+  }
+
+  Manual:
+  {
+    text
+  }
+*/
+
+function locationText(location){
+
+  if(!location){
+    return "";
+  }
+
+  if(typeof location === "string"){
+    return location;
+  }
+
+  return (
+    location.name ||
+    location.address ||
+    location.text ||
+    ""
+  );
+}
+
+function locationSearchText(location){
+
+  if(!location){
+    return "";
+  }
+
+  if(typeof location === "string"){
+    return location;
+  }
+
+  return (
+    location.address ||
+    location.name ||
+    location.text ||
+    ""
+  );
 }
 
 function googleMapsSearchURL(location){
+
+  const search =
+    locationSearchText(location);
+
+  if(!search){
+    return "";
+  }
+
   return (
     "https://www.google.com/maps/search/?api=1&query=" +
-    encodeURIComponent(location)
+    encodeURIComponent(search)
   );
 }
 
 function stopListener(){
+
   if(activeListener){
+
     activeListener();
+
     activeListener = null;
   }
 }
 
 function parseEventDate(value){
+
   if(!value) return null;
 
-  const date = new Date(value);
+  const date =
+    new Date(value);
 
-  if(Number.isNaN(date.getTime())) return null;
+  if(Number.isNaN(date.getTime())){
+    return null;
+  }
 
   return {
-    month:date.toLocaleString("en-US",{month:"short"}),
-    day:date.getDate(),
-    formatted:date.toLocaleString([],{
-      day:"numeric",
-      month:"long",
-      year:"numeric",
-      hour:"numeric",
-      minute:"2-digit"
-    }),
-    time:date.toLocaleString([],{
-      hour:"numeric",
-      minute:"2-digit",
-      hour12:true
-    }),
-    fullDate:date.toLocaleString("en-IN",{
-      day:"numeric",
-      month:"long",
-      year:"numeric"
-    }),
+
+    month:
+      date.toLocaleString(
+        "en-US",
+        {month:"short"}
+      ),
+
+    day:
+      date.getDate(),
+
+    formatted:
+      date.toLocaleString(
+        [],
+        {
+          day:"numeric",
+          month:"long",
+          year:"numeric",
+          hour:"numeric",
+          minute:"2-digit"
+        }
+      ),
+
+    time:
+      date.toLocaleString(
+        [],
+        {
+          hour:"numeric",
+          minute:"2-digit",
+          hour12:true
+        }
+      ),
+
+    fullDate:
+      date.toLocaleString(
+        "en-IN",
+        {
+          day:"numeric",
+          month:"long",
+          year:"numeric"
+        }
+      ),
+
     raw:date
   };
 }
@@ -951,27 +1135,348 @@ const SVGS = {
 
 
 /* =====================================================
+   LOCATION FIELD
+===================================================== */
+
+async function createLocationField(
+  containerId,
+  initialLocation = null
+){
+
+  const container =
+    document.querySelector(
+      "#" + containerId
+    );
+
+  if(!container){
+    return {
+      getValue:() => null
+    };
+  }
+
+  const initialText =
+    locationText(initialLocation);
+
+  /*
+   * Always begin with a normal input.
+   * This means the form never depends on Google.
+   */
+  container.innerHTML = `
+
+    <div class="input-wrapper">
+
+      <span class="input-icon">
+        ${SVGS.location}
+      </span>
+
+      <div
+        class="location-autocomplete"
+        style="width:100%;"
+      >
+
+        <input
+          class="input-field"
+          id="${containerId}Input"
+          maxlength="250"
+          autocomplete="off"
+          value="${escapeHTML(initialText)}"
+          placeholder="Search for a place or enter it manually"
+          style="padding-left:2.4rem;"
+        >
+
+      </div>
+
+    </div>
+
+    <div
+      class="location-status fallback"
+      id="${containerId}Status"
+    >
+      You can enter any location.
+    </div>
+  `;
+
+  const input =
+    document.querySelector(
+      "#" + containerId + "Input"
+    );
+
+  const status =
+    document.querySelector(
+      "#" + containerId + "Status"
+    );
+
+  let selectedLocation =
+    initialLocation &&
+    typeof initialLocation === "object"
+      ? {...initialLocation}
+      : initialText
+        ? {text:initialText}
+        : null;
+
+  /*
+   * Once the user changes the text manually,
+   * the previous Google coordinates are no longer
+   * considered authoritative.
+   */
+  input.addEventListener(
+    "input",
+    () => {
+
+      selectedLocation = {
+        text:input.value.trim()
+      };
+
+      status.textContent =
+        "Using the location exactly as entered.";
+
+      status.className =
+        "location-status fallback";
+    }
+  );
+
+  /*
+   * Try to load Google Places.
+   *
+   * Failure is intentionally silent from the user's
+   * perspective except for a small status message.
+   */
+  try{
+
+    await loadGoogleMapsPlaces();
+
+    if(
+      !window.google?.maps?.places?.Autocomplete
+    ){
+      throw new Error(
+        "Google Places Autocomplete unavailable."
+      );
+    }
+
+    const autocomplete =
+      new google.maps.places.Autocomplete(
+        input,
+        {
+          fields:[
+            "place_id",
+            "name",
+            "formatted_address",
+            "geometry"
+          ],
+          types:[
+            "establishment",
+            "geocode"
+          ]
+        }
+      );
+
+    autocomplete.addListener(
+      "place_changed",
+      () => {
+
+        const place =
+          autocomplete.getPlace();
+
+        const location =
+          place?.geometry?.location;
+
+        /*
+         * Google can return an autocomplete value
+         * without geometry. In that case we simply
+         * keep the text.
+         */
+        if(
+          !location ||
+          typeof location.lat !== "function" ||
+          typeof location.lng !== "function"
+        ){
+
+          selectedLocation = {
+            text:input.value.trim()
+          };
+
+          status.textContent =
+            "Using the location as entered.";
+
+          status.className =
+            "location-status fallback";
+
+          return;
+        }
+
+        selectedLocation = {
+
+          text:
+            place.formatted_address ||
+            place.name ||
+            input.value.trim(),
+
+          name:
+            place.name ||
+            "",
+
+          address:
+            place.formatted_address ||
+            "",
+
+          placeId:
+            place.place_id ||
+            "",
+
+          lat:
+            location.lat(),
+
+          lng:
+            location.lng(),
+
+          source:
+            "google"
+        };
+
+        input.value =
+          place.name ||
+          place.formatted_address ||
+          input.value;
+
+        status.textContent =
+          "✓ Google Maps location selected";
+
+        status.className =
+          "location-status selected";
+      }
+    );
+
+    /*
+     * If there was an existing Google location,
+     * show that it is recognized.
+     */
+    if(
+      selectedLocation?.source === "google" &&
+      Number.isFinite(
+        Number(selectedLocation.lat)
+      ) &&
+      Number.isFinite(
+        Number(selectedLocation.lng)
+      )
+    ){
+
+      status.textContent =
+        "✓ Google Maps location selected";
+
+      status.className =
+        "location-status selected";
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Google Places unavailable:",
+      error
+    );
+
+    status.textContent =
+      "Google Maps suggestions unavailable. You can still enter the location normally.";
+
+    status.className =
+      "location-status fallback";
+  }
+
+  return {
+
+    getValue(){
+
+      const currentText =
+        input.value.trim();
+
+      if(!currentText){
+        return null;
+      }
+
+      /*
+       * If the user hasn't changed a Google-selected
+       * location, retain its metadata.
+       */
+      if(
+        selectedLocation?.source === "google" &&
+        selectedLocation.text &&
+        selectedLocation.text === currentText
+      ){
+
+        return {
+          ...selectedLocation,
+          text:currentText
+        };
+      }
+
+      /*
+       * If editing and the visible value is the
+       * place name while the stored text is its
+       * formatted address, preserve the Google data
+       * only if the input hasn't materially changed.
+       */
+      if(
+        selectedLocation?.source === "google" &&
+        (
+          currentText === selectedLocation.name ||
+          currentText === selectedLocation.address
+        )
+      ){
+
+        return {
+          ...selectedLocation,
+          text:currentText
+        };
+      }
+
+      /*
+       * Otherwise this is just manually entered text.
+       */
+      return {
+        text:currentText
+      };
+    }
+  };
+}
+
+
+/* =====================================================
    AUTH
 ===================================================== */
 
 async function requireAuth(){
-  if(auth.currentUser) return true;
 
-  if(signingIn) return false;
+  if(auth.currentUser){
+    return true;
+  }
+
+  if(signingIn){
+    return false;
+  }
 
   signingIn = true;
 
   try{
-    await signInWithPopup(auth,googleProvider);
+
+    await signInWithPopup(
+      auth,
+      googleProvider
+    );
+
     return true;
+
   }catch(error){
-    console.error("Firebase Auth Error:",error);
+
+    console.error(
+      "Firebase Auth Error:",
+      error
+    );
 
     if([
       "auth/popup-closed-by-user",
       "auth/cancelled-popup-request",
       "auth/popup-blocked"
     ].includes(error.code)){
+
       return false;
     }
 
@@ -983,7 +1488,9 @@ async function requireAuth(){
     );
 
     return false;
+
   }finally{
+
     signingIn = false;
   }
 }
@@ -994,10 +1501,19 @@ async function requireAuth(){
 ===================================================== */
 
 function updateBottomNav(activeTab){
-  const navEvents = document.querySelector("#navEvents");
-  const navCreate = document.querySelector("#navCreate");
+
+  const navEvents =
+    document.querySelector(
+      "#navEvents"
+    );
+
+  const navCreate =
+    document.querySelector(
+      "#navCreate"
+    );
 
   if(navEvents && navCreate){
+
     navEvents.classList.toggle(
       "active",
       activeTab === "events"
@@ -1011,26 +1527,38 @@ function updateBottomNav(activeTab){
 }
 
 function goToEventsPage(){
+
   currentTab = "upcoming";
 
   if(location.hash !== ""){
+
     location.hash = "";
+
   }else{
+
     eventsPage();
   }
 }
 
-document.querySelector("#navEvents").addEventListener(
+document.querySelector(
+  "#navEvents"
+).addEventListener(
   "click",
   goToEventsPage
 );
 
-document.querySelector("#navCreate").addEventListener(
+document.querySelector(
+  "#navCreate"
+).addEventListener(
   "click",
   () => {
+
     if(location.hash !== "#create"){
+
       location.hash = "create";
+
     }else{
+
       createPage();
     }
   }
@@ -1041,37 +1569,79 @@ document.querySelector("#navCreate").addEventListener(
    HEADER
 ===================================================== */
 
-function renderHeader(showBack = false){
-  const user = auth.currentUser;
+function renderHeader(
+  showBack = false
+){
+
+  const user =
+    auth.currentUser;
 
   return `
+
     <header class="header">
 
       <div class="header-left">
 
-        ${showBack ? `
-          <button class="back-btn" id="backButton">
-            ${SVGS.back}
-          </button>
-        ` : ""}
+        ${
+          showBack
+            ? `
+              <button
+                class="back-btn"
+                id="backButton"
+              >
+                ${SVGS.back}
+              </button>
+            `
+            : ""
+        }
 
-        <h1 class="app-title" id="homeTitle" style="cursor:pointer;">
+        <h1
+          class="app-title"
+          id="homeTitle"
+          style="cursor:pointer;"
+        >
+
           <img
             src="logo.png"
             alt="വരുന്നുണ്ടോ???"
             class="app-logo-img"
-            onerror="this.onerror=null;this.replaceWith(document.createTextNode('വരുന്നുണ്ടോ???'));"
+            onerror="
+              this.onerror=null;
+              this.replaceWith(
+                document.createTextNode('വരുന്നുണ്ടോ???')
+              );
+            "
           >
+
         </h1>
 
       </div>
 
-      <button class="avatar-btn" id="accountButton">
+      <button
+        class="avatar-btn"
+        id="accountButton"
+      >
 
         ${
           user
-            ? `<img src="${escapeHTML(user.photoURL || "")}" alt="Profile">`
-            : `<span style="font-size:.7rem;font-weight:700;">Sign in</span>`
+            ? `
+              <img
+                src="${escapeHTML(
+                  user.photoURL || ""
+                )}"
+                alt="Profile"
+              >
+            `
+            : `
+              <span
+                style="
+                  font-size:.7rem;
+                  font-weight:700;
+                "
+              >
+                Sign in
+              </span>
+            `
         }
 
       </button>
@@ -1082,25 +1652,42 @@ function renderHeader(showBack = false){
 
 function wireHeader(){
 
-  document.querySelector("#homeTitle")
-    ?.addEventListener("click",goToEventsPage);
+  document.querySelector(
+    "#homeTitle"
+  )?.addEventListener(
+    "click",
+    goToEventsPage
+  );
 
-  document.querySelector("#backButton")
-    ?.addEventListener("click",goToEventsPage);
+  document.querySelector(
+    "#backButton"
+  )?.addEventListener(
+    "click",
+    goToEventsPage
+  );
 
-  document.querySelector("#accountButton")
-    ?.addEventListener("click",async () => {
+  document.querySelector(
+    "#accountButton"
+  )?.addEventListener(
+    "click",
+    async () => {
 
       if(!auth.currentUser){
-        const signedIn = await requireAuth();
 
-        if(signedIn) route();
+        const signedIn =
+          await requireAuth();
+
+        if(signedIn){
+          route();
+        }
 
         return;
       }
 
-      location.hash = "profile";
-    });
+      location.hash =
+        "profile";
+    }
+  );
 }
 
 
@@ -1108,40 +1695,71 @@ function wireHeader(){
    SHARING
 ===================================================== */
 
-function generateShareText(event,id){
+function generateShareText(
+  event,
+  id
+){
 
-  const dateData = parseEventDate(event.when);
+  const dateData =
+    parseEventDate(
+      event.when
+    );
 
   const formattedDateTime =
     dateData
       ? `${dateData.fullDate} · ${dateData.time}`
       : "";
 
-  const link = eventURL(id,event);
+  const link =
+    eventURL(
+      id,
+      event
+    );
+
+  const location =
+    locationText(
+      event.location
+    );
 
   return `${event.title}
 ${formattedDateTime}
 
 *വരുന്നുണ്ടോ???*
 
-${event.location ? `📍 ${event.location}\n\n` : ""}${link}`;
+${
+  location
+    ? `📍 ${location}\n\n`
+    : ""
+}${link}`;
 }
 
 async function shareEvent(id){
 
   const snapshot =
-    await get(ref(db,"events/" + id));
+    await get(
+      ref(
+        db,
+        "events/" + id
+      )
+    );
 
-  const event = snapshot.val();
+  const event =
+    snapshot.val();
 
-  if(!event) return;
+  if(!event){
+    return;
+  }
 
   const shareText =
-    generateShareText(event,id);
+    generateShareText(
+      event,
+      id
+    );
 
   if(navigator.share){
 
     try{
+
       await navigator.share({
         text:shareText
       });
@@ -1150,7 +1768,11 @@ async function shareEvent(id){
 
     }catch(error){
 
-      if(error?.name === "AbortError"){
+      if(
+        error?.name ===
+        "AbortError"
+      ){
+
         return;
       }
     }
@@ -1159,17 +1781,31 @@ async function shareEvent(id){
   copyEventMessage(id);
 }
 
-async function copyEventMessage(id,button){
+async function copyEventMessage(
+  id,
+  button
+){
 
   const snapshot =
-    await get(ref(db,"events/" + id));
+    await get(
+      ref(
+        db,
+        "events/" + id
+      )
+    );
 
-  const event = snapshot.val();
+  const event =
+    snapshot.val();
 
-  if(!event) return;
+  if(!event){
+    return;
+  }
 
   const shareText =
-    generateShareText(event,id);
+    generateShareText(
+      event,
+      id
+    );
 
   try{
 
@@ -1185,19 +1821,24 @@ async function copyEventMessage(id,button){
       button.innerHTML =
         `${SVGS.copy} Copied!`;
 
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
-        if(button.isConnected){
-          button.innerHTML =
-            original;
-        }
+          if(button.isConnected){
 
-      },1500);
+            button.innerHTML =
+              original;
+          }
+
+        },
+        1500
+      );
 
     }else{
 
-      alert("Message copied to clipboard!");
-
+      alert(
+        "Message copied to clipboard!"
+      );
     }
 
   }catch{
@@ -1206,115 +1847,6 @@ async function copyEventMessage(id,button){
       "Copy this event message:",
       shareText
     );
-
-  }
-}
-
-
-/* =====================================================
-   GOOGLE MAP
-===================================================== */
-
-async function renderGoogleMap(event){
-
-  if(!event.location){
-    return;
-  }
-
-  const mapElement =
-    document.querySelector("#googleMap");
-
-  if(!mapElement){
-    return;
-  }
-
-  const lat =
-    Number(event.latitude);
-
-  const lng =
-    Number(event.longitude);
-
-  if(
-    !Number.isFinite(lat) ||
-    !Number.isFinite(lng)
-  ){
-    mapElement.innerHTML = `
-      <div class="location-placeholder">
-        <div>
-          <div style="font-weight:700;color:var(--text-main);">
-            ${SVGS.location}
-          </div>
-
-          <div style="margin-top:.4rem;">
-            Map preview needs an exact map pin.
-          </div>
-
-          <a
-            class="maps-link"
-            href="${googleMapsSearchURL(event.location)}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Open in Google Maps →
-          </a>
-        </div>
-      </div>
-    `;
-
-    return;
-  }
-
-  try{
-
-    await loadGoogleMaps();
-
-    const map =
-      new google.maps.Map(mapElement,{
-        center:{
-          lat,
-          lng
-        },
-        zoom:16,
-        mapTypeControl:false,
-        streetViewControl:false,
-        fullscreenControl:true,
-        gestureHandling:"cooperative"
-      });
-
-    new google.maps.Marker({
-      map,
-      position:{
-        lat,
-        lng
-      },
-      title:event.location
-    });
-
-  }catch(error){
-
-    console.error(
-      "GOOGLE MAP ERROR:",
-      error
-    );
-
-    mapElement.innerHTML = `
-      <div class="location-placeholder">
-        <div>
-          <div style="font-weight:700;color:var(--text-main);">
-            Map unavailable
-          </div>
-
-          <a
-            class="maps-link"
-            href="${googleMapsSearchURL(event.location)}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Open in Google Maps →
-          </a>
-        </div>
-      </div>
-    `;
   }
 }
 
@@ -1326,14 +1858,17 @@ async function renderGoogleMap(event){
 async function loadFeedEvents(){
 
   const publicSnapshot =
-    await get(ref(db,"publicEvents"));
+    await get(
+      ref(db,"publicEvents")
+    );
 
   const publicIndex =
     publicSnapshot.val() || {};
 
-  const ids = new Set(
-    Object.keys(publicIndex)
-  );
+  const ids =
+    new Set(
+      Object.keys(publicIndex)
+    );
 
   if(auth.currentUser){
 
@@ -1350,40 +1885,47 @@ async function loadFeedEvents(){
       mineSnapshot.val() || {};
 
     Object.keys(mine)
-      .forEach(id => ids.add(id));
+      .forEach(
+        id => ids.add(id)
+      );
   }
 
   const entries =
     await Promise.all(
-      [...ids].map(async id => {
+      [...ids].map(
+        async id => {
 
-        try{
+          try{
 
-          const snapshot =
-            await get(
-              ref(db,"events/" + id)
+            const snapshot =
+              await get(
+                ref(
+                  db,
+                  "events/" + id
+                )
+              );
+
+            if(!snapshot.exists()){
+              return null;
+            }
+
+            return [
+              id,
+              snapshot.val()
+            ];
+
+          }catch(error){
+
+            console.warn(
+              "Could not load event",
+              id,
+              error
             );
 
-          if(!snapshot.exists()){
             return null;
           }
-
-          return [
-            id,
-            snapshot.val()
-          ];
-
-        }catch(error){
-
-          console.warn(
-            "Could not load event",
-            id,
-            error
-          );
-
-          return null;
         }
-      })
+      )
     );
 
   return entries.filter(Boolean);
@@ -1393,7 +1935,9 @@ function eventsPage(){
 
   stopListener();
 
-  updateBottomNav("events");
+  updateBottomNav(
+    "events"
+  );
 
   app.innerHTML = `
 
@@ -1406,14 +1950,22 @@ function eventsPage(){
     <div class="tab-container">
 
       <button
-        class="tab-btn ${currentTab === "upcoming" ? "active" : ""}"
+        class="tab-btn ${
+          currentTab === "upcoming"
+            ? "active"
+            : ""
+        }"
         id="tabUpcoming"
       >
         Upcoming
       </button>
 
       <button
-        class="tab-btn ${currentTab === "past" ? "active" : ""}"
+        class="tab-btn ${
+          currentTab === "past"
+            ? "active"
+            : ""
+        }"
         id="tabPast"
       >
         Past
@@ -1438,27 +1990,43 @@ function eventsPage(){
   wireHeader();
 
   const tabUpcoming =
-    document.querySelector("#tabUpcoming");
+    document.querySelector(
+      "#tabUpcoming"
+    );
 
   const tabPast =
-    document.querySelector("#tabPast");
+    document.querySelector(
+      "#tabPast"
+    );
 
   tabUpcoming.onclick = () => {
 
-    currentTab = "upcoming";
+    currentTab =
+      "upcoming";
 
-    tabUpcoming.classList.add("active");
-    tabPast.classList.remove("active");
+    tabUpcoming.classList.add(
+      "active"
+    );
+
+    tabPast.classList.remove(
+      "active"
+    );
 
     renderEventsList();
   };
 
   tabPast.onclick = () => {
 
-    currentTab = "past";
+    currentTab =
+      "past";
 
-    tabPast.classList.add("active");
-    tabUpcoming.classList.remove("active");
+    tabPast.classList.add(
+      "active"
+    );
+
+    tabUpcoming.classList.remove(
+      "active"
+    );
 
     renderEventsList();
   };
@@ -1469,9 +2037,13 @@ function eventsPage(){
   function renderEventsList(){
 
     const container =
-      document.querySelector("#eventsContainer");
+      document.querySelector(
+        "#eventsContainer"
+      );
 
-    if(!container) return;
+    if(!container){
+      return;
+    }
 
     const list =
       currentTab === "upcoming"
@@ -1481,6 +2053,7 @@ function eventsPage(){
     if(!list.length){
 
       container.innerHTML = `
+
         <div style="
           text-align:center;
           padding:2rem 0;
@@ -1495,167 +2068,227 @@ function eventsPage(){
     }
 
     container.innerHTML = `
+
       <div class="event-list">
 
-        ${list.map(([id,event]) => {
+        ${
+          list.map(
+            ([id,event]) => {
 
-          const dateData =
-            parseEventDate(event.when);
+              const dateData =
+                parseEventDate(
+                  event.when
+                );
 
-          const coming =
-            Object.values(
-              event.responses || {}
-            )
-            .filter(
-              r => r.status === "yes"
-            )
-            .length;
+              const coming =
+                Object.values(
+                  event.responses || {}
+                ).filter(
+                  r => r.status === "yes"
+                ).length;
 
-          return `
-            <div
-              class="event-card"
-              data-id="${escapeHTML(id)}"
-            >
+              const location =
+                locationText(
+                  event.location
+                );
 
-              <div class="date-badge">
+              return `
 
-                <div class="date-badge-month">
-                  ${dateData ? dateData.month : "---"}
+                <div
+                  class="event-card"
+                  data-id="${escapeHTML(id)}"
+                >
+
+                  <div class="date-badge">
+
+                    <div class="date-badge-month">
+                      ${
+                        dateData
+                          ? dateData.month
+                          : "---"
+                      }
+                    </div>
+
+                    <div class="date-badge-day">
+                      ${
+                        dateData
+                          ? dateData.day
+                          : "--"
+                      }
+                    </div>
+
+                  </div>
+
+                  <div class="event-info">
+
+                    <div class="event-name">
+                      ${escapeHTML(
+                        event.title
+                      )}
+                    </div>
+
+                    <div class="event-meta">
+
+                      ${
+                        dateData
+                          ? dateData.time
+                          : ""
+                      }
+
+                      ${
+                        location
+                          ? " · 📍 " +
+                            escapeHTML(
+                              location
+                            )
+                          : ""
+                      }
+
+                    </div>
+
+                    ${
+                      event.visibility ===
+                      "private"
+                        ? `
+                          <div class="visibility-pill">
+                            🔒 Private
+                          </div>
+                        `
+                        : ""
+                    }
+
+                  </div>
+
+                  <div class="count-pill">
+                    ${coming} coming
+                  </div>
+
                 </div>
-
-                <div class="date-badge-day">
-                  ${dateData ? dateData.day : "--"}
-                </div>
-
-              </div>
-
-              <div class="event-info">
-
-                <div class="event-name">
-                  ${escapeHTML(event.title)}
-                </div>
-
-                <div class="event-meta">
-                  ${dateData ? dateData.time : ""}
-                  ${event.location ? " · 📍 " + escapeHTML(event.location) : ""}
-                </div>
-
-                ${
-                  event.visibility === "private"
-                    ? `
-                      <div class="visibility-pill">
-                        🔒 Private
-                      </div>
-                    `
-                    : ""
-                }
-
-              </div>
-
-              <div class="count-pill">
-                ${coming} coming
-              </div>
-
-            </div>
-          `;
-
-        }).join("")}
+              `;
+            }
+          ).join("")
+        }
 
       </div>
     `;
 
     container
-      .querySelectorAll(".event-card")
-      .forEach(card => {
+      .querySelectorAll(
+        ".event-card"
+      )
+      .forEach(
+        card => {
 
-        card.onclick = () => {
+          card.onclick = () => {
 
-          location.hash =
-            "e=" + card.dataset.id;
-
-        };
-
-      });
+            location.hash =
+              "e=" +
+              card.dataset.id;
+          };
+        }
+      );
   }
 
   loadFeedEvents()
-    .then(events => {
+    .then(
+      events => {
 
-      const now = Date.now();
+        const now =
+          Date.now();
 
-      cachedUpcoming = [];
-      cachedPast = [];
+        cachedUpcoming = [];
+        cachedPast = [];
 
-      events.forEach(([id,event]) => {
+        events.forEach(
+          ([id,event]) => {
 
-        const eventTime =
-          new Date(event.when).getTime();
+            const eventTime =
+              new Date(
+                event.when
+              ).getTime();
 
-        if(
-          Number.isFinite(eventTime) &&
-          eventTime < now
-        ){
+            if(
+              Number.isFinite(
+                eventTime
+              ) &&
+              eventTime < now
+            ){
 
-          cachedPast.push([
-            id,
-            event
-          ]);
+              cachedPast.push([
+                id,
+                event
+              ]);
 
-        }else{
+            }else{
 
-          cachedUpcoming.push([
-            id,
-            event
-          ]);
+              cachedUpcoming.push([
+                id,
+                event
+              ]);
+            }
+          }
+        );
 
-        }
+        cachedUpcoming.sort(
+          (a,b) =>
+            new Date(
+              a[1].when
+            ).getTime() -
+            new Date(
+              b[1].when
+            ).getTime()
+        );
 
-      });
+        cachedPast.sort(
+          (a,b) =>
+            new Date(
+              b[1].when
+            ).getTime() -
+            new Date(
+              a[1].when
+            ).getTime()
+        );
 
-      cachedUpcoming.sort(
-        (a,b) =>
-          new Date(a[1].when).getTime() -
-          new Date(b[1].when).getTime()
-      );
-
-      cachedPast.sort(
-        (a,b) =>
-          new Date(b[1].when).getTime() -
-          new Date(a[1].when).getTime()
-      );
-
-      renderEventsList();
-
-    })
-    .catch(error => {
-
-      console.error(
-        "EVENTS LOAD ERROR:",
-        error
-      );
-
-      const container =
-        document.querySelector("#eventsContainer");
-
-      if(container){
-
-        container.innerHTML = `
-          <p class="error">
-            Couldn't load events.
-            ${escapeHTML(error.message || "")}
-          </p>
-        `;
+        renderEventsList();
       }
+    )
+    .catch(
+      error => {
 
-    });
+        console.error(
+          "EVENTS LOAD ERROR:",
+          error
+        );
+
+        const container =
+          document.querySelector(
+            "#eventsContainer"
+          );
+
+        if(container){
+
+          container.innerHTML = `
+
+            <p class="error">
+              Couldn't load events.
+              ${escapeHTML(
+                error.message || ""
+              )}
+            </p>
+          `;
+        }
+      }
+    );
 }
 
 
 /* =====================================================
-   EVENT FORM
+   VISIBILITY
 ===================================================== */
 
-function visibilityControl(selected){
+function visibilityControl(
+  selected
+){
 
   return `
 
@@ -1669,7 +2302,11 @@ function visibilityControl(selected){
 
         <button
           type="button"
-          class="visibility-option ${selected === "public" ? "active" : ""}"
+          class="visibility-option ${
+            selected === "public"
+              ? "active"
+              : ""
+          }"
           data-visibility="public"
         >
           🌍 Public
@@ -1677,7 +2314,11 @@ function visibilityControl(selected){
 
         <button
           type="button"
-          class="visibility-option ${selected === "private" ? "active" : ""}"
+          class="visibility-option ${
+            selected === "private"
+              ? "active"
+              : ""
+          }"
           data-visibility="private"
         >
           🔒 Private
@@ -1700,10 +2341,13 @@ function visibilityControl(selected){
   `;
 }
 
-function wireVisibilityControl(initialValue){
+function wireVisibilityControl(
+  initialValue
+){
 
   let selectedVisibility =
-    initialValue || "public";
+    initialValue ||
+    "public";
 
   const buttons =
     document.querySelectorAll(
@@ -1711,32 +2355,42 @@ function wireVisibilityControl(initialValue){
     );
 
   const hint =
-    document.querySelector("#visibilityHint");
+    document.querySelector(
+      "#visibilityHint"
+    );
 
-  buttons.forEach(button => {
+  buttons.forEach(
+    button => {
 
-    button.onclick = () => {
+      button.onclick = () => {
 
-      selectedVisibility =
-        button.dataset.visibility;
+        selectedVisibility =
+          button.dataset.visibility;
 
-      buttons.forEach(item => {
-        item.classList.toggle(
-          "active",
-          item.dataset.visibility ===
-          selectedVisibility
+        buttons.forEach(
+          item => {
+
+            item.classList.toggle(
+              "active",
+              item.dataset.visibility ===
+              selectedVisibility
+            );
+          }
         );
-      });
 
-      hint.textContent =
-        selectedVisibility === "private"
-          ? "Only people with the shared event link can access it."
-          : "Anyone can find this event on the Events page.";
-    };
+        hint.textContent =
+          selectedVisibility ===
+          "private"
 
-  });
+            ? "Only people with the shared event link can access it."
 
-  return () => selectedVisibility;
+            : "Anyone can find this event on the Events page.";
+      };
+    }
+  );
+
+  return () =>
+    selectedVisibility;
 }
 
 
@@ -1744,11 +2398,13 @@ function wireVisibilityControl(initialValue){
    CREATE
 ===================================================== */
 
-function createPage(){
+async function createPage(){
 
   stopListener();
 
-  updateBottomNav("create");
+  updateBottomNav(
+    "create"
+  );
 
   if(!auth.currentUser){
 
@@ -1758,7 +2414,10 @@ function createPage(){
 
       <div
         class="details-card"
-        style="text-align:center;padding:2rem 1rem;"
+        style="
+          text-align:center;
+          padding:2rem 1rem;
+        "
       >
 
         <h2 style="
@@ -1790,16 +2449,16 @@ function createPage(){
 
     document.querySelector(
       "#googleButton"
-    ).onclick = async () => {
+    ).onclick =
+      async () => {
 
-      const signedIn =
-        await requireAuth();
+        const signedIn =
+          await requireAuth();
 
-      if(signedIn){
-        createPage();
-      }
-
-    };
+        if(signedIn){
+          createPage();
+        }
+      };
 
     return;
   }
@@ -1881,46 +2540,7 @@ function createPage(){
         Location (optional)
       </label>
 
-      <div class="input-wrapper">
-
-        <span class="input-icon">
-          ${SVGS.location}
-        </span>
-
-        <input
-          class="input-field"
-          id="eventLocation"
-          maxlength="200"
-          placeholder="e.g. Kozhikode Beach"
-        >
-
-      </div>
-
-      <div class="location-fields" style="margin-top:.5rem;">
-
-        <input
-          class="input-field"
-          id="eventLatitude"
-          type="number"
-          step="any"
-          placeholder="Latitude (optional)"
-          style="padding-left:.85rem;"
-        >
-
-        <input
-          class="input-field"
-          id="eventLongitude"
-          type="number"
-          step="any"
-          placeholder="Longitude (optional)"
-          style="padding-left:.85rem;"
-        >
-
-      </div>
-
-      <div class="visibility-hint">
-        Add latitude/longitude if you want the event page to show an exact Google Maps pin.
-      </div>
+      <div id="createLocation"></div>
 
     </div>
 
@@ -1941,7 +2561,10 @@ function createPage(){
 
     ${visibilityControl("public")}
 
-    <p id="eventError" class="error"></p>
+    <p
+      id="eventError"
+      class="error"
+    ></p>
 
     <button
       class="btn-primary"
@@ -1954,209 +2577,202 @@ function createPage(){
 
   wireHeader();
 
+  const locationField =
+    await createLocationField(
+      "createLocation"
+    );
+
   const getVisibility =
-    wireVisibilityControl("public");
+    wireVisibilityControl(
+      "public"
+    );
 
   document.querySelector(
     "#saveEvent"
-  ).onclick = async () => {
+  ).onclick =
+    async () => {
 
-    const error =
-      document.querySelector("#eventError");
+      const error =
+        document.querySelector(
+          "#eventError"
+        );
 
-    const title =
-      document.querySelector("#title")
-        .value.trim();
+      const title =
+        document.querySelector(
+          "#title"
+        ).value.trim();
 
-    const when =
-      document.querySelector("#when")
-        .value;
+      const when =
+        document.querySelector(
+          "#when"
+        ).value;
 
-    const location =
-      document.querySelector("#eventLocation")
-        .value.trim();
+      const location =
+        locationField.getValue();
 
-    const latitudeRaw =
-      document.querySelector("#eventLatitude")
-        .value.trim();
+      const note =
+        document.querySelector(
+          "#eventNote"
+        ).value.trim();
 
-    const longitudeRaw =
-      document.querySelector("#eventLongitude")
-        .value.trim();
+      const visibility =
+        getVisibility();
 
-    const note =
-      document.querySelector("#eventNote")
-        .value.trim();
-
-    const visibility =
-      getVisibility();
-
-    if(!title){
-
-      error.textContent =
-        "Give the event a title.";
-
-      return;
-    }
-
-    if(!when){
-
-      error.textContent =
-        "Choose a date and time.";
-
-      return;
-    }
-
-    const whenMs =
-      new Date(when).getTime();
-
-    if(
-      !Number.isFinite(whenMs) ||
-      whenMs <= Date.now()
-    ){
-
-      error.textContent =
-        "Choose a future date and time.";
-
-      return;
-    }
-
-    let latitude = null;
-    let longitude = null;
-
-    if(latitudeRaw || longitudeRaw){
-
-      latitude = Number(latitudeRaw);
-      longitude = Number(longitudeRaw);
-
-      if(
-        !Number.isFinite(latitude) ||
-        !Number.isFinite(longitude) ||
-        latitude < -90 ||
-        latitude > 90 ||
-        longitude < -180 ||
-        longitude > 180
-      ){
+      if(!title){
 
         error.textContent =
-          "Latitude/longitude is invalid.";
+          "Give the event a title.";
 
         return;
       }
-    }
 
-    const user =
-      auth.currentUser;
+      if(!when){
 
-    if(!user){
+        error.textContent =
+          "Choose a date and time.";
 
-      error.textContent =
-        "Please sign in first.";
-
-      return;
-    }
-
-    const id =
-      newEventId();
-
-    const inviteToken =
-      visibility === "private"
-        ? newInviteToken()
-        : null;
-
-    const event = {
-
-      title,
-      when,
-      note,
-
-      location:location || null,
-
-      latitude,
-      longitude,
-
-      visibility,
-
-      inviteToken,
-
-      creatorUid:user.uid,
-      creatorName:user.displayName || "Unknown",
-      creatorPhoto:user.photoURL || "",
-
-      createdAt:Date.now()
-    };
-
-    try{
-
-      const updates = {};
-
-      updates[
-        "events/" + id
-      ] = event;
-
-      if(visibility === "public"){
-
-        updates[
-          "publicEvents/" + id
-        ] = true;
-
-      }else{
-
-        updates[
-          "userEvents/" +
-          user.uid +
-          "/" +
-          id
-        ] = true;
-
-        updates[
-          "eventMembers/" +
-          id +
-          "/" +
-          user.uid
-        ] = inviteToken;
-
+        return;
       }
 
-      await update(
-        ref(db),
-        updates
-      );
+      const whenMs =
+        new Date(
+          when
+        ).getTime();
 
       if(
-        visibility === "private" &&
-        inviteToken
+        !Number.isFinite(
+          whenMs
+        ) ||
+        whenMs <= Date.now()
       ){
 
-        await set(
-          ref(
-            db,
-            "privateInvites/" +
-            inviteToken
-          ),
-          {
-            eventId:id
-          }
-        );
+        error.textContent =
+          "Choose a future date and time.";
+
+        return;
       }
 
-      location.hash =
-        "e=" + id;
+      const user =
+        auth.currentUser;
 
-    }catch(errorObject){
+      if(!user){
 
-      console.error(
-        "CREATE EVENT ERROR:",
-        errorObject
-      );
+        error.textContent =
+          "Please sign in first.";
 
-      error.textContent =
-        "Couldn't create event.\n\n" +
-        errorObject.code +
-        "\n" +
-        errorObject.message;
-    }
-  };
+        return;
+      }
+
+      const id =
+        newEventId();
+
+      const inviteToken =
+        visibility === "private"
+          ? newInviteToken()
+          : null;
+
+      const event = {
+
+        title,
+        when,
+        note,
+
+        location:
+          location || null,
+
+        visibility,
+
+        inviteToken,
+
+        creatorUid:
+          user.uid,
+
+        creatorName:
+          user.displayName ||
+          "Unknown",
+
+        creatorPhoto:
+          user.photoURL ||
+          "",
+
+        createdAt:
+          Date.now()
+      };
+
+      try{
+
+        const updates = {};
+
+        updates[
+          "events/" + id
+        ] = event;
+
+        if(
+          visibility ===
+          "public"
+        ){
+
+          updates[
+            "publicEvents/" + id
+          ] = true;
+
+        }else{
+
+          updates[
+            "userEvents/" +
+            user.uid +
+            "/" +
+            id
+          ] = true;
+
+          updates[
+            "eventMembers/" +
+            id +
+            "/" +
+            user.uid
+          ] = inviteToken;
+        }
+
+        await update(
+          ref(db),
+          updates
+        );
+
+        if(
+          visibility ===
+          "private" &&
+          inviteToken
+        ){
+
+          await set(
+            ref(
+              db,
+              "privateInvites/" +
+              inviteToken
+            ),
+            {
+              eventId:id
+            }
+          );
+        }
+
+        location.hash =
+          "e=" + id;
+
+      }catch(errorObject){
+
+        console.error(
+          "CREATE EVENT ERROR:",
+          errorObject
+        );
+
+        error.textContent =
+          "Couldn't create event.\n\n" +
+          errorObject.code +
+          "\n" +
+          errorObject.message;
+      }
+    };
 }
 
 
@@ -2169,16 +2785,23 @@ async function editEvent(id){
   const user =
     auth.currentUser;
 
-  if(!user) return;
+  if(!user){
+    return;
+  }
 
   const snapshot =
     await get(
-      ref(db,"events/" + id)
+      ref(
+        db,
+        "events/" + id
+      )
     );
 
   if(!snapshot.exists()){
 
-    alert("Event not found.");
+    alert(
+      "Event not found."
+    );
 
     return;
   }
@@ -2187,10 +2810,14 @@ async function editEvent(id){
     snapshot.val();
 
   const eventTime =
-    new Date(event.when).getTime();
+    new Date(
+      event.when
+    ).getTime();
 
   if(
-    Number.isFinite(eventTime) &&
+    Number.isFinite(
+      eventTime
+    ) &&
     eventTime <= Date.now()
   ){
 
@@ -2203,7 +2830,10 @@ async function editEvent(id){
     return;
   }
 
-  if(event.creatorUid !== user.uid){
+  if(
+    event.creatorUid !==
+    user.uid
+  ){
 
     alert(
       "Only the creator can edit this event."
@@ -2213,7 +2843,8 @@ async function editEvent(id){
   }
 
   const currentVisibility =
-    event.visibility || "public";
+    event.visibility ||
+    "public";
 
   app.innerHTML = `
 
@@ -2242,7 +2873,9 @@ async function editEvent(id){
           class="input-field"
           id="title"
           maxlength="100"
-          value="${escapeHTML(event.title)}"
+          value="${escapeHTML(
+            event.title
+          )}"
         >
 
       </div>
@@ -2265,7 +2898,9 @@ async function editEvent(id){
           class="input-field"
           id="when"
           type="datetime-local"
-          value="${escapeHTML(event.when)}"
+          value="${escapeHTML(
+            event.when
+          )}"
         >
 
       </div>
@@ -2278,45 +2913,7 @@ async function editEvent(id){
         Location (optional)
       </label>
 
-      <div class="input-wrapper">
-
-        <span class="input-icon">
-          ${SVGS.location}
-        </span>
-
-        <input
-          class="input-field"
-          id="eventLocation"
-          maxlength="200"
-          value="${escapeHTML(event.location || "")}"
-          placeholder="e.g. Kozhikode Beach"
-        >
-
-      </div>
-
-      <div class="location-fields" style="margin-top:.5rem;">
-
-        <input
-          class="input-field"
-          id="eventLatitude"
-          type="number"
-          step="any"
-          value="${event.latitude ?? ""}"
-          placeholder="Latitude (optional)"
-          style="padding-left:.85rem;"
-        >
-
-        <input
-          class="input-field"
-          id="eventLongitude"
-          type="number"
-          step="any"
-          value="${event.longitude ?? ""}"
-          placeholder="Longitude (optional)"
-          style="padding-left:.85rem;"
-        >
-
-      </div>
+      <div id="editLocation"></div>
 
     </div>
 
@@ -2330,13 +2927,20 @@ async function editEvent(id){
         class="input-field"
         id="eventNote"
         maxlength="1000"
-      >${escapeHTML(event.note || "")}</textarea>
+      >${escapeHTML(
+        event.note || ""
+      )}</textarea>
 
     </div>
 
-    ${visibilityControl(currentVisibility)}
+    ${visibilityControl(
+      currentVisibility
+    )}
 
-    <p id="eventError" class="error"></p>
+    <p
+      id="eventError"
+      class="error"
+    ></p>
 
     <div style="
       display:flex;
@@ -2371,6 +2975,12 @@ async function editEvent(id){
 
   wireHeader();
 
+  const locationField =
+    await createLocationField(
+      "editLocation",
+      event.location || null
+    );
+
   const getVisibility =
     wireVisibilityControl(
       currentVisibility
@@ -2378,219 +2988,209 @@ async function editEvent(id){
 
   document.querySelector(
     "#cancel"
-  ).onclick = () =>
-    eventPage(id);
+  ).onclick =
+    () => eventPage(id);
 
   document.querySelector(
     "#saveEvent"
-  ).onclick = async () => {
+  ).onclick =
+    async () => {
 
-    const error =
-      document.querySelector("#eventError");
+      const error =
+        document.querySelector(
+          "#eventError"
+        );
 
-    const title =
-      document.querySelector("#title")
-        .value.trim();
+      const title =
+        document.querySelector(
+          "#title"
+        ).value.trim();
 
-    const when =
-      document.querySelector("#when")
-        .value;
+      const when =
+        document.querySelector(
+          "#when"
+        ).value;
 
-    const locationValue =
-      document.querySelector("#eventLocation")
-        .value.trim();
+      const location =
+        locationField.getValue();
 
-    const latitudeRaw =
-      document.querySelector("#eventLatitude")
-        .value.trim();
+      const note =
+        document.querySelector(
+          "#eventNote"
+        ).value.trim();
 
-    const longitudeRaw =
-      document.querySelector("#eventLongitude")
-        .value.trim();
+      const visibility =
+        getVisibility();
 
-    const note =
-      document.querySelector("#eventNote")
-        .value.trim();
-
-    const visibility =
-      getVisibility();
-
-    if(!title){
-
-      error.textContent =
-        "Give the event a title.";
-
-      return;
-    }
-
-    if(!when){
-
-      error.textContent =
-        "Choose a date and time.";
-
-      return;
-    }
-
-    const whenMs =
-      new Date(when).getTime();
-
-    if(
-      !Number.isFinite(whenMs) ||
-      whenMs <= Date.now()
-    ){
-
-      error.textContent =
-        "Choose a future date and time.";
-
-      return;
-    }
-
-    let latitude = null;
-    let longitude = null;
-
-    if(latitudeRaw || longitudeRaw){
-
-      latitude = Number(latitudeRaw);
-      longitude = Number(longitudeRaw);
-
-      if(
-        !Number.isFinite(latitude) ||
-        !Number.isFinite(longitude) ||
-        latitude < -90 ||
-        latitude > 90 ||
-        longitude < -180 ||
-        longitude > 180
-      ){
+      if(!title){
 
         error.textContent =
-          "Latitude/longitude is invalid.";
+          "Give the event a title.";
 
         return;
       }
-    }
 
-    try{
+      if(!when){
 
-      const oldVisibility =
-        event.visibility || "public";
+        error.textContent =
+          "Choose a date and time.";
 
-      let inviteToken =
-        event.inviteToken || null;
+        return;
+      }
+
+      const whenMs =
+        new Date(
+          when
+        ).getTime();
 
       if(
-        visibility === "private" &&
-        !inviteToken
+        !Number.isFinite(
+          whenMs
+        ) ||
+        whenMs <= Date.now()
       ){
 
-        inviteToken =
-          newInviteToken();
+        error.textContent =
+          "Choose a future date and time.";
+
+        return;
       }
 
-      const updates = {};
+      try{
 
-      updates[
-        "events/" + id + "/title"
-      ] = title;
+        const oldVisibility =
+          event.visibility ||
+          "public";
 
-      updates[
-        "events/" + id + "/when"
-      ] = when;
+        let inviteToken =
+          event.inviteToken ||
+          null;
 
-      updates[
-        "events/" + id + "/note"
-      ] = note;
+        if(
+          visibility ===
+          "private" &&
+          !inviteToken
+        ){
 
-      updates[
-        "events/" + id + "/location"
-      ] = locationValue || null;
+          inviteToken =
+            newInviteToken();
+        }
 
-      updates[
-        "events/" + id + "/latitude"
-      ] = latitude;
-
-      updates[
-        "events/" + id + "/longitude"
-      ] = longitude;
-
-      updates[
-        "events/" + id + "/visibility"
-      ] = visibility;
-
-      updates[
-        "events/" + id + "/inviteToken"
-      ] = inviteToken;
-
-      if(oldVisibility === "public"){
+        const updates = {};
 
         updates[
-          "publicEvents/" + id
-        ] = null;
-
-      }
-
-      if(visibility === "public"){
-
-        updates[
-          "publicEvents/" + id
-        ] = true;
-
-      }else{
-
-        updates[
-          "userEvents/" +
-          user.uid +
-          "/" +
-          id
-        ] = true;
-
-        updates[
-          "eventMembers/" +
+          "events/" +
           id +
-          "/" +
-          user.uid
+          "/title"
+        ] = title;
+
+        updates[
+          "events/" +
+          id +
+          "/when"
+        ] = when;
+
+        updates[
+          "events/" +
+          id +
+          "/note"
+        ] = note;
+
+        updates[
+          "events/" +
+          id +
+          "/location"
+        ] = location || null;
+
+        updates[
+          "events/" +
+          id +
+          "/visibility"
+        ] = visibility;
+
+        updates[
+          "events/" +
+          id +
+          "/inviteToken"
         ] = inviteToken;
 
-      }
+        if(
+          oldVisibility ===
+          "public"
+        ){
 
-      await update(
-        ref(db),
-        updates
-      );
+          updates[
+            "publicEvents/" +
+            id
+          ] = null;
+        }
 
-      if(
-        visibility === "private" &&
-        inviteToken
-      ){
+        if(
+          visibility ===
+          "public"
+        ){
 
-        await set(
-          ref(
-            db,
-            "privateInvites/" +
-            inviteToken
-          ),
-          {
-            eventId:id
-          }
+          updates[
+            "publicEvents/" +
+            id
+          ] = true;
+
+        }else{
+
+          updates[
+            "userEvents/" +
+            user.uid +
+            "/" +
+            id
+          ] = true;
+
+          updates[
+            "eventMembers/" +
+            id +
+            "/" +
+            user.uid
+          ] = inviteToken;
+        }
+
+        await update(
+          ref(db),
+          updates
         );
 
+        if(
+          visibility ===
+          "private" &&
+          inviteToken
+        ){
+
+          await set(
+            ref(
+              db,
+              "privateInvites/" +
+              inviteToken
+            ),
+            {
+              eventId:id
+            }
+          );
+        }
+
+        eventPage(id);
+
+      }catch(errorObject){
+
+        console.error(
+          "EDIT EVENT ERROR:",
+          errorObject
+        );
+
+        error.textContent =
+          "Couldn't save changes.\n\n" +
+          errorObject.code +
+          "\n" +
+          errorObject.message;
       }
-
-      eventPage(id);
-
-    }catch(errorObject){
-
-      console.error(
-        "EDIT EVENT ERROR:",
-        errorObject
-      );
-
-      error.textContent =
-        "Couldn't save changes.\n\n" +
-        errorObject.code +
-        "\n" +
-        errorObject.message;
-    }
-  };
+    };
 }
 
 
@@ -2603,16 +3203,23 @@ async function deleteEvent(id){
   const user =
     auth.currentUser;
 
-  if(!user) return;
+  if(!user){
+    return;
+  }
 
   const snapshot =
     await get(
-      ref(db,"events/" + id)
+      ref(
+        db,
+        "events/" + id
+      )
     );
 
   if(!snapshot.exists()){
 
-    alert("Event not found.");
+    alert(
+      "Event not found."
+    );
 
     return;
   }
@@ -2620,7 +3227,10 @@ async function deleteEvent(id){
   const event =
     snapshot.val();
 
-  if(event.creatorUid !== user.uid){
+  if(
+    event.creatorUid !==
+    user.uid
+  ){
 
     alert(
       "Only the creator can delete this event."
@@ -2631,7 +3241,9 @@ async function deleteEvent(id){
 
   if(!confirm(
     "Delete this event?\n\nThis cannot be undone."
-  )) return;
+  )){
+    return;
+  }
 
   try{
 
@@ -2657,29 +3269,31 @@ async function deleteEvent(id){
       id
     ] = null;
 
-    if(event.inviteToken){
+    if(
+      event.inviteToken
+    ){
 
       updates[
         "privateInvites/" +
         event.inviteToken
       ] = null;
-
     }
 
     if(event.responses){
 
       Object.keys(
         event.responses
-      ).forEach(uid => {
+      ).forEach(
+        uid => {
 
-        updates[
-          "userEvents/" +
-          uid +
-          "/" +
-          id
-        ] = null;
-
-      });
+          updates[
+            "userEvents/" +
+            uid +
+            "/" +
+            id
+          ] = null;
+        }
+      );
     }
 
     await update(
@@ -2738,7 +3352,10 @@ function eventPage(id){
 
   activeListener =
     onValue(
-      ref(db,"events/" + id),
+      ref(
+        db,
+        "events/" + id
+      ),
 
       snapshot => {
 
@@ -2747,7 +3364,9 @@ function eventPage(id){
             "#eventShell"
           );
 
-        if(!shell) return;
+        if(!shell){
+          return;
+        }
 
         if(!snapshot.exists()){
 
@@ -2758,7 +3377,9 @@ function eventPage(id){
               style="text-align:center;"
             >
 
-              <h2 style="font-size:1.2rem;">
+              <h2 style="
+                font-size:1.2rem;
+              ">
                 Event not found
               </h2>
 
@@ -2783,20 +3404,29 @@ function eventPage(id){
           auth.currentUser;
 
         const userUid =
-          user?.uid || null;
+          user?.uid ||
+          null;
 
         const isCreator =
-          userUid === event.creatorUid;
+          userUid ===
+          event.creatorUid;
 
         const eventTime =
-          new Date(event.when).getTime();
+          new Date(
+            event.when
+          ).getTime();
 
         const isLocked =
-          Number.isFinite(eventTime) &&
-          eventTime <= Date.now();
+          Number.isFinite(
+            eventTime
+          ) &&
+          eventTime <=
+          Date.now();
 
         const dateData =
-          parseEventDate(event.when);
+          parseEventDate(
+            event.when
+          );
 
         const responses =
           Object.entries(
@@ -2805,26 +3435,42 @@ function eventPage(id){
 
         const coming =
           responses.filter(
-            ([,r]) => r.status === "yes"
+            ([,r]) =>
+              r.status === "yes"
           );
 
         const notComing =
           responses.filter(
-            ([,r]) => r.status === "no"
+            ([,r]) =>
+              r.status === "no"
           );
 
         const myResponse =
           userUid
-            ? event.responses?.[userUid]
+            ? event.responses?.[
+                userUid
+              ]
             : null;
 
         let selectedStatus =
-          myResponse?.status || null;
+          myResponse?.status ||
+          null;
+
+        const eventLocation =
+          locationText(
+            event.location
+          );
+
+        const eventMapsURL =
+          googleMapsSearchURL(
+            event.location
+          );
 
         shell.innerHTML = `
 
           ${
-            event.visibility === "private"
+            event.visibility ===
+            "private"
               ? `
                 <div class="private-banner">
                   🔒 Private event · shared-link access
@@ -2843,7 +3489,9 @@ function eventPage(id){
           <div class="details-card">
 
             <h1 class="serif-title">
-              ${escapeHTML(event.title)}
+              ${escapeHTML(
+                event.title
+              )}
             </h1>
 
             <div style="
@@ -2868,7 +3516,7 @@ function eventPage(id){
             </div>
 
             ${
-              event.location
+              eventLocation
                 ? `
                   <div class="location-box">
 
@@ -2878,35 +3526,60 @@ function eventPage(id){
                         ${SVGS.location}
                       </div>
 
-                      <div style="min-width:0;">
+                      <div style="
+                        min-width:0;
+                        flex:1;
+                      ">
 
                         <div style="
                           font-weight:700;
                           font-size:.875rem;
                         ">
-                          ${escapeHTML(event.location)}
+                          ${escapeHTML(
+                            eventLocation
+                          )}
                         </div>
 
-                        <a
-                          class="maps-link"
-                          href="${googleMapsSearchURL(event.location)}"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Open in Google Maps →
-                        </a>
+                        ${
+                          event.location &&
+                          typeof event.location ===
+                          "object" &&
+                          event.location.address &&
+                          event.location.address !==
+                          event.location.name
+                            ? `
+                              <div style="
+                                color:var(--text-muted);
+                                font-size:.75rem;
+                                margin-top:.15rem;
+                              ">
+                                ${escapeHTML(
+                                  event.location.address
+                                )}
+                              </div>
+                            `
+                            : ""
+                        }
+
+                        ${
+                          eventMapsURL
+                            ? `
+                              <a
+                                class="maps-link"
+                                href="${escapeHTML(
+                                  eventMapsURL
+                                )}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                Open in Google Maps →
+                              </a>
+                            `
+                            : ""
+                        }
 
                       </div>
 
-                    </div>
-
-                    <div
-                      class="location-map"
-                      id="googleMap"
-                    >
-                      <div class="location-placeholder">
-                        Loading map...
-                      </div>
                     </div>
 
                   </div>
@@ -2949,7 +3622,9 @@ function eventPage(id){
                       color:var(--text-main);
                       font-size:.875rem;
                     ">
-                      ${escapeHTML(event.note)}
+                      ${escapeHTML(
+                        event.note
+                      )}
                     </div>
 
                   </div>
@@ -2964,7 +3639,9 @@ function eventPage(id){
                   ? `
                     <img
                       class="creator-photo"
-                      src="${escapeHTML(event.creatorPhoto)}"
+                      src="${escapeHTML(
+                        event.creatorPhoto
+                      )}"
                       alt=""
                     >
                   `
@@ -2975,7 +3652,8 @@ function eventPage(id){
                 Created by
                 <strong>
                   ${escapeHTML(
-                    event.creatorName || "Unknown"
+                    event.creatorName ||
+                    "Unknown"
                   )}
                 </strong>
               </span>
@@ -3033,7 +3711,9 @@ function eventPage(id){
 
           <div class="details-card">
 
-            <h3 style="font-size:1rem;">
+            <h3 style="
+              font-size:1rem;
+            ">
               Are you coming?
             </h3>
 
@@ -3067,14 +3747,16 @@ function eventPage(id){
 
                       <button
                         class="rsvp-btn yes ${
-                          selectedStatus === "yes"
+                          selectedStatus ===
+                          "yes"
                             ? "selected"
                             : ""
                         }"
                         id="yesButton"
                       >
                         ${
-                          selectedStatus === "yes"
+                          selectedStatus ===
+                          "yes"
                             ? "✓ "
                             : ""
                         }
@@ -3083,14 +3765,16 @@ function eventPage(id){
 
                       <button
                         class="rsvp-btn no ${
-                          selectedStatus === "no"
+                          selectedStatus ===
+                          "no"
                             ? "selected"
                             : ""
                         }"
                         id="noButton"
                       >
                         ${
-                          selectedStatus === "no"
+                          selectedStatus ===
+                          "no"
                             ? "✓ "
                             : ""
                         }
@@ -3108,7 +3792,8 @@ function eventPage(id){
                         placeholder="Add a note (optional)"
                         style="min-height:65px;"
                       >${escapeHTML(
-                        myResponse?.note || ""
+                        myResponse?.note ||
+                        ""
                       )}</textarea>
 
                     </div>
@@ -3176,65 +3861,71 @@ function eventPage(id){
 
             ${
               coming.length
-                ? coming.map(([,r]) => `
+                ? coming.map(
+                    ([,r]) => `
 
-                  <div class="person-row">
+                      <div class="person-row">
 
-                    <div class="person-detail">
+                        <div class="person-detail">
 
-                      ${
-                        r.photo
-                          ? `
-                            <img
-                              class="person-avatar"
-                              src="${escapeHTML(r.photo)}"
-                              alt=""
-                            >
-                          `
-                          : `
-                            <div class="person-avatar"></div>
-                          `
-                      }
+                          ${
+                            r.photo
+                              ? `
+                                <img
+                                  class="person-avatar"
+                                  src="${escapeHTML(
+                                    r.photo
+                                  )}"
+                                  alt=""
+                                >
+                              `
+                              : `
+                                <div class="person-avatar"></div>
+                              `
+                          }
 
-                      <div>
+                          <div>
 
-                        <div style="
-                          font-weight:600;
-                          font-size:.875rem;
-                        ">
-                          ${escapeHTML(
-                            r.name || "Unknown"
-                          )}
+                            <div style="
+                              font-weight:600;
+                              font-size:.875rem;
+                            ">
+                              ${escapeHTML(
+                                r.name ||
+                                "Unknown"
+                              )}
+                            </div>
+
+                            ${
+                              r.note
+                                ? `
+                                  <div style="
+                                    font-size:.75rem;
+                                    color:var(--text-muted);
+                                    margin-top:.05rem;
+                                  ">
+                                    ${escapeHTML(
+                                      r.note
+                                    )}
+                                  </div>
+                                `
+                                : ""
+                            }
+
+                          </div>
+
                         </div>
 
-                        ${
-                          r.note
-                            ? `
-                              <div style="
-                                font-size:.75rem;
-                                color:var(--text-muted);
-                                margin-top:.05rem;
-                              ">
-                                ${escapeHTML(r.note)}
-                              </div>
-                            `
-                            : ""
-                        }
+                        <span style="
+                          color:var(--yes-text);
+                          font-weight:700;
+                        ">
+                          ✓
+                        </span>
 
                       </div>
-
-                    </div>
-
-                    <span style="
-                      color:var(--yes-text);
-                      font-weight:700;
-                    ">
-                      ✓
-                    </span>
-
-                  </div>
-
-                `).join("")
+                    `
+                  ).join("")
                 : `
                   <p style="
                     font-size:.8rem;
@@ -3260,65 +3951,71 @@ function eventPage(id){
                     Not coming · ${notComing.length}
                   </h3>
 
-                  ${notComing.map(([,r]) => `
+                  ${notComing.map(
+                    ([,r]) => `
 
-                    <div class="person-row">
+                      <div class="person-row">
 
-                      <div class="person-detail">
-
-                        ${
-                          r.photo
-                            ? `
-                              <img
-                                class="person-avatar"
-                                src="${escapeHTML(r.photo)}"
-                                alt=""
-                              >
-                            `
-                            : `
-                              <div class="person-avatar"></div>
-                            `
-                        }
-
-                        <div>
-
-                          <div style="
-                            font-weight:600;
-                            font-size:.875rem;
-                          ">
-                            ${escapeHTML(
-                              r.name || "Unknown"
-                            )}
-                          </div>
+                        <div class="person-detail">
 
                           ${
-                            r.note
+                            r.photo
                               ? `
-                                <div style="
-                                  font-size:.75rem;
-                                  color:var(--text-muted);
-                                  margin-top:.05rem;
-                                ">
-                                  ${escapeHTML(r.note)}
-                                </div>
+                                <img
+                                  class="person-avatar"
+                                  src="${escapeHTML(
+                                    r.photo
+                                  )}"
+                                  alt=""
+                                >
                               `
-                              : ""
+                              : `
+                                <div class="person-avatar"></div>
+                              `
                           }
+
+                          <div>
+
+                            <div style="
+                              font-weight:600;
+                              font-size:.875rem;
+                            ">
+                              ${escapeHTML(
+                                r.name ||
+                                "Unknown"
+                              )}
+                            </div>
+
+                            ${
+                              r.note
+                                ? `
+                                  <div style="
+                                    font-size:.75rem;
+                                    color:var(--text-muted);
+                                    margin-top:.05rem;
+                                  ">
+                                    ${escapeHTML(
+                                      r.note
+                                    )}
+                                  </div>
+                                `
+                                : ""
+                            }
+
+                          </div>
 
                         </div>
 
+                        <span style="
+                          color:var(--no-text);
+                          font-weight:700;
+                        ">
+                          ×
+                        </span>
+
                       </div>
-
-                      <span style="
-                        color:var(--no-text);
-                        font-weight:700;
-                      ">
-                        ×
-                      </span>
-
-                    </div>
-
-                  `).join("")}
+                    `
+                  ).join("")}
 
                 </div>
               `
@@ -3339,13 +4036,12 @@ function eventPage(id){
         )?.addEventListener(
           "click",
           function(){
-            copyEventMessage(id,this);
+            copyEventMessage(
+              id,
+              this
+            );
           }
         );
-
-        if(event.location){
-          renderGoogleMap(event);
-        }
 
         if(isCreator){
 
@@ -3357,7 +4053,6 @@ function eventPage(id){
               "click",
               () => editEvent(id)
             );
-
           }
 
           document.querySelector(
@@ -3382,7 +4077,6 @@ function eventPage(id){
               if(signedIn){
                 eventPage(id);
               }
-
             }
           );
 
@@ -3428,97 +4122,102 @@ function eventPage(id){
 
           document.querySelector(
             "#saveResponse"
-          ).onclick = async () => {
+          ).onclick =
+            async () => {
 
-            const msg =
-              document.querySelector(
-                "#responseMessage"
-              );
+              const msg =
+                document.querySelector(
+                  "#responseMessage"
+                );
 
-            const note =
-              document.querySelector(
-                "#responseNote"
-              ).value.trim();
+              const note =
+                document.querySelector(
+                  "#responseNote"
+                ).value.trim();
 
-            if(!selectedStatus){
+              if(!selectedStatus){
 
-              alert(
-                "Select COMING or NOT COMING first."
-              );
+                alert(
+                  "Select COMING or NOT COMING first."
+                );
 
-              return;
-            }
+                return;
+              }
 
-            try{
+              try{
 
-              const response = {
+                const response = {
 
-                status:selectedStatus,
-                note,
+                  status:
+                    selectedStatus,
 
-                name:
-                  user.displayName ||
-                  "Unknown",
+                  note,
 
-                photo:
-                  user.photoURL ||
-                  "",
+                  name:
+                    user.displayName ||
+                    "Unknown",
 
-                updatedAt:
-                  Date.now()
-              };
+                  photo:
+                    user.photoURL ||
+                    "",
 
-              const updates = {};
+                  updatedAt:
+                    Date.now()
+                };
 
-              updates[
-                "events/" +
-                id +
-                "/responses/" +
-                userUid
-              ] = response;
+                const updates = {};
 
-              /*
-                This is the important part:
+                updates[
+                  "events/" +
+                  id +
+                  "/responses/" +
+                  userUid
+                ] = response;
 
-                The feed index is written regardless
-                of whether the response is YES or NO.
-              */
-              updates[
-                "userEvents/" +
-                userUid +
-                "/" +
-                id
-              ] = true;
+                /*
+                 * Feed access is created for both
+                 * COMING and NOT COMING.
+                 */
+                updates[
+                  "userEvents/" +
+                  userUid +
+                  "/" +
+                  id
+                ] = true;
 
-              await update(
-                ref(db),
-                updates
-              );
+                await update(
+                  ref(db),
+                  updates
+                );
 
-              msg.textContent =
-                "Response saved!";
+                msg.textContent =
+                  "Response saved!";
 
-              setTimeout(() => {
+                setTimeout(
+                  () => {
 
-                if(msg){
-                  msg.textContent = "";
-                }
+                    if(msg){
+                      msg.textContent =
+                        "";
+                    }
 
-              },2000);
+                  },
+                  2000
+                );
 
-            }catch(err){
+              }catch(err){
 
-              console.error(
-                "RESPONSE ERROR:",
-                err
-              );
+                console.error(
+                  "RESPONSE ERROR:",
+                  err
+                );
 
-              alert(
-                "Couldn't save response: " +
-                err.message
-              );
-            }
-          };
+                alert(
+                  "Couldn't save the event response: " +
+                  err.message
+                );
+              }
+            };
         }
 
       },
@@ -3535,7 +4234,9 @@ function eventPage(id){
             "#eventShell"
           );
 
-        if(!shell) return;
+        if(!shell){
+          return;
+        }
 
         if(
           error.code ===
@@ -3556,7 +4257,9 @@ function eventPage(id){
                 🔒
               </div>
 
-              <h2 style="font-size:1.2rem;">
+              <h2 style="
+                font-size:1.2rem;
+              ">
                 Private event
               </h2>
 
@@ -3576,9 +4279,12 @@ function eventPage(id){
         }
 
         shell.innerHTML = `
+
           <p class="error">
             Couldn't load this event.
-            ${escapeHTML(error.message || "")}
+            ${escapeHTML(
+              error.message || ""
+            )}
           </p>
         `;
       }
@@ -3590,7 +4296,9 @@ function eventPage(id){
    PRIVATE INVITE
 ===================================================== */
 
-async function privateInvitePage(token){
+async function privateInvitePage(
+  token
+){
 
   stopListener();
 
@@ -3693,20 +4401,20 @@ async function privateInvitePage(token){
 
     document.querySelector(
       "#acceptInviteButton"
-    ).onclick = async () => {
+    ).onclick =
+      async () => {
 
-      const signedIn =
-        await requireAuth();
+        const signedIn =
+          await requireAuth();
 
-      if(signedIn){
+        if(signedIn){
 
-        await acceptPrivateInvite(
-          token,
-          eventId
-        );
-
-      }
-    };
+          await acceptPrivateInvite(
+            token,
+            eventId
+          );
+        }
+      };
 
     return;
   }
@@ -3725,19 +4433,18 @@ async function acceptPrivateInvite(
   const user =
     auth.currentUser;
 
-  if(!user) return;
+  if(!user){
+    return;
+  }
 
   try{
 
     /*
-      Membership grants access to the event.
-
-      It does NOT put the event in the user's feed yet.
-
-      The feed entry is created only when the user
-      actually saves COMING or NOT COMING.
-    */
-
+     * Membership grants access.
+     *
+     * It does NOT put the event into the
+     * user's feed until they save an RSVP.
+     */
     const updates = {};
 
     updates[
@@ -3817,7 +4524,9 @@ function profilePage(){
       ">
 
         <img
-          src="${escapeHTML(user.photoURL || "")}"
+          src="${escapeHTML(
+            user.photoURL || ""
+          )}"
           alt="Profile"
           style="
             width:100%;
@@ -3846,9 +4555,12 @@ function profilePage(){
 
       </div>
 
-      <h2 style="font-size:1.3rem;">
+      <h2 style="
+        font-size:1.3rem;
+      ">
         ${escapeHTML(
-          user.displayName || "User"
+          user.displayName ||
+          "User"
         )}
       </h2>
 
@@ -3858,13 +4570,18 @@ function profilePage(){
         margin-top:.25rem;
         margin-bottom:2rem;
       ">
-        ${escapeHTML(user.email || "")}
+        ${escapeHTML(
+          user.email || ""
+        )}
       </p>
 
       <button
         class="btn-secondary"
         id="signOutButton"
-        style="max-width:280px;margin:0 auto;"
+        style="
+          max-width:280px;
+          margin:0 auto;
+        "
       >
         Sign out
       </button>
@@ -3876,12 +4593,15 @@ function profilePage(){
 
   document.querySelector(
     "#signOutButton"
-  ).onclick = async () => {
+  ).onclick =
+    async () => {
 
-    await signOut(auth);
+      await signOut(
+        auth
+      );
 
-    goToEventsPage();
-  };
+      goToEventsPage();
+    };
 }
 
 
@@ -3894,28 +4614,43 @@ function route(){
   const hash =
     location.hash;
 
-  if(hash === "#create"){
+  if(
+    hash === "#create"
+  ){
 
     createPage();
 
-  }else if(hash === "#profile"){
+  }else if(
+    hash === "#profile"
+  ){
 
     profilePage();
 
-  }else if(hash.startsWith("#invite=")){
+  }else if(
+    hash.startsWith(
+      "#invite="
+    )
+  ){
 
     const token =
-      hash.slice("#invite=".length);
+      hash.slice(
+        "#invite=".length
+      );
 
     if(token){
 
       privateInvitePage(
-        decodeURIComponent(token)
+        decodeURIComponent(
+          token
+        )
       );
-
     }
 
-  }else if(hash.startsWith("#e=")){
+  }else if(
+    hash.startsWith(
+      "#e="
+    )
+  ){
 
     const id =
       hash.slice(3);
@@ -3929,7 +4664,8 @@ function route(){
 
   }else{
 
-    currentTab = "upcoming";
+    currentTab =
+      "upcoming";
 
     eventsPage();
   }
@@ -3944,6 +4680,7 @@ onAuthStateChanged(
   auth,
   () => route()
 );
+
 </script>
 
 </body>
