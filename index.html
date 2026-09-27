@@ -1,0 +1,1618 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>വരുന്നുണ്ടോ???</title>
+
+<meta property="og:title" content="വരുന്നുണ്ടോ???">
+<meta property="og:description" content="Are you coming?">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #F5F3EF;
+  --card-bg: #FFFFFF;
+  --input-bg: #FAF8F5;
+  --text-main: #1C1917;
+  --text-muted: #78716C;
+  --border: #E7E5E4;
+  --border-dark: #292524;
+  --primary: #F2C94C;
+  --primary-hover: #E0B83B;
+  --tab-active: #21332A;
+  --yes-bg: #D1F2DF;
+  --yes-text: #166534;
+  --no-bg: #FCE7F3;
+  --no-text: #9D174D;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+}
+
+*{
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: clamp(14px, 1.1vw + 11px, 16.5px);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  width: min(100%, 540px);
+  margin: 0 auto;
+  padding: 1rem 1rem calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Typography */
+h1, h2, h3 {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.serif-title {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
+}
+
+/* Base Form Elements */
+button, input, textarea, select {
+  font: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  background: var(--primary);
+  color: var(--text-main);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem 0.85rem 0.75rem 2.4rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--input-bg);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.input-field:focus {
+  border-color: var(--border-dark);
+  background: #fff;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  display: flex;
+}
+
+textarea.input-field {
+  min-height: 100px;
+  resize: vertical;
+  padding-left: 0.85rem;
+}
+
+select.input-field {
+  padding-left: 2.4rem;
+  cursor: pointer;
+}
+
+/* Header Component */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0 1.25rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.back-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.app-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Responsive Logo Styles */
+.app-logo-img {
+  height: clamp(70px, 14vw, 115px);
+  width: auto;
+  max-width: 85vw;
+  object-fit: contain;
+  display: block;
+}
+
+.avatar-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #E7E5E4;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.avatar-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Hero Section */
+.hero-illustration {
+  text-align: center;
+  padding: 0.4rem 0 1rem;
+}
+
+.hero-illustration svg {
+  width: 100%;
+  max-width: 290px;
+  height: auto;
+}
+
+/* Segmented Control / Tabs */
+.tab-container {
+  display: flex;
+  background: #EBE8E1;
+  padding: 0.25rem;
+  border-radius: 999px;
+  margin-bottom: 1.25rem;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.tab-btn.active {
+  background: var(--tab-active);
+  color: #fff;
+}
+
+/* Event List */
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.event-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.95rem 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.date-badge {
+  background: #FAF8F5;
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.65rem;
+  text-align: center;
+  min-width: 3.2rem;
+  border: 1px solid var(--border);
+}
+
+.date-badge-month {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.date-badge-day {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.event-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-meta {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+}
+
+.count-pill {
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: #FAF8F5;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(245, 243, 239, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  padding: 0.5rem 1rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.bottom-nav-inner {
+  width: min(100%, 540px);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.725rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0.25rem 1.25rem;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease;
+}
+
+.nav-item.active {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.nav-item svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+}
+
+/* RSVP Buttons */
+.rsvp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.rsvp-btn {
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 1px solid transparent;
+  background: var(--input-bg);
+  color: var(--text-muted);
+}
+
+.rsvp-btn.yes.selected {
+  background: var(--yes-bg);
+  color: var(--yes-text);
+  border-color: rgba(22, 101, 52, 0.2);
+}
+
+.rsvp-btn.no.selected {
+  background: var(--no-bg);
+  color: var(--no-text);
+  border-color: rgba(157, 23, 77, 0.2);
+}
+
+/* Details Page Info Card */
+.details-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+
+.note-box {
+  background: #FAF8F5;
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+  border: 1px solid var(--border);
+}
+
+.creator-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  font-size: 0.825rem;
+  color: var(--text-muted);
+}
+
+.creator-photo {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.locked-badge {
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  color: #6B7280;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Response List */
+.person-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.person-row:last-child {
+  border-bottom: none;
+}
+
+.person-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.person-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #E7E5E4;
+}
+
+.error { color: #dc2626; font-size: 0.8rem; margin-top: 0.35rem; font-weight: 500; }
+.success { color: #166534; font-size: 0.8rem; margin-top: 0.35rem; font-weight: 500; }
+</style>
+</head>
+
+<body>
+
+<main id="app"></main>
+
+<!-- Bottom Navigation Bar -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="nav-item" id="navEvents">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <span>Events</span>
+    </button>
+    <button class="nav-item" id="navCreate">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="16"></line>
+        <line x1="8" y1="12" x2="16" y2="12"></line>
+      </svg>
+      <span>Create</span>
+    </button>
+  </div>
+</nav>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getDatabase, ref, get, set, remove, query, orderByChild, limitToLast, limitToFirst, onValue } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+/* =====================================================
+   FIREBASE CONFIG
+===================================================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyAagNLnoAEmzYzEY9OMeq_m5LR6bmId9zk",
+  authDomain: "varunundo-422fe.firebaseapp.com",
+  databaseURL: "https://varunundo-422fe-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "varunundo-422fe",
+  storageBucket: "varunundo-422fe.firebasestorage.app",
+  messagingSenderId: "733075243873",
+  appId: "1:733075243873:web:9a232cc80e5c9004517b20"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getDatabase(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
+
+const app = document.querySelector("#app");
+
+let activeListener = null;
+let signingIn = false;
+let currentTab = 'upcoming';
+
+/* =====================================================
+   HELPERS & SVGS
+===================================================== */
+function escapeHTML(value){
+  return String(value ?? "")
+    .replace(/[&<>"']/g, character => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[character]));
+}
+
+function newEventId(){
+  return crypto.randomUUID().replaceAll("-","").slice(0,12);
+}
+
+function newInviteToken(){
+  return crypto.randomUUID().replaceAll("-","");
+}
+
+function parseHashParams(){
+  const hash = location.hash.startsWith("#") ? location.hash.slice(1) : location.hash;
+  const params = new URLSearchParams(hash);
+  return {
+    eventId: params.get("e"),
+    inviteToken: params.get("invite"),
+    isCreate: hash === "create",
+    isProfile: hash === "profile"
+  };
+}
+
+function eventURL(id, inviteToken = null){
+  let url = "https://akshayrsam.github.io/varunnundo/#e=" + id;
+  if(inviteToken) {
+    url += "&invite=" + inviteToken;
+  }
+  return url;
+}
+
+function stopListener(){
+  if(activeListener){
+    activeListener();
+    activeListener = null;
+  }
+}
+
+function parseEventDate(value) {
+  if(!value) return null;
+  const date = new Date(value);
+  if(Number.isNaN(date.getTime())) return null;
+  return {
+    month: date.toLocaleString('en-US', { month: 'short' }),
+    day: date.getDate(),
+    formatted: date.toLocaleString([], { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit' }),
+    time: date.toLocaleString([], { hour: 'numeric', minute: '2-digit', hour12: true }),
+    fullDate: date.toLocaleString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+    raw: date
+  };
+}
+
+const SVGS = {
+  landscape: `<svg viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="140" cy="42" r="24" fill="#F2C94C"/>
+    <path d="M 20 95 C 70 65, 120 105, 170 85 C 220 65, 250 85, 260 90" stroke="#1C1917" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    <path d="M 10 102 C 80 82, 160 102, 270 96" stroke="#1C1917" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+    <path d="M 235 90 C 232 75, 230 60, 240 45" stroke="#1C1917" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M 240 45 C 228 38, 220 48, 218 50 M 240 45 C 235 32, 245 28, 250 30 M 240 45 C 252 38, 260 48, 262 50 M 240 45 C 250 55, 258 52, 260 55" stroke="#1C1917" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  </svg>`,
+
+  landscapeGreen: `<svg viewBox="0 0 280 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="178" cy="36" r="20" fill="#F2C94C"/>
+    <path d="M 10 85 C 70 50, 150 95, 270 75 L 270 100 L 10 100 Z" fill="#93A38C" opacity="0.6"/>
+    <path d="M 10 85 C 70 50, 150 95, 270 75" stroke="#1C1917" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M 220 38 Q 225 32 230 38 M 235 34 Q 240 28 245 34" stroke="#1C1917" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  </svg>`,
+
+  createCalendarIcon: `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="22" y="20" width="36" height="38" rx="6" stroke="#1C1917" stroke-width="2.5" fill="none"/>
+    <path d="M 30 14 L 30 22 M 50 14 L 50 22" stroke="#1C1917" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 32 38 L 48 38 M 40 30 L 40 46" stroke="#1C1917" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>`,
+
+  calendar: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
+  pencil: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>`,
+  note: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>`,
+  back: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>`,
+  share: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>`,
+  copy: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`,
+  location: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
+  lock: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`,
+  eye: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`
+};
+
+/* =====================================================
+   AUTH HELPER
+===================================================== */
+async function requireAuth(){
+  if(auth.currentUser) return true;
+  if(signingIn) return false;
+  signingIn = true;
+  try {
+    await signInWithPopup(auth, googleProvider);
+    return true;
+  } catch(error){
+    console.error("Firebase Auth Error:", error);
+    if(["auth/popup-closed-by-user","auth/cancelled-popup-request","auth/popup-blocked"].includes(error.code)) return false;
+    alert("Google sign-in failed.\n\n" + error.code + "\n\n" + error.message);
+    return false;
+  } finally {
+    signingIn = false;
+  }
+}
+
+/* =====================================================
+   BOTTOM NAV CONTROL & HEADER
+===================================================== */
+function updateBottomNav(activeTab){
+  const navEvents = document.querySelector("#navEvents");
+  const navCreate = document.querySelector("#navCreate");
+  
+  if(navEvents && navCreate){
+    navEvents.classList.toggle("active", activeTab === "events");
+    navCreate.classList.toggle("active", activeTab === "create");
+  }
+}
+
+function goToEventsPage(){
+  currentTab = 'upcoming';
+  if (location.hash !== "") {
+    location.hash = "";
+  } else {
+    eventsPage();
+  }
+}
+
+document.querySelector("#navEvents").addEventListener("click", goToEventsPage);
+
+document.querySelector("#navCreate").addEventListener("click", () => {
+  if (location.hash !== "#create") {
+    location.hash = "create";
+  } else {
+    createPage();
+  }
+});
+
+function renderHeader(showBack = false){
+  const user = auth.currentUser;
+  return `
+    <header class="header">
+      <div class="header-left">
+        ${showBack ? `
+          <button class="back-btn" id="backButton">${SVGS.back}</button>
+        ` : ''}
+        <h1 class="app-title" id="homeTitle" style="cursor:pointer;">
+          <img src="logo.png" alt="വരുന്നുണ്ടോ???" class="app-logo-img" onerror="this.onerror=null; this.replaceWith(document.createTextNode('വരുന്നുണ്ടോ???'));">
+        </h1>
+      </div>
+      <button class="avatar-btn" id="accountButton">
+        ${user ? `<img src="${escapeHTML(user.photoURL || "")}" alt="Profile">` : `<span style="font-size:0.7rem; font-weight:700;">Sign in</span>`}
+      </button>
+    </header>
+  `;
+}
+
+function wireHeader(){
+  document.querySelector("#homeTitle")?.addEventListener("click", goToEventsPage);
+  document.querySelector("#backButton")?.addEventListener("click", goToEventsPage);
+  document.querySelector("#accountButton")?.addEventListener("click", async () => {
+    if(!auth.currentUser){
+      const signedIn = await requireAuth();
+      if(signedIn) route();
+      return;
+    }
+    location.hash = "profile";
+  });
+}
+
+/* =====================================================
+   SHARE & COPY
+===================================================== */
+function generateShareText(event, id) {
+  const dateData = parseEventDate(event.when);
+  const formattedDateTime = dateData ? `${dateData.fullDate} · ${dateData.time}` : '';
+  const locStr = event.location?.name ? `\n📍 ${event.location.name}` : '';
+  const link = eventURL(id, event.visibility === 'private' ? event.inviteToken : null);
+
+  return `${event.title}${locStr}\n${formattedDateTime}\n\n*വരുന്നുണ്ടോ???*\n\n${link}`;
+}
+
+async function shareEvent(id){
+  const snapshot = await get(ref(db, "events/" + id));
+  const event = snapshot.val();
+  if(!event) return;
+
+  const shareText = generateShareText(event, id);
+
+  if(navigator.share){
+    try {
+      await navigator.share({ text: shareText });
+      return;
+    } catch(error){
+      if(error?.name === "AbortError") return;
+    }
+  }
+
+  copyEventMessage(id);
+}
+
+async function copyEventMessage(id, button){
+  const snapshot = await get(ref(db, "events/" + id));
+  const event = snapshot.val();
+  if(!event) return;
+
+  const shareText = generateShareText(event, id);
+
+  try {
+    await navigator.clipboard.writeText(shareText);
+    if(button){
+      const original = button.innerHTML;
+      button.innerHTML = `${SVGS.copy} Copied!`;
+      setTimeout(() => { if(button.isConnected) button.innerHTML = original; }, 1500);
+    } else {
+      alert("Message copied to clipboard!");
+    }
+  } catch {
+    prompt("Copy this event message:", shareText);
+  }
+}
+
+/* =====================================================
+   EVENTS LIST (HOME) PAGE
+===================================================== */
+function eventsPage(){
+  stopListener();
+  updateBottomNav("events");
+
+  app.innerHTML = `
+    ${renderHeader(false)}
+    
+    <div class="hero-illustration">
+      ${SVGS.landscapeGreen}
+    </div>
+
+    <div class="tab-container">
+      <button class="tab-btn ${currentTab === 'upcoming' ? 'active' : ''}" id="tabUpcoming">Upcoming</button>
+      <button class="tab-btn ${currentTab === 'past' ? 'active' : ''}" id="tabPast">Past</button>
+    </div>
+
+    <div id="eventsContainer">
+      <div style="text-align:center; padding: 1.25rem; color: var(--text-muted); font-size: 0.875rem;">Loading events...</div>
+    </div>
+  `;
+
+  wireHeader();
+
+  const tabUpcoming = document.querySelector("#tabUpcoming");
+  const tabPast = document.querySelector("#tabPast");
+
+  tabUpcoming.onclick = () => {
+    currentTab = 'upcoming';
+    tabUpcoming.classList.add('active');
+    tabPast.classList.remove('active');
+    renderEventsList();
+  };
+
+  tabPast.onclick = () => {
+    currentTab = 'past';
+    tabPast.classList.add('active');
+    tabUpcoming.classList.remove('active');
+    renderEventsList();
+  };
+
+  let cachedUpcoming = [];
+  let cachedPast = [];
+
+  function renderEventsList() {
+    const container = document.querySelector("#eventsContainer");
+    const list = currentTab === 'upcoming' ? cachedUpcoming : cachedPast;
+
+    if(!list.length){
+      container.innerHTML = `<div style="text-align:center; padding: 2rem 0; color: var(--text-muted); font-size:0.875rem;">No ${currentTab} events found.</div>`;
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="event-list">
+        ${list.map(([id, event]) => {
+          const dateData = parseEventDate(event.when);
+          const coming = Object.values(event.responses || {}).filter(r => r.status === "yes").length;
+          const isPrivate = event.visibility === 'private';
+          return `
+            <div class="event-card" data-id="${escapeHTML(id)}">
+              <div class="date-badge">
+                <div class="date-badge-month">${dateData ? dateData.month : '---'}</div>
+                <div class="date-badge-day">${dateData ? dateData.day : '--'}</div>
+              </div>
+              <div class="event-info">
+                <div class="event-name">
+                  ${isPrivate ? `<span style="vertical-align:middle; margin-right:2px;">${SVGS.lock}</span>` : ''}
+                  ${escapeHTML(event.title)}
+                </div>
+                <div class="event-meta">
+                  ${dateData ? dateData.time : ''}
+                  ${event.location?.name ? ` · 📍 ${escapeHTML(event.location.name)}` : ''}
+                </div>
+              </div>
+              <div class="count-pill">${coming} coming</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    container.querySelectorAll('.event-card').forEach(card => {
+      card.onclick = () => {
+        location.hash = "e=" + card.dataset.id;
+      };
+    });
+  }
+
+  async function loadFeedData() {
+    const user = auth.currentUser;
+    const now = Date.now();
+
+    try {
+      let eventIds = new Set();
+      
+      const pubQuery = query(ref(db, "publicEvents"), orderByChild("whenMs"), limitToLast(100));
+      const pubSnap = await get(pubQuery);
+      if(pubSnap.exists()){
+        Object.keys(pubSnap.val()).forEach(id => eventIds.add(id));
+      }
+
+      if(user){
+        const userQuery = query(ref(db, "userEvents/" + user.uid), orderByChild("whenMs"), limitToLast(100));
+        const userSnap = await get(userQuery);
+        if(userSnap.exists()){
+          Object.keys(userSnap.val()).forEach(id => eventIds.add(id));
+        }
+      }
+
+      const eventPromises = Array.from(eventIds).map(async id => {
+        const snap = await get(ref(db, "events/" + id));
+        return snap.exists() ? [id, snap.val()] : null;
+      });
+
+      const results = (await Promise.all(eventPromises)).filter(Boolean);
+
+      cachedUpcoming = [];
+      cachedPast = [];
+
+      results.forEach(([id, event]) => {
+        const eventTime = event.whenMs || (event.when ? new Date(event.when).getTime() : 0);
+        if(Number.isFinite(eventTime) && eventTime < now){
+          cachedPast.push([id, event]);
+        } else {
+          cachedUpcoming.push([id, event]);
+        }
+      });
+
+      cachedUpcoming.sort((a,b) => (a[1].whenMs || new Date(a[1].when).getTime()) - (b[1].whenMs || new Date(b[1].when).getTime()));
+      cachedPast.sort((a,b) => (b[1].whenMs || new Date(b[1].when).getTime()) - (a[1].whenMs || new Date(a[1].when).getTime()));
+
+      renderEventsList();
+    } catch(err) {
+      console.error("FEED LOAD ERROR:", err);
+      document.querySelector("#eventsContainer").innerHTML = `<p class="error">Couldn't load events. ${escapeHTML(err.message || "")}</p>`;
+    }
+  }
+
+  loadFeedData();
+}
+
+/* =====================================================
+   CREATE EVENT PAGE
+===================================================== */
+function createPage(){
+  stopListener();
+  updateBottomNav("create");
+
+  if(!auth.currentUser){
+    app.innerHTML = `
+      ${renderHeader(true)}
+      <div class="details-card" style="text-align:center; padding: 2rem 1rem;">
+        <h2 style="margin-bottom:0.5rem; font-size: 1.25rem;">Create an Event</h2>
+        <p style="color:var(--text-muted); margin-bottom:1.25rem; font-size:0.875rem;">Sign in with Google to create and host your event.</p>
+        <button class="btn-primary" id="googleButton">Continue with Google</button>
+      </div>
+    `;
+    wireHeader();
+    document.querySelector("#googleButton").onclick = async () => {
+      const signedIn = await requireAuth();
+      if(signedIn) createPage();
+    };
+    return;
+  }
+
+  app.innerHTML = `
+    ${renderHeader(true)}
+
+    <div style="text-align:center; margin: 0.4rem 0 1rem;">
+      <div style="width:80px; height:80px; margin: 0 auto;">
+        ${SVGS.createCalendarIcon}
+      </div>
+      <h2 style="font-size:1.35rem; margin-top:0.4rem;">Create a new event</h2>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Event title *</label>
+      <div class="input-wrapper">
+        <span class="input-icon">${SVGS.pencil}</span>
+        <input class="input-field" id="title" maxlength="100" placeholder="e.g. Evening walk">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Date & time *</label>
+      <div class="input-wrapper">
+        <span class="input-icon">${SVGS.calendar}</span>
+        <input class="input-field" id="when" type="datetime-local">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Visibility</label>
+      <div class="input-wrapper">
+        <span class="input-icon">${SVGS.eye}</span>
+        <select class="input-field" id="visibility">
+          <option value="public">Public (Anyone can discover & join)</option>
+          <option value="private">Private (Invite link only)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Where? (Optional Location Name)</label>
+      <div class="input-wrapper">
+        <span class="input-icon">${SVGS.location}</span>
+        <input class="input-field" id="locationName" maxlength="200" placeholder="e.g. Central Park / Cafe Coffee Day">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Address / Details (Optional)</label>
+      <div class="input-wrapper">
+        <span class="input-icon">${SVGS.location}</span>
+        <input class="input-field" id="locationAddress" maxlength="500" placeholder="e.g. MG Road, Sector 4">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Note (optional)</label>
+      <textarea class="input-field" id="eventNote" maxlength="1000" placeholder="Anything people should know?"></textarea>
+    </div>
+
+    <p id="eventError" class="error"></p>
+
+    <button class="btn-primary" id="saveEvent" style="margin-top:0.5rem;">Create →</button>
+  `;
+
+  wireHeader();
+
+  document.querySelector("#saveEvent").onclick = async () => {
+    const error = document.querySelector("#eventError");
+    const title = document.querySelector("#title").value.trim();
+    const when = document.querySelector("#when").value;
+    const visibility = document.querySelector("#visibility").value;
+    const locationName = document.querySelector("#locationName").value.trim();
+    const locationAddress = document.querySelector("#locationAddress").value.trim();
+    const note = document.querySelector("#eventNote").value.trim();
+
+    if(!title){ error.textContent = "Give the event a title."; return; }
+    if(!when){ error.textContent = "Choose a date and time."; return; }
+
+    const whenMs = new Date(when).getTime();
+    if(!Number.isFinite(whenMs) || whenMs <= Date.now()){
+      error.textContent = "Choose a future date and time.";
+      return;
+    }
+
+    const user = auth.currentUser;
+    if(!user){ error.textContent = "Please sign in first."; return; }
+
+    const id = newEventId();
+    const inviteToken = visibility === 'private' ? newInviteToken() : null;
+
+    let location = null;
+    if(locationName || locationAddress) {
+      location = {
+        name: locationName || locationAddress,
+        address: locationAddress || ""
+      };
+    }
+
+    const event = {
+      title,
+      when,
+      whenMs,
+      visibility,
+      note,
+      creatorUid: user.uid,
+      creatorName: user.displayName || "Unknown",
+      creatorPhoto: user.photoURL || "",
+      createdAt: Date.now()
+    };
+
+    if(location) event.location = location;
+    if(inviteToken) event.inviteToken = inviteToken;
+
+    try {
+      await set(ref(db, "events/" + id), event);
+      await set(ref(db, "eventMembers/" + id + "/" + user.uid), true);
+      await set(ref(db, "userEvents/" + user.uid + "/" + id), { visibility, whenMs });
+
+      if(visibility === 'public') {
+        await set(ref(db, "publicEvents/" + id), { whenMs });
+      } else if(inviteToken) {
+        await set(ref(db, "privateInvites/" + inviteToken), { eventId: id });
+      }
+
+      location.hash = "e=" + id + (inviteToken ? "&invite=" + inviteToken : "");
+    } catch(errorObject){
+      console.error("CREATE EVENT ERROR:", errorObject);
+      error.textContent = "Couldn't create event.\n\n" + errorObject.code + "\n" + errorObject.message;
+    }
+  };
+}
+
+/* =====================================================
+   EDIT EVENT PAGE
+===================================================== */
+async function editEvent(id){
+  const user = auth.currentUser;
+  if(!user) return;
+
+  const snapshot = await get(ref(db, "events/" + id));
+  if(!snapshot.exists()){ alert("Event not found."); return; }
+
+  const event = snapshot.val();
+  
+  const eventTime = new Date(event.when).getTime();
+  if(Number.isFinite(eventTime) && eventTime <= Date.now()){
+    alert("This event has already started and can no longer be edited.");
+    eventPage(id);
+    return;
+  }
+
+  if(event.creatorUid !== user.uid){
+    alert("Only the creator can edit this event.");
+    return;
+  }
+
+  app.innerHTML = `
+    ${renderHeader(true)}
+
+    <h2 style="font-size:1.35rem; margin-bottom:1rem;">Edit event</h2>
+
+    <div class="input-group">
+      <label class="input-label">Event title *</label>
+      <div class="input-wrapper">
+        <span class="input-icon">${SVGS.pencil}</span>
+        <input class="input-field" id="title" maxlength="100" value="${escapeHTML(event.title)}">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Date & time *</label>
+      <div class="input-wrapper">
+        <span class="input-icon">${SVGS.calendar}</span>
+        <input class="input-field" id="when" type="datetime-local" value="${escapeHTML(event.when)}">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Visibility</label>
+      <div class="input-wrapper">
+        <span class="input-icon">${SVGS.eye}</span>
+        <select class="input-field" id="visibility">
+          <option value="public" ${event.visibility !== 'private' ? 'selected' : ''}>Public (Anyone can discover & join)</option>
+          <option value="private" ${event.visibility === 'private' ? 'selected' : ''}>Private (Invite link only)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Where? (Optional Location Name)</label>
+      <div class="input-wrapper">
+        <span class="input-icon">${SVGS.location}</span>
+        <input class="input-field" id="locationName" maxlength="200" value="${escapeHTML(event.location?.name || "")}">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Address / Details (Optional)</label>
+      <div class="input-wrapper">
+        <span class="input-icon">${SVGS.location}</span>
+        <input class="input-field" id="locationAddress" maxlength="500" value="${escapeHTML(event.location?.address || "")}">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Note (optional)</label>
+      <textarea class="input-field" id="eventNote" maxlength="1000">${escapeHTML(event.note || "")}</textarea>
+    </div>
+
+    <p id="eventError" class="error"></p>
+
+    <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:1rem;">
+      <button class="btn-primary" id="saveEvent">Save changes</button>
+      <button class="btn-secondary" id="cancel">Cancel</button>
+    </div>
+
+    <div class="hero-illustration" style="margin-top:1rem;">
+      ${SVGS.landscape}
+    </div>
+  `;
+
+  wireHeader();
+
+  document.querySelector("#cancel").onclick = () => eventPage(id);
+
+  document.querySelector("#saveEvent").onclick = async () => {
+    const error = document.querySelector("#eventError");
+    const title = document.querySelector("#title").value.trim();
+    const when = document.querySelector("#when").value;
+    const visibility = document.querySelector("#visibility").value;
+    const locationName = document.querySelector("#locationName").value.trim();
+    const locationAddress = document.querySelector("#locationAddress").value.trim();
+    const note = document.querySelector("#eventNote").value.trim();
+
+    if(!title){ error.textContent = "Give the event a title."; return; }
+    if(!when){ error.textContent = "Choose a date and time."; return; }
+
+    const whenMs = new Date(when).getTime();
+    if(!Number.isFinite(whenMs) || whenMs <= Date.now()){
+      error.textContent = "Choose a future date and time.";
+      return;
+    }
+
+    let locationObj = null;
+    if(locationName || locationAddress) {
+      locationObj = {
+        name: locationName || locationAddress,
+        address: locationAddress || ""
+      };
+      if(event.location?.placeId) locationObj.placeId = event.location.placeId;
+    }
+
+    const oldVisibility = event.visibility || 'public';
+    let inviteToken = event.inviteToken || null;
+    if(visibility === 'private' && !inviteToken) {
+      inviteToken = newInviteToken();
+    }
+
+    try {
+      await set(ref(db, "events/" + id + "/title"), title);
+      await set(ref(db, "events/" + id + "/when"), when);
+      await set(ref(db, "events/" + id + "/whenMs"), whenMs);
+      await set(ref(db, "events/" + id + "/note"), note);
+      await set(ref(db, "events/" + id + "/visibility"), visibility);
+      await set(ref(db, "events/" + id + "/location"), locationObj);
+
+      if(inviteToken) {
+        await set(ref(db, "events/" + id + "/inviteToken"), inviteToken);
+        await set(ref(db, "privateInvites/" + inviteToken), { eventId: id });
+      }
+
+      await set(ref(db, "userEvents/" + user.uid + "/" + id), { visibility, whenMs });
+
+      if(oldVisibility === 'public' && visibility === 'private') {
+        await remove(ref(db, "publicEvents/" + id));
+      } else if(visibility === 'public') {
+        await set(ref(db, "publicEvents/" + id), { whenMs });
+      }
+
+      eventPage(id, inviteToken);
+    } catch(errorObject){
+      console.error("EDIT EVENT ERROR:", errorObject);
+      error.textContent = "Couldn't save changes.\n\n" + errorObject.code + "\n" + errorObject.message;
+    }
+  };
+}
+
+/* =====================================================
+   DELETE EVENT
+===================================================== */
+async function deleteEvent(id){
+  const user = auth.currentUser;
+  if(!user) return;
+
+  const snapshot = await get(ref(db, "events/" + id));
+  if(!snapshot.exists()){ alert("Event not found."); return; }
+
+  const event = snapshot.val();
+  if(event.creatorUid !== user.uid){
+    alert("Only the creator can delete this event.");
+    return;
+  }
+
+  if(!confirm("Delete this event?\n\nThis cannot be undone.")) return;
+
+  try {
+    if(event.inviteToken) {
+      await remove(ref(db, "privateInvites/" + event.inviteToken));
+    }
+    await remove(ref(db, "publicEvents/" + id));
+    await remove(ref(db, "eventMembers/" + id));
+    await remove(ref(db, "userEvents/" + user.uid + "/" + id));
+    await remove(ref(db, "events/" + id));
+    goToEventsPage();
+  } catch(errorObject){
+    console.error("DELETE EVENT ERROR:", errorObject);
+    alert("Couldn't delete the event.\n\n" + errorObject.code + "\n" + errorObject.message);
+  }
+}
+
+/* =====================================================
+   EVENT DETAILS PAGE
+===================================================== */
+function eventPage(id, passedInviteToken = null){
+  stopListener();
+  updateBottomNav("");
+
+  const params = parseHashParams();
+  const inviteToken = passedInviteToken || params.inviteToken;
+
+  app.innerHTML = `
+    ${renderHeader(true)}
+    <div id="eventShell">
+      <div style="text-align:center; padding:2rem; color:var(--text-muted); font-size: 0.875rem;">Loading event details...</div>
+    </div>
+  `;
+
+  wireHeader();
+
+  async function resolveAndListen() {
+    let resolvedId = id;
+    if(!resolvedId && inviteToken) {
+      const inviteSnap = await get(ref(db, "privateInvites/" + inviteToken));
+      if(inviteSnap.exists()) {
+        resolvedId = inviteSnap.val().eventId;
+      }
+    }
+
+    if(!resolvedId) {
+      document.querySelector("#eventShell").innerHTML = `
+        <div class="details-card" style="text-align:center;">
+          <h2 style="font-size:1.2rem;">Event not found</h2>
+          <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.4rem;">This invite link is invalid or has expired.</p>
+        </div>
+      `;
+      return;
+    }
+
+    activeListener = onValue(ref(db, "events/" + resolvedId), snapshot => {
+      const shell = document.querySelector("#eventShell");
+      if(!shell) return;
+
+      if(!snapshot.exists()){
+        shell.innerHTML = `
+          <div class="details-card" style="text-align:center;">
+            <h2 style="font-size:1.2rem;">Event not found</h2>
+            <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.4rem;">This event doesn't exist or has been deleted.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const event = snapshot.val();
+      const user = auth.currentUser;
+      const userUid = user?.uid || null;
+      const isCreator = userUid === event.creatorUid;
+
+      const eventTime = event.whenMs || new Date(event.when).getTime();
+      const isLocked = Number.isFinite(eventTime) && eventTime <= Date.now();
+
+      const dateData = parseEventDate(event.when);
+      const responses = Object.entries(event.responses || {});
+      const coming = responses.filter(([,r]) => r.status === "yes");
+      const notComing = responses.filter(([,r]) => r.status === "no");
+      const myResponse = userUid ? event.responses?.[userUid] : null;
+
+      let selectedStatus = myResponse?.status || null;
+
+      shell.innerHTML = `
+        <div class="hero-illustration" style="padding:0 0 0.5rem;">
+          ${SVGS.landscapeGreen}
+        </div>
+
+        <div class="details-card">
+          <h1 class="serif-title">
+            ${event.visibility === 'private' ? `<span style="font-size:1.1rem; vertical-align:middle; margin-right:4px;">${SVGS.lock}</span>` : ''}
+            ${escapeHTML(event.title)}
+          </h1>
+          
+          <div style="display:flex; align-items:center; gap:0.45rem; color:var(--text-muted); margin-top:0.4rem; font-size:0.875rem;">
+            ${SVGS.calendar}
+            <span>${dateData ? dateData.formatted : 'Date unavailable'}</span>
+          </div>
+
+          ${event.location?.name ? `
+            <div style="display:flex; align-items:flex-start; gap:0.45rem; color:var(--text-muted); margin-top:0.35rem; font-size:0.875rem;">
+              <span style="margin-top:2px;">${SVGS.location}</span>
+              <div>
+                <div style="font-weight:600; color:var(--text-main);">${escapeHTML(event.location.name)}</div>${event.location.address ? `<div style="font-size:0.8rem;">${escapeHTML(event.location.address)}</div>` : ''}
+              </div>
+            </div>
+          ` : ''}
+
+          <div style="display:inline-block; background:#FAF8F5; border:1px solid var(--border); padding:0.25rem 0.65rem; border-radius:999px; font-size:0.75rem; font-weight:600; margin-top:0.5rem;">
+            ${coming.length} coming
+          </div>
+
+          ${event.note ? `
+            <div class="note-box">
+              <div style="font-weight:700; display:flex; align-items:center; gap:0.35rem; margin-bottom:0.2rem; font-size:0.8rem;">
+                ${SVGS.note} Note
+              </div>
+              <div style="white-space:pre-wrap; color:var(--text-main); font-size:0.875rem;">${escapeHTML(event.note)}</div>
+            </div>
+          ` : ''}
+
+          <div class="creator-info">
+            ${event.creatorPhoto ? `<img class="creator-photo" src="${escapeHTML(event.creatorPhoto)}" alt="">` : ''}
+            <span>Created by <strong>${escapeHTML(event.creatorName || "Unknown")}</strong></span>
+          </div>
+
+          ${isCreator ? `
+            <div style="display:flex; gap:0.5rem; margin-top:0.85rem; border-top:1px solid var(--border); padding-top:0.85rem;">
+              ${!isLocked ? `<button class="btn-secondary" id="editButton" style="padding:0.45rem 0.8rem; font-size:0.8rem;">Edit</button>` : ''}
+              <button class="btn-secondary" id="deleteButton" style="padding:0.45rem 0.8rem; font-size:0.8rem; color:#dc2626; border-color:#fca5a5;">Delete</button>
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- RSVP Box -->
+        <div class="details-card">
+          <h3 style="font-size:1rem;">Are you coming?</h3>
+          
+          ${isLocked ? `
+            <div class="locked-badge">This event has already started. Responses are locked.</div>
+          ` : !userUid ? `
+            <p style="font-size:0.85rem; color:var(--text-muted); margin: 0.4rem 0 0.85rem;">Sign in with Google to submit your response.</p>
+            <button class="btn-primary" id="respondButton">Continue with Google</button>
+          ` : `
+            <div class="rsvp-grid">
+              <button class="rsvp-btn yes ${selectedStatus === 'yes' ? 'selected' : ''}" id="yesButton">
+                ${selectedStatus === 'yes' ? '✓ ' : ''}COMING
+              </button>
+              <button class="rsvp-btn no ${selectedStatus === 'no' ? 'selected' : ''}" id="noButton">
+                ${selectedStatus === 'no' ? '✓ ' : ''}NOT COMING
+              </button>
+            </div>
+
+            <div class="input-group">
+              <textarea class="input-field" id="responseNote" maxlength="500" placeholder="Add a note (optional)" style="min-height:65px;">${escapeHTML(myResponse?.note || "")}</textarea>
+            </div>
+
+            <button class="btn-primary" id="saveResponse">Save response</button>
+            <p id="responseMessage" class="success"></p>
+          `}
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex; gap:0.5rem; margin-bottom:1.25rem;">
+          <button class="btn-secondary" id="shareButton" style="flex:1; display:flex; gap:0.45rem;">
+            ${SVGS.share} Share
+          </button>
+          <button class="btn-secondary" id="copyButton" style="flex:1; display:flex; gap:0.45rem;">
+            ${SVGS.copy} Copy Text
+          </button>
+        </div>
+
+        <!-- Coming List -->
+        <div class="details-card">
+          <h3 style="font-size:0.95rem; margin-bottom:0.65rem;">Coming · ${coming.length}</h3>
+          ${coming.length ? coming.map(([,r]) => `
+            <div class="person-row">
+              <div class="person-detail">
+                ${r.photo ? `<img class="person-avatar" src="${escapeHTML(r.photo)}" alt="">` : `<div class="person-avatar"></div>`}
+                <div>
+                  <div style="font-weight:600; font-size:0.875rem;">${escapeHTML(r.name || "Unknown")}</div>
+                  ${r.note ? `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.05rem;">${escapeHTML(r.note)}</div>` : ''}
+                </div>
+              </div>
+              <span style="color:var(--yes-text); font-weight:700;">✓</span>
+            </div>
+          `).join('') : `<p style="font-size:0.8rem; color:var(--text-muted);">Nobody yet.</p>`}
+        </div>
+
+        <!-- Not Coming List -->
+        ${notComing.length ? `
+          <div class="details-card">
+            <h3 style="font-size:0.95rem; margin-bottom:0.65rem;">Not coming · ${notComing.length}</h3>${notComing.map(([,r]) => `
+              <div class="person-row">
+                <div class="person-detail">
+                  ${r.photo ? `<img class="person-avatar" src="${escapeHTML(r.photo)}" alt="">` : `<div class="person-avatar"></div>`}
+                  <div>
+                    <div style="font-weight:600; font-size:0.875rem;">${escapeHTML(r.name || "Unknown")}</div>
+                    ${r.note ? `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.05rem;">${escapeHTML(r.note)}</div>` : ''}
+                  </div>
+                </div>
+                <span style="color:var(--no-text); font-weight:700;">×</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      `;
+
+      document.querySelector("#shareButton")?.addEventListener("click", () => shareEvent(resolvedId));
+      document.querySelector("#copyButton")?.addEventListener("click", function(){ copyEventMessage(resolvedId, this); });
+
+      if(isCreator){
+        if(!isLocked) document.querySelector("#editButton")?.addEventListener("click", () => editEvent(resolvedId));
+        document.querySelector("#deleteButton")?.addEventListener("click", () => deleteEvent(resolvedId));
+      }
+
+      if(!userUid){
+        document.querySelector("#respondButton")?.addEventListener("click", async () => {
+          const signedIn = await requireAuth();
+          if(signedIn) eventPage(resolvedId, inviteToken);
+        });
+      } else if(!isLocked) {
+        const yesBtn = document.querySelector("#yesButton");
+        const noBtn = document.querySelector("#noButton");
+
+        yesBtn.onclick = () => {
+          selectedStatus = "yes";
+          yesBtn.classList.add("selected");
+          noBtn.classList.remove("selected");
+        };
+
+        noBtn.onclick = () => {
+          selectedStatus = "no";
+          noBtn.classList.add("selected");
+          yesBtn.classList.remove("selected");
+        };
+
+        document.querySelector("#saveResponse").onclick = async () => {
+          const msg = document.querySelector("#responseMessage");
+          const note = document.querySelector("#responseNote").value.trim();
+
+          if(!selectedStatus){
+            alert("Select COMING or NOT COMING first.");
+            return;
+          }
+
+          try {
+            await set(ref(db, "events/" + resolvedId + "/responses/" + userUid), {
+              status: selectedStatus,
+              note,
+              name: user.displayName || "Unknown",
+              photo: user.photoURL || "",
+              updatedAt: Date.now()
+            });
+
+            await set(ref(db, "eventMembers/" + resolvedId + "/" + userUid), true);
+            await set(ref(db, "userEvents/" + userUid + "/" + resolvedId), {
+              visibility: event.visibility || 'public',
+              whenMs: event.whenMs || new Date(event.when).getTime()
+            });
+
+            msg.textContent = "Response saved!";
+            setTimeout(() => { if(msg) msg.textContent = ""; }, 2000);
+          } catch(err){
+            console.error("RESPONSE ERROR:", err);
+            alert("Couldn't save response: " + err.message);
+          }
+        };
+      }
+    }, err => {
+      console.error("EVENT READ ERROR:", err);
+      document.querySelector("#eventShell").innerHTML = `
+        <div class="details-card" style="text-align:center;">
+          <h2 style="font-size:1.2rem;">Access Denied</h2>
+          <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.4rem;">You don't have access to view this private event.</p>
+        </div>
+      `;
+    });
+  }
+
+  resolveAndListen();
+}
+
+/* =====================================================
+   PROFILE PAGE
+===================================================== */
+function profilePage(){
+  stopListener();
+  updateBottomNav("");
+  const user = auth.currentUser;
+
+  if(!user){
+    goToEventsPage();
+    return;
+  }
+
+  app.innerHTML = `
+    ${renderHeader(true)}
+
+    <div style="text-align:center; padding: 2.5rem 1rem 1rem;">
+      <div style="width:80px; height:80px; border-radius:50%; overflow:hidden; margin: 0 auto 1rem; border:2px solid var(--border); position:relative;">
+        <img src="${escapeHTML(user.photoURL || "")}" alt="Profile" style="width:100%; height:100%; object-fit:cover;">
+        <div style="position:absolute; bottom:0; right:0; background:#fff; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:800; border:1px solid var(--border);">G</div>
+      </div>
+      <h2 style="font-size:1.3rem;">${escapeHTML(user.displayName || "User")}</h2>
+      <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem; margin-bottom:2rem;">${escapeHTML(user.email || "")}</p>
+
+      <button class="btn-secondary" id="signOutButton" style="max-width:280px; margin:0 auto;">Sign out</button>
+    </div>
+  `;
+
+  wireHeader();
+
+  document.querySelector("#signOutButton").onclick = async () => {
+    await signOut(auth);
+    goToEventsPage();
+  };
+}
+
+/* =====================================================
+   ROUTER & INITIALIZATION
+===================================================== */
+function route(){
+  const { eventId, inviteToken, isCreate, isProfile } = parseHashParams();
+
+  if(isCreate){
+    createPage();
+  } else if(isProfile){
+    profilePage();
+  } else if(eventId || inviteToken){
+    eventPage(eventId, inviteToken);
+  } else {
+    currentTab = 'upcoming';
+    eventsPage();
+  }
+}
+
+window.addEventListener("hashchange", route);
+
+onAuthStateChanged(auth, () => {
+  route();
+});
+</script>
+
+</body>
+</html>
